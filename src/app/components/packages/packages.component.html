@@ -1,0 +1,56 @@
+<div class="packages-container">
+  <div class="packages-header">
+    <h2 class="section-title">الباقات</h2>
+    <p class="section-description">
+      اختر الباقة التي تناسب احتياجاتك من بين باقاتنا المتنوعة.
+    </p>
+  </div>
+
+  <!-- Error Handling -->
+  <div *ngIf="error" class="error-message">{{ error }}</div>
+
+  <!-- Package Cards -->
+  <div
+    class="swiper-container"
+    *ngIf="!error && packages.length > 0"
+    pagination="true"
+    pagination-clickable="true"
+    space-between="30"
+    slides-per-view="3"
+  >
+    <div class="swiper-wrapper">
+      <div class="swiper-slide" *ngFor="let package of packages">
+        <div class="package-item">
+          <div class="package-title">{{ package.name }}</div>
+          <div class="package-details">
+            <div>
+              <strong>الدقائق الكلية:</strong> {{ package.totalMinutes }}
+            </div>
+            <div>
+              <strong>عدد المشتركين:</strong> {{ package.subscriberCount }}
+            </div>
+            <div>
+              <strong>نوع الاشتراك:</strong> {{ package.subscribeType }}
+            </div>
+          </div>
+          <div class="package-price">
+            <div>LE: {{ package.priceLE }}</div>
+            <div>$: {{ package.priceDollar }}</div>
+            <div>ريال: {{ package.priceReyal }}</div>
+          </div>
+          <a
+            href="https://ajyalalquran.somee.com/#/add-packages"
+            target="_blank"
+          >
+            <button class="btn-select">اختيار</button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Message -->
+  <div *ngIf="!error && packages.length === 0" class="error-message">
+    جاري تحميل الباقات...
+  </div>
+</div>

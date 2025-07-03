@@ -1,0 +1,30 @@
+<h2>{{ isArabic ? "قائمة دوراتنا" : "Our Courses List" }}</h2>
+
+<h3 class="title">{{ isArabic ? "الدورات الشائعة" : "Popular Courses" }}</h3>
+
+<div class="services-container" [class.rtl]="isArabic">
+  <div *ngFor="let service of services" class="col-md-6 service-details">
+    <h3 class="course-name">
+      {{ service.courseNameAr }}
+    </h3>
+    <p class="students-count">
+      {{ isArabic ? "الطلاب:" : "Students:" }} {{ service.studentsCount }}
+    </p>
+    <p class="lessons-hours">
+      {{ isArabic ? "الدروس:" : "Lessons:" }} {{ service.lessons }} |
+      {{ isArabic ? "الساعات:" : "Hours:" }} {{ service.hours }}
+    </p>
+    <p class="instructor">
+      {{ isArabic ? "المدرب:" : "Instructor:" }} {{ service.instructorAr }}
+    </p>
+    <div class="instructors-arabic">
+      {{ isArabic ? "المدرسين:" : "Instructors:" }}
+      <ul>
+        <li *ngFor="let instructor of service.instructorsAr">
+          {{ instructor }}
+        </li>
+      </ul>
+    </div>
+    <img [src]="service.image" alt="Course image" class="course-image" />
+  </div>
+</div>

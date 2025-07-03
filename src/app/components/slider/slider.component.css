@@ -1,0 +1,56 @@
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.swiper-slide:hover {
+  transform: scale(1.05);
+}
+
+.slide-image {
+  max-width: 300px;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  margin-top: 30px;
+}
+
+.slide-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.slide-subtitle {
+  font-size: 18px;
+  color: #666;
+}
+
+/* Custom Styles for Each Slide */
+.swiper-slide--one {
+  background-color: #ffefd5;
+}
+
+.swiper-slide--two {
+  background-color: #ffe4e1;
+}
+
+.swiper-slide--three {
+  background-color: #e0ffff;
+}
+
+.swiper-slide--four {
+  background-color: #fafad2;
+}

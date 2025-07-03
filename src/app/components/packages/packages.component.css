@@ -1,0 +1,172 @@
+.packages-container {
+  padding: 70px;
+  background-color: #fff;
+  overflow-x: hidden;
+}
+
+.packages-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.section-title {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.section-description {
+  font-size: 1.1rem;
+  color: #666;
+}
+
+/* Error Message */
+.error-message {
+  color: red;
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 20px;
+}
+
+/* Swiper Container */
+.swiper-container {
+  position: relative;
+}
+
+.swiper-wrapper {
+  display: flex;
+  gap: 20px;
+}
+
+.swiper-slide {
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.swiper-slide:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Package Item */
+.package-item {
+  padding: 20px;
+  text-align: center;
+}
+
+.package-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.package-details {
+  margin-bottom: 15px;
+  font-size: 1rem;
+  color: #555;
+}
+
+.package-details div {
+  margin-bottom: 5px;
+}
+
+.package-price {
+  margin-top: 15px;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.package-price div {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.btn-select {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-select:hover {
+  background-color: #0056b3;
+}
+
+/* Swiper Navigation */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #007bff;
+  font-size: 1.5rem;
+  transition: color 0.3s ease;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: #0056b3;
+}
+
+.swiper-pagination {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+.swiper-pagination-bullet {
+  background-color: #007bff;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #0056b3;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .swiper-slide {
+    width: 100%;
+    flex: 0 0 100%;
+  }
+
+  .package-title {
+    font-size: 1.3rem;
+  }
+
+  .package-price {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .section-description {
+    font-size: 1rem;
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .package-title {
+    font-size: 1rem; /* 14px */
+  }
+  .package-details {
+    font-size: 0.875rem; /* 12px */
+  }
+  .package-price {
+    font-size: 0.625rem; /* 10px */
+  }
+  .btn-select {
+    width: 60px;
+    font-size: 0.625rem; /* 10px */
+  }
+}

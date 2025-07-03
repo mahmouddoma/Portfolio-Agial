@@ -1,0 +1,72 @@
+<div class="contact-us-container">
+  <h2>اتصل بنا</h2>
+
+  <div class="contact-content">
+    <!-- نموذج الاتصال -->
+    <form
+      class="contact-form"
+      [formGroup]="contactForm"
+      (ngSubmit)="onSubmit()"
+    >
+      <label for="name">اسمك</label>
+      <input
+        id="name"
+        type="text"
+        placeholder="أدخل اسمك"
+        formControlName="name"
+      />
+      <div *ngIf="f['name'].touched && f['name'].invalid" class="error">
+        <small *ngIf="f['name'].errors?.['required']">الاسم مطلوب.</small>
+        <small *ngIf="f['name'].errors?.['minlength']">
+          يجب أن يكون الاسم مكونًا من 3 أحرف على الأقل.
+        </small>
+      </div>
+
+      <label for="email">بريدك الإلكتروني</label>
+      <input
+        id="email"
+        type="email"
+        placeholder="أدخل بريدك الإلكتروني"
+        formControlName="email"
+      />
+      <div *ngIf="f['email'].touched && f['email'].invalid" class="error">
+        <small *ngIf="f['email'].errors?.['required']"
+          >البريد الإلكتروني مطلوب.</small
+        >
+        <small *ngIf="f['email'].errors?.['email']"
+          >يرجى إدخال بريد إلكتروني صالح.</small
+        >
+      </div>
+
+      <label for="message">رسالتك</label>
+      <textarea
+        id="message"
+        rows="5"
+        placeholder="اكتب رسالتك هنا"
+        formControlName="message"
+      ></textarea>
+      <div *ngIf="f['message'].touched && f['message'].invalid" class="error">
+        <small *ngIf="f['message'].errors?.['required']">الرسالة مطلوبة.</small>
+        <small *ngIf="f['message'].errors?.['minlength']">
+          يجب أن تتكون الرسالة من 10 أحرف على الأقل.
+        </small>
+      </div>
+
+      <button type="submit" [disabled]="contactForm.invalid">
+        إرسال الرسالة
+      </button>
+    </form>
+
+    <!-- قسم الخريطة -->
+    <div class="map-container">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3456.0989492134033!2d31.242016515115595!3d30.051013926513998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x145846d46947fd53%3A0xaff8e68e5c35ad3a!2sCairo%2C%20Egypt!5e0!3m2!1sen!2seg!4v1690807350939!5m2!1sen!2seg"
+        width="100%"
+        height="100%"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </div>
+  </div>
+</div>

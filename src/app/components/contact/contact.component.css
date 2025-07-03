@@ -1,0 +1,137 @@
+.contact-us-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: "Arial", sans-serif;
+  background: #f9f9f9; /* الخلفية الفاتحة من أجل التباين الأفضل */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* ظل خفيف لإعطاء عمق */
+  border-radius: 10px;
+  direction: rtl; /* اتجاه النص من اليمين لليسار */
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.contact-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-size: 1rem;
+}
+
+input,
+textarea,
+button {
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  background-color: #eef7ff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background-color: #0056b3;
+  transform: scale(1.05); /* تكبير خفيف عند التمرير */
+}
+
+.error {
+  color: red;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.map-container {
+  width: 100%;
+  height: 300px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+
+.map-container::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.05), transparent);
+}
+
+textarea {
+  resize: none; /* تعطيل تغيير الحجم */
+}
+
+@media (max-width: 768px) {
+  .contact-us-container {
+    padding: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+  }
+
+  .contact-form {
+    gap: 1rem;
+  }
+
+  .map-container {
+    height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-us-container {
+    padding: 1rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .map-container {
+    height: 200px;
+  }
+}

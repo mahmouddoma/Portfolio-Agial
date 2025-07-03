@@ -1,0 +1,61 @@
+/* Positioning the button at the bottom right with fixed positioning */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  /* padding: 12px 18px; */
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  /* opacity: 0.8; */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  /* transform: translateY(50px); */
+  transition: opacity 0.3s, transform 0.3s ease-out, box-shadow 0.3s ease;
+  width: 60px;
+  height: 60px;
+}
+
+/* Button appearance when hovered */
+.back-to-top-btn:hover {
+  /* opacity: 1; */
+  background-color: #0056b3; /* Darker blue on hover */
+  transform: translateY(0);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Increase shadow on hover */
+}
+
+/* Focus styling */
+.back-to-top-btn:focus {
+  outline: none;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.7); /* Add glow effect when focused */
+}
+
+/* Animate the button into view when scrolling */
+.back-to-top-btn.ng-enter,
+.back-to-top-btn.ng-leave {
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.back-to-top-btn.ng-enter {
+  transform: translateY(50px); /* Initially hidden below */
+  opacity: 0;
+}
+
+.back-to-top-btn.ng-enter-active {
+  transform: translateY(0); /* Button slides into view */
+  opacity: 1;
+}
+
+.back-to-top-btn.ng-leave {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.back-to-top-btn.ng-leave-active {
+  transform: translateY(50px); /* Button slides out of view */
+  opacity: 0;
+}

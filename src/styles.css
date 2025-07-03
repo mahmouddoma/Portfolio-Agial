@@ -1,0 +1,32 @@
+/* You can add global styles to this file, and also import other style files */
+/* @import "swiper/swiper-bundle.min.css"; */
+
+html,
+body {
+  height: 100%;
+  font-family: "Tajawal", serif !important;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+* {
+  font-family: "Tajawal", serif !important;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+button,
+input,
+select,
+textarea {
+  font-family: "Tajawal", serif !important;
+}
+* {
+  font-family: "Tajawal", serif, Arial, sans-serif !important;
+}

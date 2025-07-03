@@ -1,0 +1,150 @@
+/* General Styles */
+.services-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+h2 {
+  font-weight: 600;
+  font-size: 22px; /* Slightly smaller */
+  color: #0d5ff9;
+  text-align: center;
+  margin: 10px 0;
+}
+
+h3.title {
+  font-size: 24px; /* Slightly smaller */
+  color: #333;
+  font-weight: 600;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.service-details {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 12px;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-details:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.course-name {
+  font-size: 14px; /* Smaller font size */
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 10px; /* Smaller margin */
+  text-align: center;
+}
+
+.students-count,
+.lessons-hours,
+.instructor {
+  font-size: 14px; /* Smaller font size */
+  color: #7f8c8d;
+  margin: 6px 0; /* Smaller margin */
+  text-align: center;
+}
+
+.instructors-arabic ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 5px;
+}
+
+.instructors-arabic li {
+  font-size: 12px; /* Smaller font size */
+  color: #7f8c8d;
+  margin-bottom: 5px;
+}
+
+.course-image {
+  width: 120px; /* Smaller image size */
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px; /* Slightly smaller border radius */
+  margin-top: 10px;
+}
+
+/* RTL Support */
+.services-container.rtl {
+  direction: rtl;
+}
+
+.services-container.rtl .service-details {
+  text-align: right;
+}
+
+.services-container.rtl .course-name,
+.services-container.rtl .students-count,
+.services-container.rtl .lessons-hours,
+.services-container.rtl .instructor {
+  text-align: right;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .service-details {
+    width: calc(50% - 20px);
+  }
+
+  h2,
+  h3.title {
+    font-size: 18px; /* Smaller font size */
+  }
+}
+
+@media (max-width: 768px) {
+  .service-details {
+    width: 100%;
+  }
+
+  h2,
+  h3.title {
+    font-size: 16px; /* Smaller font size */
+  }
+
+  .course-name {
+    font-size: 14px;
+  }
+
+  .students-count,
+  .lessons-hours,
+  .instructor {
+    font-size: 12px; /* Smaller font size */
+  }
+}
+
+@media (max-width: 576px) {
+  .service-details {
+    width: 100%;
+    padding: 10px; /* Even smaller padding */
+  }
+
+  h2,
+  h3.title {
+    font-size: 14px; /* Smaller font size */
+  }
+
+  .course-name {
+    font-size: 12px;
+  }
+
+  .students-count,
+  .lessons-hours,
+  .instructor {
+    font-size: 10px; /* Even smaller font size */
+  }
+}
