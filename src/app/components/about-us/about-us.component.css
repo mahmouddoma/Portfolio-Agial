@@ -1,18 +1,18 @@
 .about-section {
   background: linear-gradient(to bottom right, #f0f4f5, #ffffff);
   direction: rtl;
-  font-family: "SuisseIntl", sans-serif;
+  font-family: "SuisseIntl", sans-serif !important;
 }
 
 .section-title {
-  font-family: "SuisseIntl", sans-serif;
+  font-family: "SuisseIntl", sans-serif !important;
   font-size: 32px;
   font-weight: 700;
   color: #007c7c;
 }
 
 .section-description {
-  font-family: "SuisseIntl", sans-serif;
+  font-family: "SuisseIntl", sans-serif !important;
   font-size: 18px;
   font-weight: 400;
   color: #444;
@@ -46,7 +46,7 @@ h2 {
 }
 
 .col-md-8 p {
-  font-family: "Arial", sans-serif;
+  font-family: "SuisseIntl", sans-serif !important;
   font-size: 1.1rem;
   line-height: 1.8;
   color: #fff;
@@ -376,7 +376,7 @@ h2 {
 .about-section {
   background: linear-gradient(to bottom right, #f0f4f5, #ffffff);
   direction: rtl;
-  font-family: "Tajawal", sans-serif;
+  font-family: "SuisseIntl", sans-serif !important;
 }
 
 .section-title {
