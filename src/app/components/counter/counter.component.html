@@ -1,16 +1,17 @@
-<div class="counter-container">
-  <div class="counter-item" *ngFor="let counter of counters" #counterElement>
-    <div class="cicon">
-      <i [class]="'fa ' + counter.icon"></i>
-    </div>
-    <h4>
-      <span
-        class="cnumb"
-        [attr.data-count]="counter.target"
-        [innerText]="counter.count"
-        >0</span
-      >k+
-    </h4>
-    <p>{{ counter.label }}</p>
+<section class="counters-section" aria-label="Statistics">
+  <div class="counter-container">
+    <article class="counter-item" *ngFor="let counter of counters" #counterElement role="region"
+      [attr.aria-label]="counter.label">
+      <div class="counter-icon">
+        <i [class]="'fa ' + counter.icon" aria-hidden="true"></i>
+      </div>
+
+      <div class="counter-number">
+        <span class="counter-value" [attr.data-count]="counter.target" [innerText]="counter.count">0</span>
+        <span class="counter-suffix">k+</span>
+      </div>
+
+      <p class="counter-label">{{ counter.label }}</p>
+    </article>
   </div>
-</div>
+</section>

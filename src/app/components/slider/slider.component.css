@@ -54,3 +54,98 @@
 .swiper-slide--four {
   background-color: #fafad2;
 }
+.achievements-section {
+  padding: 60px 20px;
+  background: linear-gradient(to bottom right, #eaf6f6, #ffffff);
+  border-top: 5px solid #00a8a8;
+  border-radius: 15px;
+}
+
+.section-header-container {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.section-header {
+  font-size: 32px;
+  font-weight: 800;
+  color: #007c7c;
+}
+
+.section-subtitle {
+  font-size: 18px;
+  color: #555;
+  max-width: 700px;
+  margin: 10px auto 0;
+  line-height: 1.6;
+}
+
+.swiper {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.swiper-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 25px;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.swiper-slide:hover {
+  transform: translateY(-5px) scale(1.03);
+}
+
+.slide-image {
+  max-width: 280px;
+  height: auto;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  margin-top: 20px;
+  border: 3px solid #00b3b3;
+}
+
+.slide-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #003f3f;
+  margin-bottom: 8px;
+}
+
+.slide-subtitle {
+  font-size: 16px;
+  color: #666;
+}
+
+/* Custom background for each slide */
+.swiper-slide--one {
+  background-color: #fff5e6;
+}
+
+.swiper-slide--two {
+  background-color: #ffeef1;
+}
+
+.swiper-slide--three {
+  background-color: #e6f9ff;
+}
+
+.swiper-slide--four {
+  background-color: #fdfddb;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #007c7c;
+}
+
+.swiper-pagination-bullet-active {
+  background: #007c7c;
+}

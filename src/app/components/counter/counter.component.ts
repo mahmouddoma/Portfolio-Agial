@@ -57,20 +57,38 @@ export class CounterComponent implements OnInit, AfterViewInit {
     });
   }
 
-  observeCounters(): void {
-    const options = { threshold: 0.5 };
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        console.log('Element is intersecting:', entry.target);
-        if (entry.isIntersecting) {
-          this.startCounters();
-          observer.unobserve(entry.target);
-        }
-      });
-    }, options);
-
-    this.counterElements.toArray().forEach((el) => {
-      observer.observe(el.nativeElement);
+observeCounters(): void {
+  const options = { threshold: 0.5 };
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, index) => {
+      if (entry.isIntersecting) {
+        this.startSingleCounter(index); 
+        observer.unobserve(entry.target);
+      }
     });
-  }
+  }, options);
+
+  this.counterElements.toArray().forEach((el) => {
+    observer.observe(el.nativeElement);
+  });
+}
+
+startSingleCounter(index: number): void {
+  const counter = this.counters[index];
+  const target = counter.target;
+  let currentCount = 0;
+  const increment = target / 100;
+
+  const interval = setInterval(() => {
+    currentCount = Math.ceil(currentCount + increment);
+    counter.count = currentCount;
+    this.cdRef.markForCheck();
+
+    if (currentCount >= target) {
+      clearInterval(interval);
+      counter.count = target;
+      this.cdRef.markForCheck();
+    }
+  }, 10);
+}
 }

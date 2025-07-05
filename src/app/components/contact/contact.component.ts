@@ -28,7 +28,6 @@ export class ContactComponent {
   onSubmit(): void {
     if (this.contactForm.valid) {
       console.log('Form submitted successfully:', this.contactForm.value);
-      // Additional logic for form submission (e.g., API call)
     }
   }
 }

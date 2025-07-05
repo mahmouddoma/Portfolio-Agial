@@ -1,16 +1,23 @@
-<section>
+<section class="achievements-section mt-2">
+  <div class="section-header-container">
+    <h2 class="section-header">🏆 إنجازات الطلاب المتميزين</h2>
+    <p class="section-subtitle">
+      فخورون بطلابنا الذين أتموا الختم بجدارة – إليكم بعض لحظات النجاح والتميز 💫
+    </p>
+  </div>
+
   <div class="swiper" appGrabCursor>
     <div class="swiper-wrapper">
-      <div
-        *ngFor="let slide of slides"
-        class="swiper-slide"
-        [ngClass]="slide.cssClass"
-      >
+      <div *ngFor="let slide of slides" class="swiper-slide" [ngClass]="slide.cssClass">
         <img [src]="slide.image" alt="slide" class="slide-image" />
         <h2 class="slide-title">{{ slide.title }}</h2>
         <p class="slide-subtitle">{{ slide.subtitle }}</p>
       </div>
     </div>
-    <!-- <div class="swiper-pagination"></div> -->
+
+    <!-- Optional navigation buttons -->
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-pagination"></div>
   </div>
 </section>

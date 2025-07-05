@@ -353,3 +353,27 @@ h2 {
     display: none;
   }
 }
+.about-section {
+  background: linear-gradient(to bottom right, #f0f4f5, #ffffff);
+  direction: rtl;
+  font-family: "Tajawal", sans-serif;
+}
+
+.section-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #007c7c;
+}
+
+.section-description {
+  font-size: 18px;
+  color: #444;
+  line-height: 2;
+}
+
+.about-logo {
+  max-width: 250px;
+  border-radius: 12px;
+  border: 3px solid #00b3b3;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}

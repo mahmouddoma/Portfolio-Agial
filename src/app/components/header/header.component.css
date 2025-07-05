@@ -1,53 +1,44 @@
-.navbar {
-  background-color: #007bff;
-  padding: 0px 20px;
-  font-family: Arial, sans-serif;
+.custom-navbar {
+  background-color: #4b715c;
+  padding: 10px 20px;
   direction: rtl;
+  font-family: "Tajawal", sans-serif;
   position: fixed;
   top: 0;
   z-index: 1000;
   width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.navbar-brand {
-  color: #ffffff;
-  font-size: 24px;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  text-decoration: none;
+.navbar-brand img {
+  border-radius: 50%;
+  border: 2px solid #fff;
 }
 
 .navbar-nav {
-  display: flex;
-  justify-content: flex-start;
-  gap: 20px;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
 }
 
-.navbar-nav .nav-item {
-  list-style: none;
-}
-
-.navbar-nav .nav-link {
-  color: #ffffff;
+.nav-link {
+  color: #fff !important;
   font-size: 18px;
-  text-decoration: none;
-  padding: 10px 15px;
-  border-radius: 5px;
-  transition: background-color 0.3s, color 0.3s;
+  font-weight: 500;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
+  border-radius: 8px;
 }
 
-.navbar-nav .nav-link:hover {
-  color: #ffffff;
+.nav-link:hover,
+.nav-link.active:hover {
+  background-color: #0056b3;
+  color: #ffd700 !important;
 }
 
-.navbar-nav .nav-link.active:hover {
-  color: #ff6f61;
+.nav-link.active {
   font-weight: bold;
-}
-
-img {
-  border-radius: 50%;
+  color: #ffdd57 !important;
 }
 
 .navbar-toggler {
