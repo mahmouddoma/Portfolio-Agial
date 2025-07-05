@@ -2,12 +2,14 @@
   "name": "project-landing",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
+   "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
+    "deploy": "ng deploy --base-href=/project-landing/",
     "test": "ng test"
   },
+  "homepage": "https://github.com/mahmouddoma/Portfolio-Agial.git",
   "private": true,
   "dependencies": {
     "@angular/animations": "^19.0.0",
@@ -36,6 +38,7 @@
     "@types/jest": "^29.5.14",
     "@types/mocha": "^10.0.10",
     "@types/swiper": "^5.4.3",
+    "gh-pages": "^6.3.0",
     "jasmine-core": "~5.4.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",

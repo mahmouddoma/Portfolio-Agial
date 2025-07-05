@@ -1,3 +1,23 @@
+.about-section {
+  background: linear-gradient(to bottom right, #f0f4f5, #ffffff);
+  direction: rtl;
+  font-family: "SuisseIntl", sans-serif;
+}
+
+.section-title {
+  font-family: "SuisseIntl", sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #007c7c;
+}
+
+.section-description {
+  font-family: "SuisseIntl", sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: #444;
+  line-height: 2;
+}
 .container {
   width: 100%;
   margin: 0 auto;

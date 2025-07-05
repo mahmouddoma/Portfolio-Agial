@@ -1,18 +1,48 @@
-/* You can add global styles to this file, and also import other style files */
-/* @import "swiper/swiper-bundle.min.css"; */
+@font-face {
+  font-family: "SuisseIntl";
+  src: url("./assets/fonts/font/SuisseIntl-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SuisseIntl";
+  src: url("./assets/fonts/font/SuisseIntl-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SuisseIntl";
+  src: url("./assets/fonts/font/SuisseIntl-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "SuisseIntl", sans-serif;
+}
 
 html,
 body {
   height: 100%;
-  font-family: "Tajawal", serif !important;
+  font-weight: 400;
 }
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+
+.medium-text {
+  font-weight: 500;
 }
-* {
-  font-family: "Tajawal", serif !important;
+
+.bold-text {
+  font-weight: 700;
 }
+
 h1,
 h2,
 h3,
@@ -25,8 +55,5 @@ button,
 input,
 select,
 textarea {
-  font-family: "Tajawal", serif !important;
-}
-* {
-  font-family: "Tajawal", serif, Arial, sans-serif !important;
+  font-family: "SuisseIntl", sans-serif;
 }

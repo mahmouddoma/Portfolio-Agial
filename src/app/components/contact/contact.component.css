@@ -2,11 +2,11 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
-  font-family: "Arial", sans-serif;
-  background: #f9f9f9; /* الخلفية الفاتحة من أجل التباين الأفضل */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* ظل خفيف لإعطاء عمق */
+  font-family: "SuisseIntl", sans-serif;
+  background: #f9f9f9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-  direction: rtl; /* اتجاه النص من اليمين لليسار */
+  direction: rtl;
 }
 
 h2 {
