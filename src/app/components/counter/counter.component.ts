@@ -3,92 +3,105 @@ import {
   Component,
   OnInit,
   AfterViewInit,
+  OnDestroy,
   ElementRef,
   ViewChildren,
   QueryList,
   ChangeDetectorRef,
 } from '@angular/core';
+import { CounterService, CounterItem } from '../../services/counter.service';
 
 @Component({
   selector: 'app-counter',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './counter.component.html',
   styleUrl: './counter.component.css',
 })
-export class CounterComponent implements OnInit, AfterViewInit {
+export class CounterComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('counterElement') counterElements!: QueryList<ElementRef>;
+  private observer: IntersectionObserver | null = null;
+  counters: CounterItem[] = [];
 
-  counters = [
-    { label: 'طلابنا السعداء', target: 1900, icon: 'fa fa-users', count: 0 },
-    { label: 'الجوائز المحققة', target: 500, icon: 'fa fa-trophy', count: 0 },
-    {
-      label: 'الشركات التي تثق بنا',
-      target: 200,
-      icon: 'fa-building',
-      count: 0,
-    },
-    { label: 'الدول التي وصلنا إليها', target: 50, icon: 'fa-globe', count: 0 },
-  ];
+  constructor(
+    private counterService: CounterService,
+    private cdRef: ChangeDetectorRef
+  ) {
+    this.counters = this.counterService.getCounters();
+  }
 
-  constructor(private cdRef: ChangeDetectorRef) {}
-
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.setupIntersectionObserver();
+  }
 
   ngAfterViewInit(): void {
     this.observeCounters();
   }
 
-  startCounters(): void {
-    this.counters.forEach((counter) => {
-      const target = counter.target;
-      let currentCount = 0;
-      const increment = target / 100;
-      const interval = setInterval(() => {
-        currentCount = Math.ceil(currentCount + increment);
-        counter.count = currentCount;
-        this.cdRef.markForCheck();
+  ngOnDestroy(): void {
+    this.cleanupCounters();
+    this.observer?.disconnect();
+  }
 
-        if (currentCount >= target) {
-          clearInterval(interval);
-          counter.count = target;
-          this.cdRef.markForCheck();
+  private setupIntersectionObserver(): void {
+    this.observer = this.counterService.createIntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          this.startSingleCounter(index);
+          this.observer?.unobserve(entry.target);
         }
-      }, 10);
+      });
     });
   }
 
-observeCounters(): void {
-  const options = { threshold: 0.5 };
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
-      if (entry.isIntersecting) {
-        this.startSingleCounter(index); 
-        observer.unobserve(entry.target);
+  private observeCounters(): void {
+    if (!this.observer) return;
+
+    this.counterElements.forEach((element) => {
+      this.observer?.observe(element.nativeElement);
+    });
+  }
+
+  private startSingleCounter(index: number): void {
+    const counter = this.counters[index];
+    if (!counter) return;
+
+    const startTime = performance.now();
+    const startValue = 0;
+
+    // Cleanup any existing interval
+    if (counter.interval) {
+      clearInterval(counter.interval);
+    }
+
+    counter.interval = setInterval(() => {
+      const { progress, easeProgress } = this.counterService.calculateProgress(
+        startTime,
+        counter.duration
+      );
+
+      counter.count = Math.round(
+        startValue + (counter.target - startValue) * easeProgress
+      );
+      this.cdRef.markForCheck();
+
+      if (progress >= 1) {
+        clearInterval(counter.interval);
+        counter.count = counter.target;
+        this.cdRef.markForCheck();
+      }
+    }, 16);
+  }
+
+  private cleanupCounters(): void {
+    this.counters.forEach((counter) => {
+      if (counter.interval) {
+        clearInterval(counter.interval);
       }
     });
-  }, options);
+  }
 
-  this.counterElements.toArray().forEach((el) => {
-    observer.observe(el.nativeElement);
-  });
-}
-
-startSingleCounter(index: number): void {
-  const counter = this.counters[index];
-  const target = counter.target;
-  let currentCount = 0;
-  const increment = target / 100;
-
-  const interval = setInterval(() => {
-    currentCount = Math.ceil(currentCount + increment);
-    counter.count = currentCount;
-    this.cdRef.markForCheck();
-
-    if (currentCount >= target) {
-      clearInterval(interval);
-      counter.count = target;
-      this.cdRef.markForCheck();
-    }
-  }, 10);
-}
+  formatNumber(value: number): string {
+    return this.counterService.formatNumber(value);
+  }
 }

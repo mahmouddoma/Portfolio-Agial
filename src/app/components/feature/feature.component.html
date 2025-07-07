@@ -1,34 +1,36 @@
-<div class="container-fluid features">
-  <div class="row">
-    <div class="col-12 text-center">
-      <div class="section-title">
-        <span>الميزات</span>
-        <h2>منصة واحدة، العديد من الدورات</h2>
+<section class="feature-section" aria-labelledby="feature-title">
+  <div class="container-fluid features">
+    <div class="row">
+      <div class="col-12 text-center">
+        <div class="section-title">
+          <span>الميزات</span>
+          <h2 id="feature-title">منصة واحدة، العديد من الدورات</h2>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-lg-4 col-md-6 col-12" *ngFor="let feature of features">
+        <article class="feature-item" [attr.aria-label]="feature.title">
+          <span class="feature-number" aria-hidden="true">{{ feature.id }}</span>
+
+          <div class="fea-icon">
+            <ng-container *ngIf="feature.icon.type === 'svg'; else imageBlock">
+              <div class="svg-icon" [innerHTML]="feature.icon.content" role="img" [attr.aria-label]="feature.title">
+              </div>
+            </ng-container>
+            <ng-template #imageBlock>
+              <img [src]="feature.icon.content" [alt]="feature.title" width="140" loading="lazy"
+                [ngStyle]="feature.icon.style || {}" />
+            </ng-template>
+          </div>
+
+          <div class="feature-content">
+            <h3 class="fea-title">{{ feature.title }}</h3>
+            <p class="fea-desc">{{ feature.description }}</p>
+          </div>
+        </article>
       </div>
     </div>
 
-    <!-- Start Feature Loop -->
-    <div class="col-xl-3 col-lg-4 col-md-6 col-12" *ngFor="let feature of features">
-      <div class="feature-item">
-        <span class="feature-number">{{ feature.id }}</span>
-
-        <div class="fea-icon">
-          <ng-container *ngIf="feature.iconType === 'svg'; else imageBlock">
-            <div [innerHTML]="feature.iconSvg"></div>
-          </ng-container>
-          <ng-template #imageBlock>
-            <img [src]="feature.iconImg" [alt]="feature.title" width="140" loading="lazy"
-              [ngStyle]="feature.imageStyle || {}" />
-          </ng-template>
-        </div>
-
-        <div class="feature-content">
-          <h3 class="fea-title">{{ feature.title }}</h3>
-          <p class="fea-desc">{{ feature.description }}</p>
-        </div>
-      </div>
-    </div>
-    <!-- End Feature Loop -->
+    <app-counter></app-counter>
   </div>
-  <app-counter></app-counter>
-</div>
+</section>

@@ -27,6 +27,8 @@ h2 {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  background: white;
+  transition: transform 0.3s ease;
 }
 
 label {
@@ -71,7 +73,7 @@ button:disabled {
 
 button:hover:not(:disabled) {
   background-color: #0056b3;
-  transform: scale(1.05); /* تكبير خفيف عند التمرير */
+  transform: scale(1.05);
 }
 
 .error {
@@ -104,6 +106,130 @@ textarea {
   resize: none; /* تعطيل تغيير الحجم */
 }
 
+.contact-section {
+  background-color: #f8f9fa;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.section-description {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.form-control {
+  border: 1px solid #dee2e6;
+  padding: 0.75rem;
+  font-size: 1rem;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+  border-color: #86b7fe;
+}
+
+.contact-info {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  height: 100%;
+}
+
+.contact-info i {
+  font-size: 2rem;
+  color: #0d6efd;
+}
+
+/* Form Validation Styles */
+.form-control.is-invalid {
+  border-color: #dc3545;
+  padding-right: calc(1.5em + 0.75rem);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.form-control.is-invalid:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+}
+
+.invalid-feedback {
+  display: block;
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.is-invalid ~ .invalid-feedback {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Alert Styles */
+.alert {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.375rem;
+  opacity: 0;
+  transform: translateY(-10px);
+  animation: slideDown 0.3s ease forwards;
+}
+
+.alert-success {
+  color: #0f5132;
+  background-color: #d1e7dd;
+  border-color: #badbcc;
+}
+
+.alert-danger {
+  color: #842029;
+  background-color: #f8d7da;
+  border-color: #f5c2c7;
+}
+
+/* Loading Button Styles */
+button[type="submit"] {
+  position: relative;
+  min-width: 150px;
+  transition: all 0.3s ease;
+}
+
+button[type="submit"]:disabled {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.spinner-border {
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.15em;
+}
+
+/* Animation Keyframes */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive styles */
 @media (max-width: 768px) {
   .contact-us-container {
     padding: 1.5rem;
@@ -120,9 +246,34 @@ textarea {
   .map-container {
     height: 250px;
   }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .section-description {
+    font-size: 1rem;
+  }
+
+  .contact-info {
+    margin-bottom: 1rem;
+  }
+
+  .contact-info i {
+    font-size: 1.75rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+    min-width: auto;
+  }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 576px) {
   .contact-us-container {
     padding: 1rem;
   }
@@ -131,7 +282,39 @@ textarea {
     font-size: 1.5rem;
   }
 
+  .form-control {
+    padding: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
   .map-container {
     height: 200px;
   }
+
+  .section-title {
+    font-size: 1.75rem;
+  }
+}
+
+/* RTL Support */
+[dir="rtl"] .contact-form {
+  text-align: right;
+}
+
+[dir="rtl"] .form-control {
+  text-align: right;
+}
+
+[dir="rtl"] .form-control.is-invalid {
+  background-position: left calc(0.375em + 0.1875rem) center;
+  padding-left: calc(1.5em + 0.75rem);
+  padding-right: 0.75rem;
+}
+
+[dir="rtl"] .invalid-feedback {
+  text-align: right;
 }

@@ -1,23 +1,36 @@
-<section class="achievements-section mt-2">
-  <div class="section-header-container">
-    <h2 class="section-header">🏆 إنجازات الطلاب المتميزين</h2>
-    <p class="section-subtitle">
-      فخورون بطلابنا الذين أتموا الختم بجدارة – إليكم بعض لحظات النجاح والتميز 💫
-    </p>
+<section class="achievements-section container-fluid py-5" aria-labelledby="achievements-title">
+  <div class="row mb-5">
+    <div class="col-12 text-center">
+      <h2 id="achievements-title" class="section-header mb-3">🏆 إنجازات الطلاب المتميزين</h2>
+      <p class="section-subtitle mx-auto">
+        فخورون بطلابنا الذين أتموا الختم بجدارة – إليكم بعض لحظات النجاح والتميز 💫
+      </p>
+    </div>
   </div>
 
-  <div class="swiper" appGrabCursor>
-    <div class="swiper-wrapper">
-      <div *ngFor="let slide of slides" class="swiper-slide" [ngClass]="slide.cssClass">
-        <img [src]="slide.image" alt="slide" class="slide-image" />
-        <h2 class="slide-title">{{ slide.title }}</h2>
-        <p class="slide-subtitle">{{ slide.subtitle }}</p>
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-10">
+      <div class="swiper" role="region" aria-label="معرض إنجازات الطلاب">
+        <div class="swiper-wrapper">
+          <div *ngFor="let slide of slides; let i = index" class="swiper-slide d-flex flex-column align-items-center"
+            [ngClass]="slide.cssClass" role="group" [attr.aria-label]="slide.title"
+            [attr.aria-roledescription]="'شريحة ' + (i + 1) + ' من ' + slides.length">
+            <div class="slide-image-wrapper">
+              <img [src]="slide.image" [alt]="slide.title" class="slide-image img-fluid" loading="lazy" />
+            </div>
+            <div class="slide-content">
+              <h3 class="slide-title">{{ slide.title }}</h3>
+              <p class="slide-subtitle mb-0">{{ slide.subtitle }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="swiper-navigation-wrapper">
+          <button class="swiper-button-prev" aria-label="السابق"></button>
+          <button class="swiper-button-next" aria-label="التالي"></button>
+          <div class="swiper-pagination" role="tablist"></div>
+        </div>
       </div>
     </div>
-
-    <!-- Optional navigation buttons -->
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
-    <div class="swiper-pagination"></div>
   </div>
 </section>

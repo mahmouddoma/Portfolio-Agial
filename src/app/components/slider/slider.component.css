@@ -1,4 +1,28 @@
+.achievements-section {
+  background: linear-gradient(to bottom right, #eaf6f6, #ffffff);
+  border-radius: 1rem;
+  border-top: 5px solid #00a8a8;
+  overflow: hidden;
+  padding: 4rem 1.25rem;
+}
+
+.section-header {
+  color: #007c7c;
+  font-weight: 800;
+  font-size: calc(1.75rem + 0.5vw);
+}
+
+.section-subtitle {
+  color: #555;
+  font-size: calc(1rem + 0.1vw);
+  max-width: 700px;
+  line-height: 1.6;
+}
+
+/* Swiper Customization */
 .swiper {
+  position: relative;
+  padding: 2rem 1rem;
   width: 100%;
   height: 100%;
 }
@@ -7,145 +31,183 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 20px;
-  background: #f9f9f9;
-  border-radius: 10px;
-  transition: transform 0.3s ease-in-out;
-}
-
-.swiper-slide:hover {
-  transform: scale(1.05);
-}
-
-.slide-image {
-  max-width: 300px;
-  height: auto;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  margin-top: 30px;
-}
-
-.slide-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin: 10px 0;
-}
-
-.slide-subtitle {
-  font-size: 18px;
-  color: #666;
-}
-
-/* Custom Styles for Each Slide */
-.swiper-slide--one {
-  background-color: #ffefd5;
-}
-
-.swiper-slide--two {
-  background-color: #ffe4e1;
-}
-
-.swiper-slide--three {
-  background-color: #e0ffff;
-}
-
-.swiper-slide--four {
-  background-color: #fafad2;
-}
-.achievements-section {
-  padding: 60px 20px;
-  background: linear-gradient(to bottom right, #eaf6f6, #ffffff);
-  border-top: 5px solid #00a8a8;
-  border-radius: 15px;
-}
-
-.section-header-container {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.section-header {
-  font-size: 32px;
-  font-weight: 800;
-  color: #007c7c;
-}
-
-.section-subtitle {
-  font-size: 18px;
-  color: #555;
-  max-width: 700px;
-  margin: 10px auto 0;
-  line-height: 1.6;
-}
-
-.swiper {
-  width: 100%;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.swiper-slide {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 25px;
   background: #fff;
-  border-radius: 15px;
+  border-radius: 1rem;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  height: auto;
+  padding: 1.25rem;
 }
 
 .swiper-slide:hover {
-  transform: translateY(-5px) scale(1.03);
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.slide-image-wrapper {
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
 }
 
 .slide-image {
-  max-width: 280px;
-  height: auto;
-  border-radius: 12px;
-  margin-bottom: 15px;
-  margin-top: 20px;
+  border-radius: 0.75rem;
   border: 3px solid #00b3b3;
+  max-height: 280px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.slide-content {
+  padding: 0 0.5rem;
 }
 
 .slide-title {
-  font-size: 22px;
-  font-weight: 600;
   color: #003f3f;
-  margin-bottom: 8px;
+  font-size: calc(1.1rem + 0.2vw);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
 }
 
 .slide-subtitle {
-  font-size: 16px;
   color: #666;
+  font-size: calc(0.9rem + 0.1vw);
 }
 
-/* Custom background for each slide */
+/* Custom slide backgrounds with subtle gradients */
 .swiper-slide--one {
-  background-color: #fff5e6;
+  background: linear-gradient(145deg, #fff5e6, #fff9f0);
 }
 
 .swiper-slide--two {
-  background-color: #ffeef1;
+  background: linear-gradient(145deg, #ffeef1, #fff2f5);
 }
 
 .swiper-slide--three {
-  background-color: #e6f9ff;
+  background: linear-gradient(145deg, #e6f9ff, #f0fbff);
 }
 
 .swiper-slide--four {
-  background-color: #fdfddb;
+  background: linear-gradient(145deg, #fdfddb, #fefee6);
+}
+
+/* Navigation elements */
+.swiper-navigation-wrapper {
+  position: static;
+  margin-top: 2rem;
 }
 
 .swiper-button-next,
 .swiper-button-prev {
-  color: #007c7c;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background-color: rgba(0, 124, 124, 0.9);
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.swiper-button-next:after,
+.swiper-button-prev:after {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.swiper-button-prev {
+  left: 1rem;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background-color: rgba(0, 179, 179, 1);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.swiper-button-next.swiper-button-disabled,
+.swiper-button-prev.swiper-button-disabled {
+  opacity: 0.35;
+  cursor: auto;
+  pointer-events: none;
+}
+
+/* Pagination styles */
+.swiper-pagination {
+  position: static;
+  margin-top: 2rem;
+}
+
+.swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  background: #007c7c;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+  margin: 0 6px;
 }
 
 .swiper-pagination-bullet-active {
-  background: #007c7c;
+  background: #00b3b3;
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .achievements-section {
+    padding: 3rem 1rem;
+  }
+
+  .section-header {
+    font-size: 1.5rem;
+  }
+
+  .section-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .slide-title {
+    font-size: 1.1rem;
+  }
+
+  .slide-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .slide-image {
+    max-height: 220px;
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    width: 35px;
+    height: 35px;
+  }
+
+  .swiper-button-next:after,
+  .swiper-button-prev:after {
+    font-size: 1rem;
+  }
+
+  .swiper-button-prev {
+    left: 0.5rem;
+  }
+}
+
+/* RTL Support */
+[dir="rtl"] .swiper-button-next {
+  right: auto;
+  left: 1rem;
+}
+
+[dir="rtl"] .swiper-button-prev {
+  left: auto;
+  right: 1rem;
 }

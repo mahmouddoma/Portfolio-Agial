@@ -1,399 +1,85 @@
-.about-section {
-  background: linear-gradient(to bottom right, #f0f4f5, #ffffff);
-  direction: rtl;
-  font-family: "SuisseIntl", sans-serif !important;
-}
-
-.section-title {
-  font-family: "SuisseIntl", sans-serif !important;
-  font-size: 32px;
-  font-weight: 700;
-  color: #007c7c;
-}
-
-.section-description {
-  font-family: "SuisseIntl", sans-serif !important;
-  font-size: 18px;
-  font-weight: 400;
-  color: #444;
-  line-height: 2;
-}
-.container {
-  width: 100%;
-  margin: 0 auto;
-  padding: 30px;
-}
-
-.home-banner {
-  background-size: cover;
-  background-color: #002935;
-  color: #fff;
+.about-us-section {
+  height: 100vh;
+  overflow: hidden;
   position: relative;
+  font-family: "SuisseIntl", sans-serif;
+  padding: 4rem 0;
 }
 
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-}
-
-h2 {
-  font-size: 32px;
-  font-weight: bold;
-  color: #fff;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.col-md-8 p {
-  font-family: "SuisseIntl", sans-serif !important;
-  font-size: 1.1rem;
-  line-height: 1.8;
-  color: #fff;
-  text-align: right;
-  margin-bottom: 20px;
-  border-right: 4px solid #007bff;
-  padding-right: 15px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-}
-
-.col-md-4 {
-  flex: 1;
-  max-width: 400px;
-}
-
-.banner_img {
-  position: relative;
-  text-align: center;
-}
-
-.banner_img img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.total_students_badge {
+.slider,
+.slide,
+.overlay {
   position: absolute;
-  top: 10%;
-  right: -30px;
-  transform: translateX(-50%);
-  display: inline-block;
-  text-align: center;
-  background-color: #fff;
-  color: #444;
-  padding: 22px 20px;
-  border-radius: 8px;
-  box-shadow: 0 9px 65px rgba(255, 255, 255, 0.25);
-}
-
-.total_students_badge h4 {
-  font-size: 24px;
-  margin: 0;
-  font-weight: bold;
-}
-
-.total_students_badge span {
-  display: block;
-  font-size: 14px;
-  margin-top: 5px;
-}
-
-.total_students_badge .icon {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  background-color: #fff;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-.total_students_badge .icon svg {
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  fill: #1abc9c;
 }
 
-@media (max-width: 768px) {
-  .row {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .col-md-8 {
-    max-width: 100%;
-    margin-bottom: 20px;
-  }
-
-  .col-md-4 {
-    max-width: 100%;
-  }
-
-  .total_students_badge {
-    top: 5%;
-    left: 0;
-    transform: translateX(0);
-    padding: 15px 12px;
-    font-size: 18px;
-  }
-
-  .total_students_badge h4 {
-    font-size: 18px;
-  }
-
-  .total_students_badge span {
-    font-size: 12px;
-  }
-
-  .banner_img img {
-    border-radius: 5px;
-  }
+.slider {
+  z-index: 0;
 }
 
-@media (max-width: 480px) {
-  h2 {
-    font-size: 28px;
-  }
-
-  .total_students_badge {
-    padding: 10px 8px;
-  }
-
-  .total_students_badge h4 {
-    font-size: 16px;
-  }
-
-  .total_students_badge span {
-    font-size: 10px;
-  }
+.slide {
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  z-index: 0;
 }
 
-.tcourse_content {
-  text-align: center;
+.slide.active {
+  opacity: 1;
+  z-index: 1;
+}
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 2;
+}
+
+.z-2 {
+  z-index: 2;
+}
+
+.pagination {
   position: absolute;
-  bottom: -50px;
-  right: 75px;
+  bottom: 20px;
+  left: 50%;
   transform: translateX(-50%);
-  background-color: #fff;
-  color: #444;
+  z-index: 2;
+  display: flex;
+  gap: 12px;
+}
+
+.dot {
   display: inline-block;
-  padding: 22px 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 10px;
+  height: 10px;
+  margin: 0 5px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.tcourse_content h4 {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #4a4a4a;
+.dot.active {
+  background-color: white;
 }
 
-.tcourse_content span {
-  font-size: 1.25rem;
-  color: #a0a0a0;
-}
-
-.bwavehape {
-  position: absolute;
-  bottom: 65px;
-  left: -257px;
-}
-
-.bwavehape svg {
-  width: 1320px;
-}
-
-.bshape1 {
-  position: absolute;
-  top: 19%;
-  right: 2%;
-  transform: translateX(8.03333px) translateY(-17.1556px);
-}
-
-.bshape2 {
-  position: absolute;
-  top: 20%;
-  right: 37%;
-  transform: translateX(8.03333px) translateY(-17.1556px);
-}
-
-.bshape3 {
-  position: absolute;
-  top: 21%;
-  left: 2%;
-  transform: translateX(8.03333px) translateY(-17.1556px);
-}
-
-.bshape4 {
-  position: absolute;
-  bottom: 5%;
-  left: 12%;
-  transform: translateX(8.03333px) translateY(-17.1556px);
-}
-/* For screens smaller than 1200px (Large screens) */
-/* For screens smaller than 1200px (Large screens) */
-@media (max-width: 1199px) {
-  .home-banner h2 {
-    font-size: 2rem;
+/* Responsive Typography */
+@media (max-width: 768px) {
+  .about-us-section {
+    padding: 2rem 0;
   }
 
-  .home-banner .col-md-4,
-  .home-banner .col-md-8 {
-    padding: 10px;
-  }
-
-  .home-banner .banner_img img {
-    width: 100%;
-    height: auto;
-  }
-
-  .total_students_badge,
-  .tcourse_content {
-    position: absolute;
-    bottom: 20px;
-    left: 10px;
+  h2 {
+    font-size: 1.75rem;
   }
 }
 
-/* For screens smaller than 992px (Medium screens) */
-@media (max-width: 991px) {
-  .home-banner h2 {
-    font-size: 1.8rem;
-    text-align: center;
+@media (max-width: 576px) {
+  h2 {
+    font-size: 1.5rem;
   }
-
-  .home-banner .col-md-4,
-  .home-banner .col-md-8 {
-    padding: 20px;
-    width: 100%;
-  }
-
-  .home-banner .banner_img img {
-    width: 100%;
-    height: auto;
-  }
-
-  .total_students_badge,
-  .tcourse_content {
-    position: absolute;
-    bottom: 15px;
-    left: 5px;
-    text-align: left;
-  }
-
-  .bg_shapes .eitem {
-    display: none;
-  }
-}
-
-/* For screens smaller than 768px (Small screens) */
-@media (max-width: 767px) {
-  .home-banner h2 {
-    font-size: 1.6rem;
-    text-align: center;
-  }
-
-  .home-banner .col-md-4,
-  .home-banner .col-md-8 {
-    padding: 15px;
-    width: 100%;
-  }
-
-  .home-banner .banner_img img {
-    width: 100%;
-    height: auto;
-  }
-
-  .total_students_badge,
-  .tcourse_content {
-    position: relative;
-    bottom: auto;
-    left: auto;
-    width: 100%;
-    text-align: center;
-  }
-
-  .bg_shapes .eitem {
-    display: none;
-  }
-
-  .bwavehape {
-    display: none;
-  }
-}
-
-/* For screens smaller than 576px (Extra small screens) */
-@media (max-width: 575px) {
-  .home-banner h2 {
-    font-size: 1.4rem;
-  }
-  h4,
-  span {
-    font-size: 9px !important;
-  }
-  .icon {
-    width: 10px !important;
-    height: 10px !important;
-  }
-  .home-banner .col-md-4,
-  .home-banner .col-md-8 {
-    padding: 10px;
-    width: 100%;
-  }
-
-  .home-banner .banner_img img {
-    width: 100%;
-    height: auto;
-  }
-
-  .total_students_badge {
-    position: relative;
-    bottom: 407px;
-    left: 87px;
-    width: 15%;
-    height: 15%;
-    text-align: center;
-  }
-  .tcourse_content {
-    position: relative;
-    bottom: 136px;
-    left: -40px;
-    width: 27%;
-    height: 4%;
-    text-align: center;
-  }
-
-  .bg_shapes .eitem {
-    display: none;
-  }
-
-  .bwavehape {
-    display: none;
-  }
-}
-.about-section {
-  background: linear-gradient(to bottom right, #f0f4f5, #ffffff);
-  direction: rtl;
-  font-family: "SuisseIntl", sans-serif !important;
-}
-
-.section-title {
-  font-size: 32px;
-  font-weight: 800;
-  color: #007c7c;
-}
-
-.section-description {
-  font-size: 18px;
-  color: #444;
-  line-height: 2;
-}
-
-.about-logo {
-  max-width: 250px;
-  border-radius: 12px;
-  border: 3px solid #00b3b3;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }

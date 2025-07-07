@@ -1,58 +1,97 @@
 .custom-navbar {
-  background-color: #4b715c;
-  padding: 10px 20px;
-  direction: rtl;
-  font-family: "SuisseIntl", sans-serif;
   position: fixed;
   top: 0;
-  z-index: 1000;
-  width: 100%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  left: 0;
+  right: 0;
+  z-index: 1030;
+  padding: 1rem 0;
+  transition: all 0.3s ease;
+  background-color: transparent;
 }
 
-.navbar-brand img {
+.custom-navbar.scrolled {
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 0;
+}
+
+.navbar-brand {
+  padding: 0;
+}
+
+.img-navbar {
   border-radius: 50%;
-  border: 2px solid #fff;
+  transition: transform 0.3s ease;
 }
 
-.navbar-nav {
-  gap: 10px;
-  justify-content: center;
-  align-items: center;
+.navbar-brand:hover .img-navbar {
+  transform: scale(1.1);
 }
 
 .nav-link {
-  color: #fff !important;
-  font-size: 18px;
+  color: white;
   font-weight: 500;
-  padding: 8px 16px;
-  transition: all 0.3s ease;
-  border-radius: 8px;
+  padding: 0.5rem 1rem !important;
+  transition: color 0.3s ease;
+}
+
+.scrolled .nav-link {
+  color: #333;
 }
 
 .nav-link:hover,
-.nav-link.active:hover {
-  background-color: #0056b3;
-  color: #ffd700 !important;
-}
-
 .nav-link.active {
-  font-weight: bold;
-  color: #ffdd57 !important;
+  color: #0d6efd;
 }
 
 .navbar-toggler {
   border: none;
-}
-
-.navbar-toggler-icon {
-  background-image: none;
-}
-
-.navbar-toggler-icon::before {
-  content: "\f0c9";
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
+  padding: 0.25rem;
   color: white;
-  font-size: 1.5rem;
+}
+
+.scrolled .navbar-toggler {
+  color: #333;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none;
+}
+
+/* Responsive styles */
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .nav-link {
+    color: #333 !important;
+    text-align: center;
+    padding: 0.75rem !important;
+  }
+
+  .navbar-nav {
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .custom-navbar {
+    padding: 0.5rem 0;
+  }
+
+  .navbar-brand img {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+/* RTL Support */
+[dir="rtl"] .navbar-toggler {
+  margin-left: 0;
+  margin-right: auto;
 }

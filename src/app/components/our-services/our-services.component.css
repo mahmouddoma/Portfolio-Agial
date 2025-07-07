@@ -43,7 +43,7 @@ h3.title {
 }
 
 .course-name {
-  font-size: 14px; /* Smaller font size */
+  font-size: 14px;
   font-weight: bold;
   color: #2c3e50;
   margin-bottom: 10px; /* Smaller margin */
@@ -53,7 +53,7 @@ h3.title {
 .students-count,
 .lessons-hours,
 .instructor {
-  font-size: 14px; /* Smaller font size */
+  font-size: 14px;
   color: #7f8c8d;
   margin: 6px 0; /* Smaller margin */
   text-align: center;
@@ -66,7 +66,7 @@ h3.title {
 }
 
 .instructors-arabic li {
-  font-size: 12px; /* Smaller font size */
+  font-size: 12px;
   color: #7f8c8d;
   margin-bottom: 5px;
 }
@@ -77,6 +77,58 @@ h3.title {
   object-fit: cover;
   border-radius: 8px; /* Slightly smaller border radius */
   margin-top: 10px;
+}
+
+.services-section {
+  background-color: #f8f9fa;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.section-description {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.service-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+}
+
+.icon-wrapper {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto;
+  background: #f0f4ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-wrapper i {
+  font-size: 2rem;
+  color: #0d6efd;
+}
+
+.service-title {
+  color: #333;
+  font-weight: 600;
+}
+
+.service-description {
+  color: #666;
+  line-height: 1.6;
 }
 
 /* RTL Support */
@@ -103,7 +155,7 @@ h3.title {
 
   h2,
   h3.title {
-    font-size: 18px; /* Smaller font size */
+    font-size: 18px;
   }
 }
 
@@ -114,7 +166,7 @@ h3.title {
 
   h2,
   h3.title {
-    font-size: 16px; /* Smaller font size */
+    font-size: 16px;
   }
 
   .course-name {
@@ -124,7 +176,24 @@ h3.title {
   .students-count,
   .lessons-hours,
   .instructor {
-    font-size: 12px; /* Smaller font size */
+    font-size: 12px;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .section-description {
+    font-size: 1rem;
+  }
+
+  .icon-wrapper {
+    width: 60px;
+    height: 60px;
+  }
+
+  .icon-wrapper i {
+    font-size: 1.75rem;
   }
 }
 
@@ -136,7 +205,7 @@ h3.title {
 
   h2,
   h3.title {
-    font-size: 14px; /* Smaller font size */
+    font-size: 14px;
   }
 
   .course-name {
@@ -147,5 +216,13 @@ h3.title {
   .lessons-hours,
   .instructor {
     font-size: 10px; /* Even smaller font size */
+  }
+
+  .section-title {
+    font-size: 1.75rem;
+  }
+
+  .service-card {
+    margin-bottom: 1rem;
   }
 }

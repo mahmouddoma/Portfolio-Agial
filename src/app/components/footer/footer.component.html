@@ -2,58 +2,18 @@
   <div class="footer-content">
     <!-- Company Info -->
     <div class="footer-section company-info">
-      <h3 class="company-heading">اسم الشركة</h3>
-      <img
-        src="https://ajyalalquran.somee.com/assets/images/agialLogo.jpg"
-        alt="logo"
-        width="100"
-        class="img-navbar"
-      />
+      <h3 class="company-heading">{{companyName}}</h3>
+      <img src="https://ajyalalquran.somee.com/assets/images/agialLogo.jpg" [alt]="companyName + ' logo'" width="100"
+        height="100" class="img-navbar" loading="lazy" />
     </div>
 
     <!-- Quick Links -->
     <div class="footer-section quick-links">
       <h4>روابط سريعة</h4>
       <ul>
-        <!-- Wrap the list items in an unordered list -->
-        <li>
-          <a
-            class="nav-link"
-            routerLink="/about"
-            routerLinkActive="active"
-            (click)="scrollTo($event)"
-          >
-            من نحن
-          </a>
-        </li>
-        <li>
-          <a
-            class="nav-link"
-            routerLink="/features"
-            routerLinkActive="active"
-            (click)="scrollTo($event)"
-          >
-            الميزات
-          </a>
-        </li>
-        <li>
-          <a
-            class="nav-link"
-            routerLink="/our-services"
-            routerLinkActive="active"
-            (click)="scrollTo($event)"
-          >
-            خدماتنا
-          </a>
-        </li>
-        <li>
-          <a
-            class="nav-link"
-            routerLink="/contact"
-            routerLinkActive="active"
-            (click)="scrollTo($event)"
-          >
-            اتصل بنا
+        <li *ngFor="let link of quickLinks">
+          <a class="nav-link" [routerLink]="link.path" routerLinkActive="active" (click)="scrollTo($event)">
+            {{link.text}}
           </a>
         </li>
       </ul>
@@ -64,24 +24,26 @@
       <h4>اتصل بنا</h4>
       <p>
         البريد الإلكتروني:
-        <a href="mailto:info&#64;company.com">info&#64;company.com</a>
+        <a [href]="'mailto:' + contactInfo.email">{{contactInfo.email}}</a>
       </p>
-      <p>الهاتف: +1 (123) 456-7890</p>
-      <p>العنوان: 123 شارع الأعمال، المدينة، البلد</p>
+      <p>الهاتف: {{contactInfo.phone}}</p>
+      <p>العنوان: {{contactInfo.address}}</p>
     </div>
 
     <!-- Social Media -->
     <div class="footer-section social-media">
       <h4>تابعنا</h4>
-      <a href="#" target="_blank"><i class="fab fa-facebook"></i></a>
-      <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
-      <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
-      <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
+      <div class="social-links">
+        <a *ngFor="let social of socialLinks" [href]="social.url" target="_blank" rel="noopener noreferrer"
+          [attr.aria-label]="social.ariaLabel">
+          <i class="fab fa-{{social.icon}}" aria-hidden="true"></i>
+        </a>
+      </div>
     </div>
   </div>
 
   <!-- Footer Bottom -->
   <div class="footer-bottom">
-    <p>&copy; 2025 اسم الشركة. جميع الحقوق محفوظة.</p>
+    <p>&copy; {{currentYear}} {{companyName}}. جميع الحقوق محفوظة.</p>
   </div>
 </footer>

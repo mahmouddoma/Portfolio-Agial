@@ -1,3 +1,8 @@
-<button *ngIf="showButton" class="back-to-top-btn" (click)="scrollToTop()">
-  ↑
-</button>
+<div class="fixed-buttons">
+  <button *ngIf="showButton" class="back-to-top-btn" (click)="scrollToTop()">
+    ↑
+  </button>
+  <a href="https://wa.me/+1234567890" target="_blank" class="whatsapp-btn" aria-label="تواصل معنا عبر واتساب">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+</div>
