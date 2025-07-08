@@ -29,10 +29,8 @@ export class FeatureComponent {
       title: 'تقارير الطلاب و متابعه الطلاب',
       description: 'يمكن لنظام مدرسة أجيال القرآن إنشاء تقارير مفصلة عن تقدم الطلاب، تتيح للمعلمين والإداريين متابعة تحصيل الطلاب في جميع المواد. كما يمكن تتبع الحضور والأنشطة الخاصة بالطلاب لضمان تقديم الدعم المناسب.',
       icon: {
-        type: 'svg',
-        content: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
-        </svg>`
+        type: 'img',
+        content: `https://i.pinimg.com/736x/2c/2b/10/2c2b10cff1dba30cf56ef9a8fd28589b.jpg`
       }
     },
     {
@@ -41,7 +39,7 @@ export class FeatureComponent {
       description: 'يقوم المشرفون على التحفيظ والتدريس بمتابعة وتوجيه الطلاب في حفظ وفهم القرآن الكريم، مع التركيز على جودة الحفظ والتجويد.',
       icon: {
         type: 'img',
-        content: 'https://theyellowspot.com/wp-content/uploads/2020/07/banner_supervisor-1-on1qjs9amyjm5krb8zsn6srcurf3qz5qc4wybelzyo.png',
+        content: 'https://i.pinimg.com/736x/c3/1e/c0/c31ec00f14f34b803f6d0fc15fcc6fd9.jpg',
         style: {
           borderRadius: '10px',
           boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
@@ -53,10 +51,8 @@ export class FeatureComponent {
       title: 'حلقات السور القرآنية ووقت الحلقة والمشرف والمعلم',
       description: 'تتم إدارة الحلقات من قبل مشرفين ومعلمين متخصصين، مع جدولة مرنة تناسب احتياجات الطلاب.',
       icon: {
-        type: 'svg',
-        content: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/>
-        </svg>`
+        type: 'img',
+        content: `https://i.pinimg.com/736x/8b/45/6b/8b456b5ec6ebd65db0a11e9c0a56a1d2.jpg`
       }
     },
     {
@@ -65,7 +61,7 @@ export class FeatureComponent {
       description: 'المدرسة هي البيئة التي تنمي قدرات الطالب على الصعيدين الأكاديمي والشخصي، مع التركيز على القيم الإسلامية والتربوية.',
       icon: {
         type: 'img',
-        content: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_l9oVFo3e85aWkRpJv7S5SIoJmXMWUuvGKw&s',
+        content: 'https://i.pinimg.com/736x/32/f6/1f/32f61f2f0b2e81d1f80d4d6ba5250e3c.jpg',
         style: {
           borderRadius: '10px',
           boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)'

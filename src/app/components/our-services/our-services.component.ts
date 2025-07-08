@@ -30,7 +30,7 @@ export class OurServicesComponent {
       instructorAr: 'سارة لي',
       instructorsAr: ['سمر سعيد سليمان', 'عبدالله صبحي محمد', 'خالد أحمد'],
       image:
-        'https://w7.pngwing.com/pngs/527/663/png-transparent-logo-person-user-person-icon-rectangle-photography-computer-wallpaper-thumbnail.png',
+        'https://i.pinimg.com/736x/d6/73/1f/d6731f4c2cc28f51d9d0f82b5c569d01.jpg',
     },
     {
       courseNameAr: 'تفسير سور من القرآن',
@@ -40,7 +40,7 @@ export class OurServicesComponent {
       instructorAr: 'أحمد علي',
       instructorsAr: ['محمود عبد الله', 'فاطمة الزهراء', 'محمد سعيد'],
       image:
-        'https://w7.pngwing.com/pngs/527/663/png-transparent-logo-person-user-person-icon-rectangle-photography-computer-wallpaper-thumbnail.png',
+        'https://i.pinimg.com/736x/cb/7b/54/cb7b54a03248fa27b8b6b4ebc6e6ea72.jpg',
     },
     {
       courseNameAr: 'تحفيظ',
@@ -50,7 +50,7 @@ export class OurServicesComponent {
       instructorAr: 'مريم أحمد',
       instructorsAr: ['سارة علي', 'محمد حسين'],
       image:
-        'https://w7.pngwing.com/pngs/527/663/png-transparent-logo-person-user-person-icon-rectangle-photography-computer-wallpaper-thumbnail.png',
+        'https://i.pinimg.com/736x/18/5a/8e/185a8e68e9eacc6cb989fb427509997a.jpg',
     },
     {
       courseNameAr: 'تفسير سور من القرآن',
@@ -60,7 +60,7 @@ export class OurServicesComponent {
       instructorAr: 'علي حسن',
       instructorsAr: ['سامي أحمد', 'ليلى مصطفى'],
       image:
-        'https://w7.pngwing.com/pngs/527/663/png-transparent-logo-person-user-person-icon-rectangle-photography-computer-wallpaper-thumbnail.png',
+        'https://i.pinimg.com/736x/19/45/9e/19459e259b57e0838a9e452a23e63287.jpg',
     },
     {
       courseNameAr: 'تفسير سور من القرآن',
@@ -70,7 +70,7 @@ export class OurServicesComponent {
       instructorAr: 'فاطمة الزهراء',
       instructorsAr: ['أحمد منصور', 'سارة لي'],
       image:
-        'https://w7.pngwing.com/pngs/527/663/png-transparent-logo-person-user-person-icon-rectangle-photography-computer-wallpaper-thumbnail.png',
+        'https://i.pinimg.com/736x/f7/ec/77/f7ec77d7bd18f4731185e4766843c7ca.jpg',
     },
   ];
 }

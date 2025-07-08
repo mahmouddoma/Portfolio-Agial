@@ -39,25 +39,25 @@ export class SliderComponent implements AfterViewInit, OnDestroy {
     {
       title: 'رحلة النجاح في حفظ القرآن',
       subtitle: 'طلابنا يتفوقون في حفظ كتاب الله',
-      image: 'https://img.freepik.com/free-photo/muslims-reading-from-quran_53876-20958.jpg',
+      image: 'https://i.pinimg.com/736x/64/84/ef/6484eff71c4f79e50c9354d4f727c1f5.jpg',
       cssClass: 'swiper-slide--one',
     },
     {
       title: 'تعليم القرآن للفتيات',
       subtitle: 'برامج متخصصة لتحفيظ القرآن',
-      image: 'https://img.freepik.com/free-vector/muslim-girls-education-illustration_52683-130674.jpg',
+      image: 'https://i.pinimg.com/736x/01/9d/96/019d968fe8f67088ba03fe1bb57d418c.jpg',
       cssClass: 'swiper-slide--two',
     },
     {
       title: 'التجويد والتلاوة',
       subtitle: 'تعلم أحكام التجويد مع أفضل المعلمين',
-      image: 'https://img.freepik.com/premium-photo/young-man-reading-quran-after-doing-salat_175634-15484.jpg',
+      image: 'https://i.pinimg.com/736x/dd/10/27/dd102763a8e104f7d58a3a70017c9cee.jpg',
       cssClass: 'swiper-slide--three',
     },
     {
       title: 'دورات التفسير',
       subtitle: 'فهم معاني القرآن الكريم',
-      image: 'https://img.freepik.com/free-psd/islamic-new-year-celebration-template_23-2151559173.jpg',
+      image: 'https://i.pinimg.com/736x/1c/1f/03/1c1f03f78f4b053d1c541d0e61c197b4.jpg',
       cssClass: 'swiper-slide--four',
     },
   ];
