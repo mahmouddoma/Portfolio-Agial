@@ -2,7 +2,7 @@
   "name": "project-landing",
   "version": "0.0.0",
   "scripts": {
-   "ng": "ng",
+    "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
@@ -26,7 +26,7 @@
     "ngx-slick-carousel": "^19.0.0",
     "rxjs": "~7.8.0",
     "slick-carousel": "^1.8.1",
-    "swiper": "^11.2.1",
+    "swiper": "^11.2.10",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },

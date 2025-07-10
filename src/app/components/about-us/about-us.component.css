@@ -1,9 +1,9 @@
 .about-us-section {
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
   position: relative;
   font-family: "SuisseIntl", sans-serif;
   padding: 4rem 0;
+  overflow: hidden;
 }
 
 .slider,
@@ -89,7 +89,14 @@
 }
 
 @media (max-width: 576px) {
+  .about-us-section {
+    padding: 2rem 0;
+  }
+
   h2 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
   }
 }

@@ -6,27 +6,32 @@
   --transition-duration: 0.3s;
   --border-radius: 8px;
   --box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  --item-min-height: 420px;
 }
 
-/* Section Styles */
+/* =====================
+   Feature Section
+   ===================== */
 .feature-section {
   padding: 4rem 1rem;
   font-family: "SuisseIntl", sans-serif;
   direction: rtl;
 }
 
-/* Header Styles */
+/* =====================
+   Section Title
+   ===================== */
 .section-title {
   margin-bottom: 3rem;
   text-align: center;
 }
 
 .section-title span {
-  display: block;
   font-size: 1.25rem;
   font-weight: bold;
   color: var(--primary-color);
   margin-bottom: 0.5rem;
+  display: block;
 }
 
 .section-title h2 {
@@ -36,25 +41,39 @@
   margin: 0;
 }
 
-/* Feature Item Styles */
-.feature-item {
-  position: relative;
-  padding: 3rem 1.5rem 2rem;
-  text-align: center;
-  border: 1px solid #c7c7c7;
-  border-radius: 15px;
-  box-shadow: 0px 4px 8px 0px rgb(96, 96, 96);
-  margin-bottom: 2rem;
-  transition: all 0.4s ease;
-  overflow: hidden;
-  background: #fff;
-}
+/* =====================
+   Feature Item
+   ===================== */
+   .feature-item {
+    position: relative;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 3rem 1.5rem 2rem;
+    text-align: center;
+    overflow: hidden;
+    width: 100%;
+    min-height: var(--item-min-height);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 10px;
+    
+     transition: 
+      transform 0.4s ease,
+      box-shadow 0.4s ease,
+      border-color 0.4s ease,
+      background-color 0.4s ease;
+  }
+  
 
-.feature-item:hover {
-  transform: translateY(-10px);
-  box-shadow: 0px 8px 20px 0px rgb(96, 96, 96);
-  border-color: var(--primary-color);
-}
+  .feature-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 30px rgba(13, 95, 249, 0.25);
+    border-color: var(--primary-color);
+    background-color: #f9fbff;
+  }
 
 .feature-item:hover .fea-icon {
   transform: scale(1.1) rotate(5deg);
@@ -64,27 +83,32 @@
   transform: translateY(-5px);
 }
 
-/* Feature Number Badge */
+/* =====================
+   Feature Badge
+   ===================== */
 .feature-number {
   position: absolute;
   top: 0;
   left: 2rem;
-  background: var(--primary-color);
-  color: white;
+  background-color: var(--primary-color);
+  color: #fff;
   padding: 0.25rem 0.75rem;
   border-radius: 0 0 var(--border-radius) var(--border-radius);
   font-size: 0.9rem;
   font-weight: 600;
 }
 
-/* Icon Styles */
-.fea-icon {
-  margin-bottom: 1.5rem;
-  height: 140px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+/* =====================
+   Icon Area
+   ===================== */
+   .fea-icon {
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    transition: transform 0.4s ease;
+  }
 
 .svg-icon {
   width: 64px;
@@ -95,15 +119,19 @@
   width: 100%;
   height: 100%;
   fill: var(--primary-color);
-  transition: fill var(--transition-duration) ease;
+  transition: transform 0.4s ease, fill 0.4s ease;
+}
+
+.feature-item:hover .fea-icon {
+  transform: scale(1.1) rotate(3deg);
 }
 
 .feature-item:hover .svg-icon svg {
-  fill: var(--primary-color);
   transform: scale(1.1);
+  fill: var(--primary-color);
 }
 
-img {
+.feature-item img {
   max-width: 100%;
   height: auto;
   transition: transform var(--transition-duration) ease;
@@ -113,10 +141,12 @@ img {
   transform: scale(1.05);
 }
 
-/* Content Styles */
+/* =====================
+   Feature Content
+   ===================== */
 .feature-content {
   text-align: center;
-  transition: transform 0.3s ease;
+  transition: transform var(--transition-duration) ease;
 }
 
 .fea-title {
@@ -127,16 +157,19 @@ img {
 }
 
 .fea-desc {
-  color: var(--text-secondary);
   font-size: 0.95rem;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin: 0;
 }
 
-/* Responsive Styles */
+/* =====================
+   Responsive Design
+   ===================== */
 @media (max-width: 992px) {
   .feature-item {
     padding: 2.5rem 1.25rem 1.75rem;
+    min-height: 400px;
   }
 
   .fea-title {
@@ -163,6 +196,7 @@ img {
 
   .feature-item {
     padding: 2rem 1rem 1.5rem;
+    min-height: 380px;
   }
 
   .fea-icon {
@@ -188,5 +222,9 @@ img {
     left: 1rem;
     padding: 0.2rem 0.5rem;
     font-size: 0.8rem;
+  }
+
+  .feature-item {
+    min-height: 360px;
   }
 }

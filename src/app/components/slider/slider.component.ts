@@ -1,13 +1,12 @@
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, AfterViewInit, OnDestroy, CUSTOM_ELEMENTS_SCHEMA, HostListener } from '@angular/core';
 import Swiper from 'swiper';
-import { Pagination, Navigation, Autoplay, Keyboard } from 'swiper/modules';
+import { Navigation } from 'swiper/modules';
 
-interface SlideItem {
+interface TestimonialSlide {
+  image: string;
   title: string;
   subtitle: string;
-  image: string;
-  cssClass: string;
 }
 
 @Component({
@@ -15,94 +14,50 @@ interface SlideItem {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './slider.component.html',
-  styleUrl: './slider.component.css',
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  styleUrls: ['./slider.component.css'],
 })
-export class SliderComponent implements AfterViewInit, OnDestroy {
-  private swiper: Swiper | null = null;
-
-  @HostListener('keydown.arrowLeft', ['$event'])
-  @HostListener('keydown.arrowRight', ['$event'])
-  onKeyDown(event: KeyboardEvent) {
-    if (!this.swiper) return;
-
-    if (event.key === 'ArrowLeft') {
-      event.preventDefault();
-      this.swiper.slidePrev();
-    } else if (event.key === 'ArrowRight') {
-      event.preventDefault();
-      this.swiper.slideNext();
-    }
-  }
-
-  slides: SlideItem[] = [
+export class SliderComponent implements OnInit, AfterViewInit {
+  slides: TestimonialSlide[] = [
     {
-      title: 'رحلة النجاح في حفظ القرآن',
-      subtitle: 'طلابنا يتفوقون في حفظ كتاب الله',
-      image: 'https://i.pinimg.com/736x/64/84/ef/6484eff71c4f79e50c9354d4f727c1f5.jpg',
-      cssClass: 'swiper-slide--one',
+      image: 'https://i.pinimg.com/736x/f2/fa/a4/f2faa44cc72d5d11d59f031962f3c7bc.jpg',
+      title: 'أحمد محمد',
+      subtitle: 'الحمد لله، أتممت حفظ القرآن الكريم كاملاً في عامين من الدراسة المنتظمة',
     },
     {
-      title: 'تعليم القرآن للفتيات',
-      subtitle: 'برامج متخصصة لتحفيظ القرآن',
-      image: 'https://i.pinimg.com/736x/01/9d/96/019d968fe8f67088ba03fe1bb57d418c.jpg',
-      cssClass: 'swiper-slide--two',
+      image: 'https://i.pinimg.com/736x/cf/db/2f/cfdb2ffc2643584278cc7d91a67dc908.jpg',
+      title: 'عبد الرحمن خالد',
+      subtitle: 'تعلمت القراءة الصحيحة وأحكام التجويد بطريقة سهلة وميسرة',
     },
     {
-      title: 'التجويد والتلاوة',
-      subtitle: 'تعلم أحكام التجويد مع أفضل المعلمين',
-      image: 'https://i.pinimg.com/736x/dd/10/27/dd102763a8e104f7d58a3a70017c9cee.jpg',
-      cssClass: 'swiper-slide--three',
-    },
-    {
-      title: 'دورات التفسير',
-      subtitle: 'فهم معاني القرآن الكريم',
-      image: 'https://i.pinimg.com/736x/1c/1f/03/1c1f03f78f4b053d1c541d0e61c197b4.jpg',
-      cssClass: 'swiper-slide--four',
+      image: 'https://i.pinimg.com/736x/4d/1a/19/4d1a19621a8a37cedab32b234fafb26a.jpg',
+      title: 'محمد عبد الله',
+      subtitle: 'أشكر معلمي على صبره وحسن تعليمه، وأنصح كل من يريد تعلم القرآن بهذا المعهد',
     },
   ];
 
+  private swiper: Swiper | undefined;
+
+  constructor() {}
+
+  ngOnInit(): void {}
+
   ngAfterViewInit(): void {
-    this.initializeSwiper();
+    this.initSwiper();
   }
 
-  ngOnDestroy(): void {
-    if (this.swiper) {
-      this.swiper.destroy();
-    }
-  }
-
-  private initializeSwiper(): void {
+  private initSwiper(): void {
     this.swiper = new Swiper('.swiper', {
-      modules: [Pagination, Navigation, Autoplay, Keyboard],
+      modules: [Navigation],
       slidesPerView: 1,
-      spaceBetween: 20,
+      spaceBetween: 30,
       loop: true,
-      grabCursor: true,
-      centeredSlides: true,
-      keyboard: {
-        enabled: true,
-        onlyInViewport: true,
-      },
-      autoplay: {
-        delay: 3000,
-        disableOnInteraction: false,
-        pauseOnMouseEnter: true,
-      },
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
       navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
+        nextEl: '.next-button',
+        prevEl: '.prev-button',
       },
       breakpoints: {
-        640: {
-          slidesPerView: 2,
-        },
-        1024: {
-          slidesPerView: 3,
+        768: {
+          slidesPerView: 1,
         },
       },
     });

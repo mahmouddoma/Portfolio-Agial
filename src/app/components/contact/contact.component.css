@@ -1,12 +1,14 @@
 .contact-us-container {
+  width: 100%;
   max-width: 800px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1.5rem;
   font-family: "SuisseIntl", sans-serif;
   background: #f9f9f9;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   direction: rtl;
+  overflow: hidden;
 }
 
 h2 {
@@ -282,13 +284,23 @@ button[type="submit"]:disabled {
     font-size: 1.5rem;
   }
 
+  input,
+  textarea {
+    font-size: 14px;
+    max-width: 100%;
+  }
+
   .form-control {
     padding: 0.5rem;
     font-size: 0.875rem;
+    width: 100%;
   }
 
   .btn {
     width: 100%;
+    white-space: normal;
+    height: auto;
+    min-height: 44px;
   }
 
   .map-container {

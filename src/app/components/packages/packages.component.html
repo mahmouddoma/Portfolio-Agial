@@ -1,56 +1,46 @@
 <div class="packages-container">
   <div class="packages-header">
-    <h2 class="section-title">الباقات</h2>
-    <p class="section-description">
-      اختر الباقة التي تناسب احتياجاتك من بين باقاتنا المتنوعة.
-    </p>
+    <div class="section-title">الباقات</div>
+    <div class="section-description">اختر الباقة المناسبة لك</div>
   </div>
 
-  <!-- Error Handling -->
-  <div *ngIf="error" class="error-message">{{ error }}</div>
-
-  <!-- Package Cards -->
-  <div
-    class="swiper-container"
-    *ngIf="!error && packages.length > 0"
-    pagination="true"
-    pagination-clickable="true"
-    space-between="30"
-    slides-per-view="3"
-  >
+  <div class="swiper-container">
     <div class="swiper-wrapper">
       <div class="swiper-slide" *ngFor="let package of packages">
-        <div class="package-item">
+        <div class="package-item" [ngClass]="{
+            'package-diamond': package.name.includes('الماسية'),
+            'package-fort': package.name.includes('الحصون'),
+            'package-bronze': package.name.includes('برونزية'),
+            'package-silver': package.name.includes('الفضية'),
+            'package-gold': package.name.includes('ذهبية')
+          }">
           <div class="package-title">{{ package.name }}</div>
-          <div class="package-details">
-            <div>
-              <strong>الدقائق الكلية:</strong> {{ package.totalMinutes }}
-            </div>
-            <div>
-              <strong>عدد المشتركين:</strong> {{ package.subscriberCount }}
-            </div>
-            <div>
-              <strong>نوع الاشتراك:</strong> {{ package.subscribeType }}
-            </div>
-          </div>
           <div class="package-price">
-            <div>LE: {{ package.priceLE }}</div>
-            <div>$: {{ package.priceDollar }}</div>
-            <div>ريال: {{ package.priceReyal }}</div>
+            <strong>
+              {{
+                currencyField === 'priceLE'
+                  ? package.priceLE + ' ج.م / الشهر'
+                  : currencyField === 'priceReyal'
+                  ? package.priceReyal + ' ريال / الشهر'
+                  : '$' + package.priceDollar + ' / month'
+              }}
+            </strong>
           </div>
-          <a
-            href="https://ajyalalquran.somee.com/#/add-packages"
-            target="_blank"
-          >
-            <button class="btn-select">اختيار</button>
+          <ul class="package-features">
+            <li>الدقائق الكلية: {{ package.totalMinutes }}</li>
+            <!-- <li>عدد المشتركين: {{ package.subscriberCount }}</li> -->
+            <li>نوع الاشتراك: {{ package.subscribeType }}</li>
+          </ul>
+          <a href="https://ajyalalquran.somee.com/#/add-packages" target="_blank">
+            <button class="btn-select">اشترك الآن</button>
           </a>
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- Loading Message -->
-  <div *ngIf="!error && packages.length === 0" class="error-message">
-    جاري تحميل الباقات...
+    <!-- Swiper navigation buttons -->
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+    <!-- Swiper pagination -->
+    <!-- <div class="swiper-pagination"></div> -->
   </div>
 </div>
