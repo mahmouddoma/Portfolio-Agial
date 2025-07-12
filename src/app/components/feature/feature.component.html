@@ -1,15 +1,15 @@
-<section class="feature-section" aria-labelledby="feature-title" appInViewport animationType="slide-bottom">
+<section class="feature-section" aria-labelledby="feature-title" >
   <div class="container-fluid features">
     <div class="row">
       <div class="col-12 text-center">
         <div class="section-title">
           <span>الميزات</span>
-          <h2 id="feature-title">منصة واحدة، العديد من الدورات</h2>
+          <h2 id="feature-title">{{section.title}}</h2>
         </div>
       </div>
 
       <div class="col-xl-3 col-lg-4 col-md-6 col-12" *ngFor="let feature of features">
-        <article class="feature-item" [attr.aria-label]="feature.title">
+        <article class="feature-item" [attr.aria-label]="feature.subtitle || feature.title">
           <span class="feature-number" aria-hidden="true">{{ feature.id }}</span>
 
           <div class="fea-icon">
@@ -18,12 +18,12 @@
               </div>
             </ng-container>
             <ng-template #imageBlock>
-              <img [src]="feature.icon.content" [alt]="feature.title" width="140" loading="lazy"
+              <img class="rounded-2" [src]="feature.icon.content" [alt]="feature.title" width="140" loading="lazy"
                 [ngStyle]="feature.icon.style || {}" />
             </ng-template>
           </div>
 
-          <div class="feature-content">
+          <div class="feature-content fea-content">
             <h3 class="fea-title">{{ feature.title }}</h3>
             <p class="fea-desc">{{ feature.description }}</p>
           </div>

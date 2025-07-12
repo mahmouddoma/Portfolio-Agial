@@ -22,6 +22,7 @@ export class CounterComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('counterElement') counterElements!: QueryList<ElementRef>;
   private observer: IntersectionObserver | null = null;
   counters: CounterItem[] = [];
+  private triggered: boolean = false;
 
   constructor(
     private counterService: CounterService,
@@ -36,6 +37,10 @@ export class CounterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.observeCounters();
+    // Fallback: If on small screen or IntersectionObserver not supported, trigger all counters
+    if (window.innerWidth <= 768 || !('IntersectionObserver' in window)) {
+      setTimeout(() => this.startAllCounters(), 400); // slight delay for DOM
+    }
   }
 
   ngOnDestroy(): void {
@@ -44,14 +49,16 @@ export class CounterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private setupIntersectionObserver(): void {
-    this.observer = this.counterService.createIntersectionObserver((entries) => {
-      entries.forEach((entry, index) => {
-        if (entry.isIntersecting) {
-          this.startSingleCounter(index);
-          this.observer?.unobserve(entry.target);
-        }
+    if ('IntersectionObserver' in window) {
+      this.observer = this.counterService.createIntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+          if (entry.isIntersecting) {
+            this.startSingleCounter(index);
+            this.observer?.unobserve(entry.target);
+          }
+        });
       });
-    });
+    }
   }
 
   private observeCounters(): void {
@@ -91,6 +98,12 @@ export class CounterComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cdRef.markForCheck();
       }
     }, 16);
+  }
+
+  private startAllCounters(): void {
+    if (this.triggered) return;
+    this.triggered = true;
+    this.counters.forEach((_, idx) => this.startSingleCounter(idx));
   }
 
   private cleanupCounters(): void {
