@@ -40,12 +40,17 @@ export class PackagesComponent implements OnInit, AfterViewInit {
   }
 
   getUserCountry(): void {
-    this.http.get<{ country_name: string }>('https://ipapi.co/json/').subscribe({
-      next: (res: { country_name: string }) => {
+    this.http.get<{ country_name: string, country_code?: string, currency?: string }>('https://ipapi.co/json/').subscribe({
+      next: (res: { country_name: string, country_code?: string, currency?: string }) => {
         this.userCountry = res.country_name;
+        // Robust Saudi detection
         if (this.userCountry === 'Egypt') {
           this.currencyField = 'priceLE';
-        } else if (this.userCountry === 'Saudi Arabia') {
+        } else if (
+          this.userCountry === 'Saudi Arabia' ||
+          res.country_code === 'SA' ||
+          res.currency === 'SAR'
+        ) {
           this.currencyField = 'priceReyal';
         } else {
           this.currencyField = 'priceDollar';

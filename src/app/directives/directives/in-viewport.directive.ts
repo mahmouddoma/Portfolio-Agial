@@ -4,28 +4,33 @@ import { Directive, ElementRef, HostBinding, Input, OnInit, Renderer2 } from '@a
   selector: '[appInViewport]'
 })
 export class InViewportDirective implements OnInit {
-  @Input() animationType: 'fade-in' | 'slide-left' | 'slide-right' | 'slide-bottom' | 'scale-in' = 'fade-in';
+  @Input() animationType: 'fade-in' | 'slide-left' | 'slide-right' | 'slide-bottom' | 'scale-in' | 'slide-in-out-bottom' | 'slide-bottom-emerge' = 'slide-bottom';
   @Input() staggerDelay: number = 0;
 
   constructor(private el: ElementRef, private renderer: Renderer2) {}
 
   ngOnInit(): void {
     const nativeEl = this.el.nativeElement;
-
-    // Add initial animation class
-    this.renderer.addClass(nativeEl, this.animationType);
-
-    // Add stagger delay class if needed
-    if (this.staggerDelay > 0) {
-      const delayClass = `stagger-${Math.min(this.staggerDelay, 5)}`;
-      this.renderer.addClass(nativeEl, delayClass);
+    let children = nativeEl.querySelectorAll('[data-animate]');
+  
+    // If no children with data-animate, apply to self
+    if (!children.length) {
+      children = [nativeEl];
     }
-
-    // Setup IntersectionObserver
+  
+    children.forEach((child: HTMLElement, index: number) => {
+      this.renderer.addClass(child, this.animationType);
+      if (this.staggerDelay > 0) {
+        this.renderer.addClass(child, `stagger-${Math.min(this.staggerDelay + index, 5)}`);
+      }
+    });
+  
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          this.renderer.addClass(nativeEl, 'show');
+          children.forEach((child: HTMLElement) => {
+            this.renderer.addClass(child, 'show');
+          });
           observer.unobserve(nativeEl);
         }
       });
@@ -33,7 +38,7 @@ export class InViewportDirective implements OnInit {
       threshold: 0.1,
       rootMargin: '0px 0px -50px 0px'
     });
-
+  
     observer.observe(nativeEl);
   }
 }

@@ -103,14 +103,16 @@ textarea {
 /* Slide from bottom (enhanced) */
 .slide-bottom {
   opacity: 0;
-  transform: translateY(60px);
-  transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1), opacity 0.6s ease-out;
+  transform: translateY(100px); 
+  transition: transform 0.9s cubic-bezier(0.23, 1, 0.32, 1), 
+              opacity 0.9s ease-out;
   will-change: transform, opacity;
 }
 
+/* After entering the viewport */
 .slide-bottom.show {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0);  
 }
 
 button, a {
@@ -174,6 +176,48 @@ button:hover, a:hover {
 .stagger-3 { transition-delay: 300ms; }
 .stagger-4 { transition-delay: 1.2s; }
 .stagger-5 { transition-delay: 1.5s; }
+.stagger-6 { transition-delay: 1.8s; }
+
+@keyframes slideInOutBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+    box-shadow: none;
+  }
+  18% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    box-shadow: 0 4px 16px rgba(13, 95, 249, 0.08);
+  }
+  82% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    box-shadow: 0 4px 16px rgba(13, 95, 249, 0.08);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+    box-shadow: none;
+  }
+}
+
+@keyframes slideInFromBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-in-out-bottom {
+  opacity: 0;
+  transform: translateY(40px);
+  animation: slideInFromBottom 1s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+  will-change: opacity, transform;
+}
 
 
 @media (max-width: 768px) {
@@ -183,32 +227,17 @@ button:hover, a:hover {
   .slide-bottom,
   .slide-bottom-blur,
   .scale-in {
-    transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1) !important;
-    animation-duration: 0.7s !important;
-    will-change: opacity, transform;
+    transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+    will-change: transform, opacity;
   }
-}
 
-@media (max-width: 576px) {
-  .fade-in,
-  .slide-left,
-  .slide-right,
-  .slide-bottom,
-  .slide-bottom-blur,
-  .scale-in {
-    transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1) !important;
-    animation-duration: 0.7s !important;
-    will-change: opacity, transform;
-  }
-}
-@media (max-width: 768px),
-       (max-width: 576px) {
-  .fade-in,
-  .slide-left,
-  .slide-right,
-  .slide-bottom,
-  .slide-bottom-blur,
-  .scale-in {
-    transition: transform 0.6s ease, opacity 0.6s ease !important;
+  .fade-in.show,
+  .slide-left.show,
+  .slide-right.show,
+  .slide-bottom.show,
+  .slide-bottom-blur.show,
+  .scale-in.show {
+    transform: translateY(0) !important;
+    opacity: 1 !important;
   }
 }
