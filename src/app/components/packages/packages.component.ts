@@ -22,68 +22,58 @@ export class PackagesComponent implements OnInit, AfterViewInit {
   packages: any[] = [];
   error: string | null = null;
   swiper: Swiper | null = null;
-  userCountry: string = '';
   currencyField: 'priceLE' | 'priceReyal' | 'priceDollar' = 'priceDollar';
 
   constructor(
-    private PackagesService: PackagesService,
+    private packagesService: PackagesService,
     private cdr: ChangeDetectorRef,
-    private http: HttpClient 
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
-    this.getUserCountry();
+    this.detectUserCurrencyAndLoadPackages();
   }
 
   ngAfterViewInit(): void {
     this.initializeSwiper();
   }
 
-  getUserCountry(): void {
+  detectUserCurrencyAndLoadPackages(): void {
     this.http.get<{ country_name: string, country_code?: string, currency?: string }>('https://ipapi.co/json/').subscribe({
-      next: (res: { country_name: string, country_code?: string, currency?: string }) => {
-        this.userCountry = res.country_name;
-        // Robust Saudi detection
-        if (this.userCountry === 'Egypt') {
+      next: (res) => {
+        const country = res.country_name;
+        const code = res.country_code;
+        const currency = res.currency;
+
+        if (country === 'Egypt') {
           this.currencyField = 'priceLE';
-        } else if (
-          this.userCountry === 'Saudi Arabia' ||
-          res.country_code === 'SA' ||
-          res.currency === 'SAR'
-        ) {
+        } else if (country === 'Saudi Arabia' || code === 'SA' || currency === 'SAR') {
           this.currencyField = 'priceReyal';
         } else {
           this.currencyField = 'priceDollar';
         }
+
         this.loadPackages();
       },
-      error: (err: any) => {
-        console.warn('Failed to get location, defaulting to dollar', err);
+      error: () => {
+        console.warn('Failed to get location, using default currency.');
         this.currencyField = 'priceDollar';
         this.loadPackages();
-      },
+      }
     });
   }
 
   loadPackages(): void {
-    this.PackagesService.getPackages().subscribe({
+    this.packagesService.getPackages(this.currencyField).subscribe({
       next: (data) => {
-        this.packages = data.map((pkg: any) => ({
-          name: pkg.name,
-          totalMinutes: pkg.totalMinutes,
-          priceLE: pkg.priceLE,
-          priceDollar: pkg.priceDollar,
-          priceReyal: pkg.priceReyal,
-          subscriberCount: pkg.subscriberCount,
-          subscribeType: pkg.subscribeType.name,
-        }));
+        this.packages = data;
         this.cdr.detectChanges();
         this.initializeSwiper();
       },
       error: (err) => {
         this.error = 'Failed to load packages. Please try again later.';
         console.error(err);
-      },
+      }
     });
   }
 

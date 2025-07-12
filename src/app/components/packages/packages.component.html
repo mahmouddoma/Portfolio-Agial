@@ -16,16 +16,11 @@
           }">
           <div class="package-title">{{ package.name }}</div>
           <div class="package-price">
-            <strong>
-              {{
-                currencyField === 'priceLE'
-                  ? package.priceLE + ' ج.م / الشهر'
-                  : currencyField === 'priceReyal'
-                  ? package.priceReyal + ' ريال / الشهر'
-                  : '$' + package.priceDollar + ' / month'
-              }}
-            </strong>
+            <strong *ngIf="currencyField === 'priceLE'">{{ package.price }} ج.م / الشهر</strong>
+            <strong *ngIf="currencyField === 'priceReyal'">{{ package.price }} ريال / الشهر</strong>
+            <strong *ngIf="currencyField === 'priceDollar'">${{ package.price }} / month</strong>
           </div>
+          
           <ul class="package-features">
             <li>الدقائق الكلية: {{ package.totalMinutes }}</li>
             <!-- <li>عدد المشتركين: {{ package.subscriberCount }}</li> -->
