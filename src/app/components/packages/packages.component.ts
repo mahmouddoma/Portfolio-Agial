@@ -40,38 +40,60 @@ export class PackagesComponent implements OnInit, AfterViewInit {
 
   detectUserCurrencyAndLoadPackages(): void {
     this.http.get<{ country_name: string, country_code?: string, currency?: string }>('https://ipapi.co/json/').subscribe({
-      next: (res) => {
+      next: (res: { country_name: string, country_code?: string, currency?: string }) => {
         const country = res.country_name;
         const code = res.country_code;
         const currency = res.currency;
-
-        if (country === 'Egypt') {
+  
+        if (country === 'Egypt' || code === 'EG' || currency === 'EGP') {
           this.currencyField = 'priceLE';
         } else if (country === 'Saudi Arabia' || code === 'SA' || currency === 'SAR') {
           this.currencyField = 'priceReyal';
         } else {
           this.currencyField = 'priceDollar';
         }
-
-        this.loadPackages();
+  
+        this.loadPackages(); // ← بعد ما نحدد العملة
       },
       error: () => {
-        console.warn('Failed to get location, using default currency.');
+        console.warn('Fallback to dollar');
         this.currencyField = 'priceDollar';
         this.loadPackages();
       }
     });
   }
 
+  // loadAndDetectCurrency(): void {
+  //   this.packagesService.getRawPackages().subscribe({
+  //     next: (data) => {
+  //        const sample = data.find(pkg => pkg.priceLE || pkg.priceReyal || pkg.priceDollar);
+
+  //       if (sample?.priceReyal > 0) {
+  //         this.currencyField = 'priceReyal';
+  //       } else if (sample?.priceLE > 0) {
+  //         this.currencyField = 'priceLE';
+  //       } else {
+  //         this.currencyField = 'priceDollar';
+  //       }
+
+  //       this.loadPackages();
+  //     },
+  //     error: (err: any) => {
+  //       console.error('Error loading packages:', err);
+  //       this.error = 'فشل في تحميل الباقات، حاول مرة أخرى لاحقًا.';
+  //     }
+  //   });
+  // }
+
   loadPackages(): void {
-    this.packagesService.getPackages(this.currencyField).subscribe({
+    this.packagesService.getPackages().subscribe({
       next: (data) => {
         this.packages = data;
         this.cdr.detectChanges();
         this.initializeSwiper();
       },
-      error: (err) => {
-        this.error = 'Failed to load packages. Please try again later.';
+      error: (err: any) => {
+        this.error = 'فشل في تحميل الباقات. حاول لاحقًا.';
         console.error(err);
       }
     });
@@ -102,26 +124,10 @@ export class PackagesComponent implements OnInit, AfterViewInit {
         clickable: true,
       },
       breakpoints: {
-        320: {
-          slidesPerView: 'auto',
-          centeredSlides: true,
-          spaceBetween: 15
-        },
-        768: {
-          slidesPerView: 'auto',
-          centeredSlides: true,
-          spaceBetween: 20
-        },
-        1024: {
-          slidesPerView: 4,
-          centeredSlides: false,
-          spaceBetween: 20
-        },
-        1440: {
-          slidesPerView: 6,
-          centeredSlides: false,
-          spaceBetween: 20
-        }
+        320: { slidesPerView: 'auto', centeredSlides: true, spaceBetween: 15 },
+        768: { slidesPerView: 'auto', centeredSlides: true, spaceBetween: 20 },
+        1024: { slidesPerView: 4, centeredSlides: false, spaceBetween: 20 },
+        1440: { slidesPerView: 6, centeredSlides: false, spaceBetween: 20 }
       }
     });
   }

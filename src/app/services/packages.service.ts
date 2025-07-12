@@ -18,10 +18,13 @@ export class PackagesService {
           name: pkg.name,
           totalMinutes: pkg.totalMinutes,
           price: pkg[currency],
+          currency: currency === 'priceLE' ? 'LE' : currency === 'priceReyal' ? 'SAR' : 'USD',
           subscriberCount: pkg.subscriberCount,
           subscribeType: pkg.subscribeType.name,
         }))
       )
     );
   }
+  
+
 }
