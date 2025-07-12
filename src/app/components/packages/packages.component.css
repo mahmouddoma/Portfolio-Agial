@@ -40,11 +40,13 @@
   .swiper-container {
     position: relative;
     padding-top: 30px;
+    width: 100%;
+    overflow: hidden;
   }
   
   .swiper-wrapper {
     display: flex;
-    gap: 20px;
+    align-items: center;
   }
   
   .swiper-slide {
@@ -53,6 +55,8 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     overflow: hidden;
+    display: flex;
+    justify-content: center;
   }
   
   .swiper-slide:hover {
@@ -239,15 +243,19 @@
       padding: 30px 15px;
     }
   
-    .swiper-slide,
+    .swiper-slide {
+      width: 90vw !important; /* or 95vw for more padding */
+      max-width: 340px;
+      min-width: 250px;
+      box-sizing: border-box;
+      margin: 0; /* Remove auto margin */
+    }
+    
     .package-item {
       width: 100%;
-      min-width: 250px;
-      height: auto;
-    }
-  
-    .package-item {
-      height: 380px;
+      max-width: none;
+      min-width: 0;
+      margin: 0;
     }
   
     .package-title {
@@ -267,26 +275,87 @@
       padding: 8px 15px;
       width: 60px;
     }
+    
+    .swiper-button-next,
+    .swiper-button-prev {
+      width: 40px;
+      height: 40px;
+    }
+    
+    .swiper-button-next::after,
+    .swiper-button-prev::after {
+      font-size: 1.5rem;
+    }
   }
   
   @media (max-width: 576px) {
+    .swiper-slide {
+      max-width: 280px;
+    }
+    
+    .package-item {
+      max-width: 280px;
+      min-height: 340px;
+    }
+    
     .btn-select {
       width: 100%;
       font-size: 0.9rem;
     }
-  
-    .package-item {
-      height: 340px;
-    }
   }
   
   @media (max-width: 320px) {
+    .swiper-slide {
+      max-width: 250px;
+    }
+    
+    .package-item {
+      max-width: 250px;
+      min-height: 320px;
+    }
+    
     .section-title {
       font-size: 1.5rem;
     }
   
     .section-description {
       font-size: 1rem;
+    }
+  }
+  @media (max-width: 768px) {
+    .swiper-wrapper {
+      justify-content: center;  
+    }
+  
+    .swiper-slide {
+      width: 85vw !important;   
+      max-width: 320px;         
+      margin: 0 auto;           
+    }
+  
+    .package-item {
+      width: 100%;
+      padding: 25px 15px;
+      box-sizing: border-box;
+    }
+  }
+  @media (max-width: 768px) {
+    .swiper-slide {
+      width: 50vw !important;     
+      max-width: 300px;
+      margin-left: auto !important;   
+      margin-right: auto !important;
+    }
+  
+    .swiper-wrapper {
+      display: flex;
+      align-items: stretch;
+    }
+  
+    .package-item {
+      width: 100%;
+      padding: 20px 15px;
+      box-sizing: border-box;
     }
   }
   

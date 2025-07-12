@@ -3,7 +3,7 @@
 <h3 class="title">{{ isArabic ? "الدورات الشائعة" : "Popular Courses" }}</h3>
 
 <div class="services-container" [class.rtl]="isArabic">
-  <div *ngFor="let service of services" class="col-md-6 service-details">
+  <div *ngFor="let service of services" class="col-md-6 service-details animate-on-scroll" appInViewport>
     <h3 class="course-name">
       {{ service.courseNameAr }}
     </h3>

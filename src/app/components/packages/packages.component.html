@@ -7,7 +7,7 @@
   <div class="swiper-container">
     <div class="swiper-wrapper">
       <div class="swiper-slide" *ngFor="let package of packages">
-        <div class="package-item" [ngClass]="{
+        <div class="package-item animate-on-scroll" appInViewport [ngClass]="{
             'package-diamond': package.name.includes('الماسية'),
             'package-fort': package.name.includes('الحصون'),
             'package-bronze': package.name.includes('برونزية'),

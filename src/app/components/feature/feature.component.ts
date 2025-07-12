@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CounterComponent } from "../counter/counter.component";
+import { InViewportDirective } from '../../directives/directives/in-viewport.directive';
 
 interface FeatureIcon {
   type: 'svg' | 'img';
@@ -18,7 +19,7 @@ interface Feature {
 @Component({
   selector: 'app-feature',
   standalone: true,
-  imports: [CounterComponent, CommonModule],
+  imports: [CounterComponent, CommonModule, InViewportDirective],
   templateUrl: './feature.component.html',
   styleUrl: './feature.component.css'
 })

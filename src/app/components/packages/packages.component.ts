@@ -88,8 +88,11 @@ export class PackagesComponent implements OnInit, AfterViewInit {
     }
 
     this.swiper = new Swiper('.swiper-container', {
-      slidesPerView: 2,
+      slidesPerView: 'auto',
       spaceBetween: 20,
+      centeredSlides: true,
+      observeParents: true,
+      observer: true,
       navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
@@ -103,13 +106,28 @@ export class PackagesComponent implements OnInit, AfterViewInit {
         el: '.swiper-pagination',
         clickable: true,
       },
-      centeredSlides: true,
       breakpoints: {
-        320: { slidesPerView: 1, centeredSlides: true },
-        768: { slidesPerView: 2, centeredSlides: true },
-        1024: { slidesPerView: 3, centeredSlides: false },
-        1440: { slidesPerView: 4, centeredSlides: false },
-      },
+        320: {
+          slidesPerView: 'auto',
+          centeredSlides: true,
+          spaceBetween: 15
+        },
+        768: {
+          slidesPerView: 'auto',
+          centeredSlides: true,
+          spaceBetween: 20
+        },
+        1024: {
+          slidesPerView: 4,
+          centeredSlides: false,
+          spaceBetween: 20
+        },
+        1440: {
+          slidesPerView: 6,
+          centeredSlides: false,
+          spaceBetween: 20
+        }
+      }
     });
   }
 }

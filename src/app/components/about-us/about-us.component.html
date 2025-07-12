@@ -1,7 +1,14 @@
-<section class="about-us-section d-flex align-items-center justify-content-center text-center text-white min-vh-100">
+<section
+  class="about-us-section d-flex align-items-center justify-content-center text-center text-white min-vh-100 animate-on-scroll"
+  appInViewport
+>
   <div class="slider w-100">
-    <div *ngFor="let slide of slides; let i = index" class="slide" [class.active]="currentSlide === i"
-      [style.backgroundImage]="'url(' + slide + ')'"></div>
+    <div
+      *ngFor="let slide of slides; let i = index"
+      class="slide"
+      [class.active]="currentSlide === i"
+      [style.backgroundImage]="'url(' + slide + ')'"
+    ></div>
     <div class="overlay"></div>
   </div>
 
@@ -15,19 +22,24 @@
           تقديم تعليم متميز يجمع بين العلوم الشرعية والمعارف الحديثة، مع التركيز
           على بناء شخصية الطالب بشكل متكامل من الناحيتين الدينية والعلمية. نلتزم
           بتوفير بيئة تعليمية محفزة، تضم مجموعة من المعلمين المتخصصين ذوي الخبرة
-          العالية في تدريس القرآن الكريم والعلوم الإسلامية، إلى جانب تدريب طلابنا
-          على المهارات الحياتية والعلمية التي تؤهلهم للمستقبل. كما نولي اهتماماً
-          خاصاً بتطوير مهارات التفكير النقدي والإبداعي لدى الطلاب. نسعى في مدرسة
-          أجيال القرآن إلى أن نكون من الرواد في تقديم نموذج تعليمي متميز يرتقي
-          بالمستوى الأكاديمي والديني لطلابنا ويؤهلهم ليكونوا قادة المستقبل.
+          العالية في تدريس القرآن الكريم والعلوم الإسلامية، إلى جانب تدريب
+          طلابنا على المهارات الحياتية والعلمية التي تؤهلهم للمستقبل. كما نولي
+          اهتماماً خاصاً بتطوير مهارات التفكير النقدي والإبداعي لدى الطلاب. نسعى
+          في مدرسة أجيال القرآن إلى أن نكون من الرواد في تقديم نموذج تعليمي
+          متميز يرتقي بالمستوى الأكاديمي والديني لطلابنا ويؤهلهم ليكونوا قادة
+          المستقبل.
         </p>
       </div>
     </div>
   </div>
   <div class="pagination">
-    <span *ngFor="let slide of slides; let i = index" class="dot" [class.active]="currentSlide === i"
-      (click)="setCurrentSlide(i)"></span>
+    <span
+      *ngFor="let slide of slides; let i = index"
+      class="dot"
+      [class.active]="currentSlide === i"
+      (click)="setCurrentSlide(i)"
+    ></span>
   </div>
 </section>
 
-<app-slider></app-slider>
+<app-slider appInViewport animationType="slide-bottom"></app-slider>

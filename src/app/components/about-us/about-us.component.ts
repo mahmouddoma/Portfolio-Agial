@@ -2,11 +2,12 @@ import { Component, AfterViewInit,OnDestroy,OnInit,ElementRef,QueryList,ViewChil
 import { SliderComponent } from "../slider/slider.component";
 import { CommonModule } from '@angular/common';
 import { interval, Subscription } from 'rxjs';
+import { InViewportDirective } from '../../directives/directives/in-viewport.directive';
 
 
 @Component({
   selector: 'app-about-us',
-  imports: [CommonModule, SliderComponent],
+  imports: [CommonModule, SliderComponent,InViewportDirective],
   templateUrl: './about-us.component.html',
   styleUrl: './about-us.component.css'
 })
