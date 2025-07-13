@@ -40,20 +40,30 @@ export class PackagesComponent implements OnInit, AfterViewInit {
 
   detectUserCurrencyAndLoadPackages(): void {
     this.http.get<{ country_name: string, country_code?: string, currency?: string }>('https://ipapi.co/json/').subscribe({
-      next: (res: { country_name: string, country_code?: string, currency?: string }) => {
+      next: (res) => {
         const country = res.country_name;
         const code = res.country_code;
         const currency = res.currency;
-  
+
         if (country === 'Egypt' || code === 'EG' || currency === 'EGP') {
           this.currencyField = 'priceLE';
-        } else if (country === 'Saudi Arabia' || code === 'SA' || currency === 'SAR') {
-          this.currencyField = 'priceReyal';
-        } else {
+        } 
+        //  else if (
+        //   country === 'Saudi Arabia' ||
+        //   country === 'KSA' ||
+        //   country.includes('Saudi') ||
+        //   code === 'SA' ||
+        //   currency === 'SAR'
+        // )
+        // {
+        //   this.currencyField = 'priceReyal';
+        
+        // } 
+        else {
           this.currencyField = 'priceDollar';
         }
-  
-        this.loadPackages(); // ← بعد ما نحدد العملة
+
+        this.loadPackages();
       },
       error: () => {
         console.warn('Fallback to dollar');
@@ -63,32 +73,11 @@ export class PackagesComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // loadAndDetectCurrency(): void {
-  //   this.packagesService.getRawPackages().subscribe({
-  //     next: (data) => {
-  //        const sample = data.find(pkg => pkg.priceLE || pkg.priceReyal || pkg.priceDollar);
-
-  //       if (sample?.priceReyal > 0) {
-  //         this.currencyField = 'priceReyal';
-  //       } else if (sample?.priceLE > 0) {
-  //         this.currencyField = 'priceLE';
-  //       } else {
-  //         this.currencyField = 'priceDollar';
-  //       }
-
-  //       this.loadPackages();
-  //     },
-  //     error: (err: any) => {
-  //       console.error('Error loading packages:', err);
-  //       this.error = 'فشل في تحميل الباقات، حاول مرة أخرى لاحقًا.';
-  //     }
-  //   });
-  // }
-
   loadPackages(): void {
-    this.packagesService.getPackages().subscribe({
+    this.packagesService.getPackages(this.currencyField).subscribe({
       next: (data) => {
         this.packages = data;
+        this.error = null;
         this.cdr.detectChanges();
         this.initializeSwiper();
       },

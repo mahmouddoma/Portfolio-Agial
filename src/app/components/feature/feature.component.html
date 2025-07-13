@@ -1,15 +1,15 @@
 <section class="feature-section" aria-labelledby="feature-title" >
-  <div class="container-fluid features">
+  <div class="container-fluid features" appInViewport animationType="fade-in" staggerDelay="1">
     <div class="row">
       <div class="col-12 text-center">
-        <div class="section-title">
+        <div class="section-title" data-animate>
           <span>الميزات</span>
           <h2 id="feature-title">{{section.title}}</h2>
         </div>
       </div>
 
-      <div class="col-xl-3 col-lg-4 col-md-6 col-12" *ngFor="let feature of features">
-        <article class="feature-item" [attr.aria-label]="feature.subtitle || feature.title">
+      <div class="col-xl-3 col-lg-4 col-md-6 col-12" *ngFor="let feature of features; let i = index">
+        <article class="feature-item" [attr.aria-label]="feature.subtitle || feature.title" data-animate>
           <span class="feature-number" aria-hidden="true">{{ feature.id }}</span>
 
           <div class="fea-icon">
@@ -31,6 +31,6 @@
       </div>
     </div>
 
-    <app-counter appInViewport animationType="slide-bottom" [staggerDelay]="5"></app-counter>
+    <app-counter appInViewport animationClass="slide-bottom"></app-counter>
   </div>
 </section>

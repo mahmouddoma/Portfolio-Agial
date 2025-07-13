@@ -2,8 +2,8 @@
 
 <h3 class="title">{{ isArabic ? "الدورات الشائعة" : "Popular Courses" }}</h3>
 
-<div class="services-container" [class.rtl]="isArabic">
-  <div *ngFor="let service of services" class="col-md-6 service-details animate-on-scroll" appInViewport>
+<div class="services-container" [class.rtl]="isArabic" appInViewport animationType="fade-in" staggerDelay="1">
+  <div *ngFor="let service of services; let i = index" class="col-md-6 service-details" data-animate>
     <h3 class="course-name">
       {{ service.courseNameAr }}
     </h3>

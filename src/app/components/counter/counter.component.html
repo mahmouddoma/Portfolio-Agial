@@ -1,19 +1,23 @@
-<section class="counters-section animate-on-scroll" aria-labelledby="counters-title" appInViewport>
+<section class="counters-section" aria-labelledby="counters-title">
   <h2 id="counters-title" class="visually-hidden">إحصائياتنا</h2>
-  <div class="counter-container">
-    <article class="counter-item" *ngFor="let counter of counters" #counterElement role="region"
-      [attr.aria-label]="counter.label">
+  <div class="counter-container" appInViewport animationType="fade-in" staggerDelay="1">
+    <article
+      class="counter-item"
+      *ngFor="let counter of counters"
+      #counterElement
+      role="region"
+      [attr.aria-label]="counter.label"
+      data-animate
+    >
       <div class="counter-icon" aria-hidden="true">
         <i [class]="counter.icon"></i>
       </div>
-
       <div class="counter-number">
         <span class="counter-value" [attr.data-target]="counter.target">
           {{ formatNumber(counter.count) }}
         </span>
         <span class="counter-suffix" aria-hidden="true">+</span>
       </div>
-
       <p class="counter-label">{{ counter.label }}</p>
     </article>
   </div>

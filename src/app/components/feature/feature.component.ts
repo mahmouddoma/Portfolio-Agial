@@ -81,4 +81,9 @@ export class FeatureComponent {
   isValidSvg(content: string): boolean {
     return content.includes('<svg') && content.includes('</svg>');
   }
+
+  getAnimationClass(index: number): string {
+    const classes = ['slide-bottom', 'slide-left', 'slide-right', 'fade-in'];
+    return classes[index % classes.length];
+  }
 }

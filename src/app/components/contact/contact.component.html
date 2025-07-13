@@ -1,23 +1,23 @@
 <section class="contact-section py-5">
-  <div class="container">
-    <div class="row justify-content-center mb-5">
-      <div class="col-12 col-md-8 text-center">
-        <h2 class="section-title mb-4">اتصل بنا</h2>
-        <p class="section-description">نحن هنا للإجابة على استفساراتك</p>
+  <div class="container" appInViewport animationType="fade-in" staggerDelay="1">
+    <div class="row justify-content-center mb-5" data-animate>
+      <div class="col-12 col-md-8 text-center" data-animate>
+        <h2 class="section-title mb-4" data-animate>اتصل بنا</h2>
+        <p class="section-description" data-animate>نحن هنا للإجابة على استفساراتك</p>
       </div>
     </div>
 
-    <div class="row justify-content-center">
-      <div class="col-12 col-md-10 col-lg-8">
+    <div class="row justify-content-center" data-animate>
+      <div class="col-12 col-md-10 col-lg-8" data-animate>
         <!-- Alert for form submission result -->
         <div *ngIf="submitResult" class="alert" [ngClass]="submitResult.success ? 'alert-success' : 'alert-danger'"
-          role="alert">
+          role="alert" data-animate>
           {{ submitResult.message }}
         </div>
 
-        <form class="contact-form p-4 bg-white rounded-3 shadow-sm" [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+        <form class="contact-form p-4 bg-white rounded-3 shadow-sm" [formGroup]="contactForm" (ngSubmit)="onSubmit()" data-animate>
           <div class="row g-3">
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-6" data-animate>
               <div class="form-group">
                 <input type="text" class="form-control" [ngClass]="{'is-invalid': hasError('name')}" placeholder="الاسم"
                   formControlName="name" required />
@@ -25,7 +25,7 @@
               </div>
             </div>
 
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-6" data-animate>
               <div class="form-group">
                 <input type="email" class="form-control" [ngClass]="{'is-invalid': hasError('email')}"
                   placeholder="البريد الإلكتروني" formControlName="email" required />
@@ -33,7 +33,7 @@
               </div>
             </div>
 
-            <div class="col-12">
+            <div class="col-12" data-animate>
               <div class="form-group">
                 <input type="tel" class="form-control" [ngClass]="{'is-invalid': hasError('phone')}"
                   placeholder="رقم الهاتف" formControlName="phone" />
@@ -41,7 +41,7 @@
               </div>
             </div>
 
-            <div class="col-12">
+            <div class="col-12" data-animate>
               <div class="form-group">
                 <textarea class="form-control" [ngClass]="{'is-invalid': hasError('message')}" rows="5"
                   placeholder="رسالتك" formControlName="message" required></textarea>
@@ -49,7 +49,7 @@
               </div>
             </div>
 
-            <div class="col-12 text-center">
+            <div class="col-12 text-center" data-animate>
               <button type="submit" class="btn btn-primary px-5 py-2" [disabled]="contactForm.invalid || isSubmitting">
                 <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status"
                   aria-hidden="true"></span>
@@ -61,23 +61,23 @@
       </div>
     </div>
 
-    <div class="row mt-5 g-4">
-      <div class="col-12 col-md-4">
-        <div class="contact-info text-center p-3">
+    <div class="row mt-5 g-4" data-animate>
+      <div class="col-12 col-md-4" data-animate>
+        <div class="contact-info text-center p-3" data-animate>
           <i class="fas fa-phone mb-3"></i>
           <h4 class="h5">الهاتف</h4>
           <p class="mb-0">+1234567890</p>
         </div>
       </div>
-      <div class="col-12 col-md-4">
-        <div class="contact-info text-center p-3">
+      <div class="col-12 col-md-4" data-animate>
+        <div class="contact-info text-center p-3" data-animate>
           <i class="fas fa-envelope mb-3"></i>
           <h4 class="h5">البريد الإلكتروني</h4>
           <p class="mb-0">info&#64;example.com</p>
         </div>
       </div>
-      <div class="col-12 col-md-4">
-        <div class="contact-info text-center p-3">
+      <div class="col-12 col-md-4" data-animate>
+        <div class="contact-info text-center p-3" data-animate>
           <i class="fas fa-map-marker-alt mb-3"></i>
           <h4 class="h5">العنوان</h4>
           <p class="mb-0">123 شارع المثال، المدينة</p>
