@@ -1,0 +1,49 @@
+<section #journeySection class="student-journey" aria-labelledby="student-journey-title">
+  <span #journeySignal class="journey-signal" aria-hidden="true"></span>
+
+  <div class="journey-shell">
+    <header class="journey-header">
+      <span class="journey-kicker journey-gsap-title">{{ section.kicker }}</span>
+      <h2 id="student-journey-title" class="journey-title journey-gsap-title">
+        {{ section.title }}
+      </h2>
+      <p class="journey-description journey-gsap-title">
+        {{ section.description }}
+      </p>
+    </header>
+
+    <div class="journey-stage">
+      <aside class="journey-panel" aria-label="تفاصيل المرحلة الحالية">
+        <span class="journey-panel__phase">{{ activeStep().phase }}</span>
+        <h3>{{ activeStep().title }}</h3>
+        <p>{{ activeStep().description }}</p>
+
+        <div class="journey-panel__metric">
+          <strong>{{ activeStep().metric }}</strong>
+          <span>{{ activeStep().detail }}</span>
+        </div>
+      </aside>
+
+      <div class="journey-map" role="list" aria-label="خطوات رحلة الطالب">
+        <span class="journey-line" aria-hidden="true"></span>
+
+        @for (step of steps; track step.id; let index = $index) {
+          <button
+            type="button"
+            class="journey-step"
+            [class.journey-step--active]="activeStepIndex() === index"
+            (mouseenter)="setActiveStep(index)"
+            (focus)="setActiveStep(index)"
+            [attr.aria-current]="activeStepIndex() === index ? 'step' : null"
+          >
+            <span class="journey-step__dot">{{ step.phase }}</span>
+            <span class="journey-step__content">
+              <strong>{{ step.title }}</strong>
+              <small>{{ step.description }}</small>
+            </span>
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+</section>

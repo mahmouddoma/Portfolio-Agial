@@ -1,36 +1,60 @@
-<section class="feature-section" aria-labelledby="feature-title" >
-  <div class="container-fluid features" appInViewport animationType="fade-in" staggerDelay="1">
-    <div class="row">
-      <div class="col-12 text-center">
-        <div class="section-title" data-animate>
-          <span>الميزات</span>
-          <h2 id="feature-title">{{section.title}}</h2>
-        </div>
-      </div>
+<section
+  #featureSection
+  class="feature-section"
+  aria-labelledby="feature-title"
+>
+  <div #journeyOrb class="journey-orb" aria-hidden="true"></div>
 
-      <div class="col-xl-3 col-lg-4 col-md-6 col-12" *ngFor="let feature of features; let i = index">
-        <article class="feature-item" [attr.aria-label]="feature.subtitle || feature.title" data-animate>
-          <span class="feature-number" aria-hidden="true">{{ feature.id }}</span>
+  <div class="feature-shell">
+    <header class="feature-header">
+      <span class="section-kicker feature-gsap-title">{{
+        section.kicker
+      }}</span>
+      <h2 id="feature-title" class="feature-title feature-gsap-title">
+        {{ section.title }}
+      </h2>
+      <p class="feature-description feature-gsap-title">
+        {{ section.description }}
+      </p>
+    </header>
 
-          <div class="fea-icon">
-            <ng-container *ngIf="feature.icon.type === 'svg'; else imageBlock">
-              <div class="svg-icon" [innerHTML]="feature.icon.content" role="img" [attr.aria-label]="feature.title">
-              </div>
-            </ng-container>
-            <ng-template #imageBlock>
-              <img class="rounded-2" [src]="feature.icon.content" [alt]="feature.title" width="140" loading="lazy"
-                [ngStyle]="feature.icon.style || {}" />
-            </ng-template>
-          </div>
-
-          <div class="feature-content fea-content">
-            <h3 class="fea-title">{{ feature.title }}</h3>
-            <p class="fea-desc">{{ feature.description }}</p>
-          </div>
-        </article>
-      </div>
+    <div class="journey-rail" aria-hidden="true">
+      @for (feature of features; track feature.id) {
+        <span class="journey-step">{{ feature.id }}</span>
+      }
     </div>
 
-    <app-counter appInViewport animationClass="slide-bottom"></app-counter>
+    <div class="feature-grid">
+      @for (feature of features; track feature.id; let index = $index) {
+        <article
+          #featureCard
+          class="feature-card"
+          [class.feature-card--raised]="index % 2 === 1"
+          [attr.aria-label]="feature.title"
+        >
+          <div class="feature-card__media">
+            <img [src]="feature.image" [alt]="feature.title" loading="lazy" />
+            <span class="feature-card__number">{{ feature.id }}</span>
+          </div>
+
+          <div class="feature-card__content">
+            <span class="feature-card__eyebrow">{{ feature.eyebrow }}</span>
+            <h3>{{ feature.title }}</h3>
+            <p>{{ feature.description }}</p>
+          </div>
+
+          <div class="feature-card__highlight">
+            <span>{{ feature.highlight.label }}</span>
+            <strong>{{ feature.highlight.value }}</strong>
+          </div>
+        </article>
+      }
+    </div>
+
+    <div class="feature-counter-bridge" aria-hidden="true">
+      <span></span>
+    </div>
+
+    <app-counter></app-counter>
   </div>
 </section>

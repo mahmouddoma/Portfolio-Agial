@@ -1,0 +1,71 @@
+@use "colors" as c;
+
+// Primary actions
+$primary: c.$mint-400;
+$primary-hover: c.$mint-500;
+$primary-active: c.$mint-600;
+$primary-subtle: c.$mint-50;
+$primary-border: c.$mint-300;
+$primary-contrast: c.$brand-ink;
+
+// Secondary actions
+$secondary: c.$brand-teal;
+$secondary-hover: c.$mint-700;
+$secondary-active: c.$mint-800;
+$secondary-subtle: c.$brand-ice;
+$secondary-contrast: c.$color-white;
+
+// Backgrounds
+$app-background: c.$background-page;
+$surface-background: c.$background-surface;
+$surface-soft-background: c.$background-surface-soft;
+$surface-muted-background: c.$background-surface-muted;
+$inverse-background: c.$background-inverse;
+$overlay-background: c.$background-overlay;
+
+// Text
+$text-primary: c.$text-primary;
+$text-secondary: c.$text-secondary;
+$text-muted: c.$text-muted;
+$text-inverse: c.$text-inverse;
+$text-brand: c.$text-brand;
+$text-link: c.$text-link;
+
+// Borders
+$border-subtle: c.$border-subtle;
+$border-default: c.$border-default;
+$border-strong: c.$border-strong;
+$border-primary: c.$border-primary;
+$border-inverse: c.$border-inverse;
+
+// Semantic states
+$success: c.$success;
+$success-background: c.$success-soft;
+$success-text: c.$success-strong;
+
+$warning: c.$warning;
+$warning-background: c.$warning-soft;
+$warning-text: c.$warning-strong;
+
+$error: c.$error;
+$error-background: c.$error-soft;
+$error-text: c.$error-strong;
+
+$info: c.$info;
+$info-background: c.$info-soft;
+$info-text: c.$info-strong;
+
+// Gradients
+$gradient-main: c.$gradient-main;
+$gradient-soft: c.$gradient-soft;
+$gradient-dark: c.$gradient-dark;
+
+// Effects
+$shadow-sm: 0 1px 2px rgba(c.$brand-ink, 0.06);
+$shadow-md: 0 8px 24px rgba(c.$brand-ink, 0.10);
+$shadow-lg: 0 18px 48px rgba(c.$brand-ink, 0.14);
+
+$radius-sm: 4px;
+$radius-md: 8px;
+$radius-lg: 12px;
+$radius-pill: 999px;

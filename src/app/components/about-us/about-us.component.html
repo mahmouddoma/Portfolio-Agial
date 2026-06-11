@@ -7,7 +7,8 @@
   <div class="slider w-100" data-animate>
     <div
       *ngFor="let slide of slides; let i = index"
-      class="slide" data-animate
+      class="slide"
+      data-animate
       [class.active]="currentSlide === i"
       [style.backgroundImage]="'url(' + slide + ')'"
     ></div>
@@ -16,22 +17,41 @@
 
   <div class="container position-relative z-2 px-3 px-md-4" data-animate>
     <div class="row justify-content-center">
-      <div class="col-12 col-md-10 col-lg-8" data-animate>
-        <h2 class="fw-bold fs-5 mb-4 mt-5" data-animate>{{ sectionTitle }}</h2>
-        <p class="lead mb-4 fs-6 fs-md-5" data-animate>
+      <div class="col-12 col-md-11 col-lg-9 col-xl-8" data-animate>
+        <span class="hero-eyebrow" data-animate>تعليم قرآني متكامل</span>
+        <h1 class="hero-title" data-animate>{{ sectionTitle }}</h1>
+        <p class="hero-description" data-animate>
           {{ description }}
         </p>
+        <div class="hero-actions" data-animate>
+          <a class="hero-action hero-action-primary" href="#packages"
+            >ابدأ الآن</a
+          >
+          <a class="hero-action hero-action-secondary" href="#our-services"
+            >استكشف البرامج</a
+          >
+        </div>
+        <div class="hero-metrics" aria-label="ملخص أجيال القرآن" data-animate>
+          <span>حفظ</span>
+          <span>تجويد</span>
+          <span>متابعة فردية</span>
+        </div>
       </div>
     </div>
   </div>
   <div class="pagination" data-animate>
     <span
       *ngFor="let slide of slides; let i = index"
-      class="dot" data-animate
+      class="dot"
+      data-animate
       [class.active]="currentSlide === i"
       (click)="setCurrentSlide(i)"
     ></span>
   </div>
 </section>
 
-<app-slider appInViewport animationType="slide-bottom" staggerDelay="1"></app-slider>
+<app-slider
+  appInViewport
+  animationType="slide-bottom"
+  staggerDelay="1"
+></app-slider>

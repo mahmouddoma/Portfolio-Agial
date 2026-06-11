@@ -3,57 +3,108 @@
     <div class="row justify-content-center mb-5" data-animate>
       <div class="col-12 col-md-8 text-center" data-animate>
         <h2 class="section-title mb-4" data-animate>اتصل بنا</h2>
-        <p class="section-description" data-animate>نحن هنا للإجابة على استفساراتك</p>
+        <p class="section-description" data-animate>
+          نحن هنا للإجابة على استفساراتك
+        </p>
       </div>
     </div>
 
     <div class="row justify-content-center" data-animate>
       <div class="col-12 col-md-10 col-lg-8" data-animate>
         <!-- Alert for form submission result -->
-        <div *ngIf="submitResult" class="alert" [ngClass]="submitResult.success ? 'alert-success' : 'alert-danger'"
-          role="alert" data-animate>
+        <div
+          *ngIf="submitResult"
+          class="alert"
+          [ngClass]="submitResult.success ? 'alert-success' : 'alert-danger'"
+          role="alert"
+          data-animate
+        >
           {{ submitResult.message }}
         </div>
 
-        <form class="contact-form p-4 bg-white rounded-3 shadow-sm" [formGroup]="contactForm" (ngSubmit)="onSubmit()" data-animate>
+        <form
+          class="contact-form p-4 bg-white rounded-3 shadow-sm"
+          [formGroup]="contactForm"
+          (ngSubmit)="onSubmit()"
+          data-animate
+        >
           <div class="row g-3">
             <div class="col-12 col-md-6" data-animate>
               <div class="form-group">
-                <input type="text" class="form-control" [ngClass]="{'is-invalid': hasError('name')}" placeholder="الاسم"
-                  formControlName="name" required />
-                <div *ngIf="hasError('name')" class="invalid-feedback">{{ getErrorMessage('name') }}</div>
+                <input
+                  type="text"
+                  class="form-control"
+                  [ngClass]="{ 'is-invalid': hasError('name') }"
+                  placeholder="الاسم"
+                  formControlName="name"
+                  required
+                />
+                <div *ngIf="hasError('name')" class="invalid-feedback">
+                  {{ getErrorMessage("name") }}
+                </div>
               </div>
             </div>
 
             <div class="col-12 col-md-6" data-animate>
               <div class="form-group">
-                <input type="email" class="form-control" [ngClass]="{'is-invalid': hasError('email')}"
-                  placeholder="البريد الإلكتروني" formControlName="email" required />
-                <div *ngIf="hasError('email')" class="invalid-feedback">{{ getErrorMessage('email') }}</div>
+                <input
+                  type="email"
+                  class="form-control"
+                  [ngClass]="{ 'is-invalid': hasError('email') }"
+                  placeholder="البريد الإلكتروني"
+                  formControlName="email"
+                  required
+                />
+                <div *ngIf="hasError('email')" class="invalid-feedback">
+                  {{ getErrorMessage("email") }}
+                </div>
               </div>
             </div>
 
             <div class="col-12" data-animate>
               <div class="form-group">
-                <input type="tel" class="form-control" [ngClass]="{'is-invalid': hasError('phone')}"
-                  placeholder="رقم الهاتف" formControlName="phone" />
-                <div *ngIf="hasError('phone')" class="invalid-feedback">{{ getErrorMessage('phone') }}</div>
+                <input
+                  type="tel"
+                  class="form-control"
+                  [ngClass]="{ 'is-invalid': hasError('phone') }"
+                  placeholder="رقم الهاتف"
+                  formControlName="phone"
+                />
+                <div *ngIf="hasError('phone')" class="invalid-feedback">
+                  {{ getErrorMessage("phone") }}
+                </div>
               </div>
             </div>
 
             <div class="col-12" data-animate>
               <div class="form-group">
-                <textarea class="form-control" [ngClass]="{'is-invalid': hasError('message')}" rows="5"
-                  placeholder="رسالتك" formControlName="message" required></textarea>
-                <div *ngIf="hasError('message')" class="invalid-feedback">{{ getErrorMessage('message') }}</div>
+                <textarea
+                  class="form-control"
+                  [ngClass]="{ 'is-invalid': hasError('message') }"
+                  rows="5"
+                  placeholder="رسالتك"
+                  formControlName="message"
+                  required
+                ></textarea>
+                <div *ngIf="hasError('message')" class="invalid-feedback">
+                  {{ getErrorMessage("message") }}
+                </div>
               </div>
             </div>
 
             <div class="col-12 text-center" data-animate>
-              <button type="submit" class="btn btn-primary px-5 py-2" [disabled]="contactForm.invalid || isSubmitting">
-                <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status"
-                  aria-hidden="true"></span>
-                {{ isSubmitting ? 'جاري الإرسال...' : 'إرسال' }}
+              <button
+                type="submit"
+                class="btn btn-primary px-5 py-2"
+                [disabled]="contactForm.invalid || isSubmitting"
+              >
+                <span
+                  *ngIf="isSubmitting"
+                  class="spinner-border spinner-border-sm me-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                {{ isSubmitting ? "جاري الإرسال..." : "إرسال" }}
               </button>
             </div>
           </div>

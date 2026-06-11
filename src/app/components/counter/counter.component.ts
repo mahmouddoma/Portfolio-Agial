@@ -8,6 +8,7 @@ import {
   ViewChildren,
   QueryList,
   ChangeDetectorRef,
+  inject,
 } from '@angular/core';
 import { CounterService, CounterItem } from '../../services/counter.service';
 
@@ -19,17 +20,12 @@ import { CounterService, CounterItem } from '../../services/counter.service';
   styleUrl: './counter.component.css',
 })
 export class CounterComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChildren('counterElement') counterElements!: QueryList<ElementRef>;
+  @ViewChildren('counterElement') counterElements!: QueryList<ElementRef<HTMLElement>>;
+  private readonly counterService = inject(CounterService);
+  private readonly cdRef = inject(ChangeDetectorRef);
   private observer: IntersectionObserver | null = null;
-  counters: CounterItem[] = [];
+  counters: CounterItem[] = this.counterService.getCounters();
   private triggered: boolean = false;
-
-  constructor(
-    private counterService: CounterService,
-    private cdRef: ChangeDetectorRef
-  ) {
-    this.counters = this.counterService.getCounters();
-  }
 
   ngOnInit(): void {
     this.setupIntersectionObserver();

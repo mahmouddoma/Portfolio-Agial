@@ -1,89 +1,219 @@
-import { Component } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  NgZone,
+  OnDestroy,
+  ViewChild,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CounterComponent } from "../counter/counter.component";
-import { InViewportDirective } from '../../directives/directives/in-viewport.directive';
+import { CounterComponent } from '../counter/counter.component';
 
-interface FeatureIcon {
-  type: 'svg' | 'img';
-  content: string;
-  style?: { [key: string]: string };
+type GsapApi = typeof import('gsap').gsap;
+type GsapContext = ReturnType<GsapApi['context']>;
+type GsapQuickTo = ReturnType<GsapApi['quickTo']>;
+
+interface FeatureHighlight {
+  label: string;
+  value: string;
 }
 
 interface Feature {
   id: number;
+  eyebrow: string;
   title: string;
   description: string;
-  icon: FeatureIcon;
-  subtitle?: string; // Make subtitle optional
+  image: string;
+  highlight: FeatureHighlight;
 }
 
 @Component({
   selector: 'app-feature',
   standalone: true,
-  imports: [CounterComponent, CommonModule, InViewportDirective],
+  imports: [CommonModule, CounterComponent],
   templateUrl: './feature.component.html',
-  styleUrl: './feature.component.css'
+  styleUrl: './feature.component.css',
 })
-export class FeatureComponent {
-  features: Feature[] = [
+export class FeatureComponent implements AfterViewInit, OnDestroy {
+  @ViewChild('featureSection') private featureSection?: ElementRef<HTMLElement>;
+  @ViewChild('journeyOrb') private journeyOrb?: ElementRef<HTMLElement>;
+
+  private readonly ngZone = inject(NgZone);
+  private gsap?: GsapApi;
+  private animationContext?: GsapContext;
+  private xTo?: GsapQuickTo;
+  private yTo?: GsapQuickTo;
+  private scrollListener?: () => void;
+  private resizeListener?: () => void;
+  private ticking = false;
+  private destroyed = false;
+  private reducedMotion = false;
+
+  readonly section = {
+    kicker: 'المميزات',
+    title: 'مميزات مدرسة أجيال القرآن',
+    description:
+      'منظومة تعليمية تربط المتابعة الفردية، جودة الإشراف، وتنظيم الحلقات في تجربة واحدة واضحة للطالب وولي الأمر.',
+  };
+
+  readonly features: readonly Feature[] = [
     {
       id: 1,
-      title: ' تقارير الطلاب ومتابعتهم 📄',
-      description: 'يوفر نظام أجيال القرآن تقارير دقيقة وشاملة عن أداء الطلاب، تشمل التحصيل العلمي، الحضور، والمشاركة في الأنشطة، مما يساعد المعلمين والإدارة على تقديم الدعم المناسب لكل طالب وفق احتياجاته.',
-      icon: {
-        type: 'img',
-        content: `https://i.pinimg.com/736x/2c/2b/10/2c2b10cff1dba30cf56ef9a8fd28589b.jpg`
-      }
+      eyebrow: 'متابعة ذكية',
+      title: 'تقارير الطالب ومتابعته',
+      description:
+        'تقارير دقيقة تعرض الحفظ، الحضور، المشاركة، ونقاط التحسن، حتى يحصل كل طالب على دعم مناسب حسب مستواه.',
+      image: 'medium-shot-boy-first-communion-portrait.jpg',
+      highlight: { label: 'تحديثات دورية', value: 'أسبوعية' },
     },
     {
       id: 2,
-      title: ' المشرفون على التحفيظ والتدريس 👨‍🏫',
-      description:'يشرف على تحفيظ وتدريس القرآن الكريم نخبة من المشرفين المتخصصين، يعملون على متابعة الطلاب وتوجيههم بدقة، مع التركيز على جودة الحفظ، إتقان التلاوة، وفهم معاني الآيات.كما يحرص المشرفون على ترسيخ القيم التربوية المستمدة من القرآن الكريم، ليكون التعليم مقرونًا بالتهذيب والتزكية، لا الحفظ فقط.ومن مهامهم كذلك:تقييم أداء الحلقات والمعلمين والطلاب بشكل دوري.رصد نقاط القوة والضعف وتقديم التوجيه المناسب.معالجة المشكلات التربوية والتعليمية أولًا بأول لضمان بيئة تعليمية ناجحة ومستقرة.',
-      icon: {
-        type: 'img',
-        content: 'https://i.pinimg.com/736x/c3/1e/c0/c31ec00f14f34b803f6d0fc15fcc6fd9.jpg',
-        style: {
-          borderRadius: '10px',
-          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
-        }
-      }
+      eyebrow: 'إشراف متخصص',
+      title: 'مشرفون على التخطيط والتدريس',
+      description:
+        'فريق إشراف يتابع جودة الحفظ والتلاوة، ويراجع أداء الحلقات والمعلمين لضمان بيئة تعليمية مستقرة.',
+      image: 'muslims-reading-from-quran.jpg',
+      highlight: { label: 'تقييم أداء', value: 'مستمر' },
     },
     {
       id: 3,
-      title: 'الحلقات',
-      subtitle :'🔹 الحلقات في مدرسة أجيال القرآن',
-      description:' تعتمد مدرسة أجيال القرآن نظام الحلقات الفردية، حيث يحظى كل طالب بمتابعة خاصة وفق مستواه، مما يضمن جودة الحفظ والتلاوة والتدرج المناسب في التعلم. وقد تم تنظيم الحلقات ضمن أقسام مستقلة تراعي الخصوصية والفروق العمرية: 👨‍🦰 قسم الرجال: يشرف عليه معلمون متخصصون في تحفيظ وتجويد القرآن.👩 قسم النساء: تشرف عليه معلمات ذوات كفاءة وخبرة في تعليم القرآن الكريم.👦👧 قسم الأطفال: يُعنى بتعليم الصغار بأساليب تربوية مشوّقة ومناسبة لأعمارهم.  نسعى من خلال هذا التنظيم إلى تهيئة بيئة تعليمية آمنة ومثمرة، تساعد كل متعلم على تحقيق أفضل النتائج في حفظ كتاب الله وتدبره. ',
-      icon: {
-        type: 'img',
-        content: `https://i.pinimg.com/736x/8b/45/6b/8b456b5ec6ebd65db0a11e9c0a56a1d2.jpg`
-      }
+      eyebrow: 'رحلة منظمة',
+      title: 'حلقات فردية حسب المستوى',
+      description:
+        'مسارات تعلم تراعي العمر والقدرة، مع خطة حفظ ومراجعة واضحة تساعد الطالب على التدرج بثقة.',
+      image: 'islamic-new-year-concept-with-copy-space.jpg',
+      highlight: { label: 'خطة شخصية', value: 'مفعلة' },
     },
     {
       id: 4,
-      subtitle: 'المعلمون',
-      title: ' المعلمون في أجيال القرآن 👩‍🏫',
-      description: 'يضم فريق أجيال القرآن نخبة من المعلمين والمعلمات المتخصصين في تعليم القرآن الكريم وعلومه، يتمتعون بالكفاءة العلمية، والخبرة التربوية، والتمكن من مهارات التحفيظ والتجويد.لا يقتصر دورهم على التعليم فقط، بل يمتد ليشمل غرس القيم القرآنية، ومرافقة الطالب في رحلته الإيمانية والعلمية، بأسلوب تربوي راقٍ يُراعي الفروق الفردية ويُحفّز على الاستمرار والتقدم.',
-      icon: {
-        type: 'img',
-        content: 'https://i.pinimg.com/736x/32/f6/1f/32f61f2f0b2e81d1f80d4d6ba5250e3c.jpg',
-        style: {
-          borderRadius: '10px',
-          boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)'
-        }
-      }
-    }
+      eyebrow: 'فريق مؤهل',
+      title: 'معلمون يرافقون الطالب',
+      description:
+        'معلمون ومعلمات يجمعون بين الخبرة التربوية وإتقان التجويد، ويركزون على الثبات والاستمرار.',
+      image: 'silhouette-woman-reading-quran.jpg',
+      highlight: { label: 'مرافقة تربوية', value: 'يومية' },
+    },
   ];
 
-  section = {
-    title: 'مميزات مدرسة أجيال القرآن'
-  };
+  async ngAfterViewInit(): Promise<void> {
+    const { gsap } = await import('gsap');
+    if (this.destroyed) {
+      return;
+    }
 
-  isValidSvg(content: string): boolean {
-    return content.includes('<svg') && content.includes('</svg>');
+    this.gsap = gsap;
+    this.reducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
+    this.createEntranceAnimation();
+    this.createJourneyMotion();
   }
 
-  getAnimationClass(index: number): string {
-    const classes = ['slide-bottom', 'slide-left', 'slide-right', 'fade-in'];
-    return classes[index % classes.length];
+  ngOnDestroy(): void {
+    this.destroyed = true;
+    this.scrollListener?.();
+    this.resizeListener?.();
+    this.animationContext?.revert();
+  }
+
+  trackByFeatureId(_: number, feature: Feature): number {
+    return feature.id;
+  }
+
+  private createEntranceAnimation(): void {
+    const section = this.featureSection?.nativeElement;
+    const gsap = this.gsap;
+    if (!section || !gsap || this.reducedMotion) {
+      return;
+    }
+
+    this.animationContext = gsap.context(() => {
+      gsap
+        .timeline({ defaults: { ease: 'power3.out' } })
+        .from(section.querySelectorAll('.feature-gsap-title'), {
+          y: 44,
+          opacity: 0,
+          duration: 0.85,
+          stagger: 0.1,
+        })
+        .from(
+          section.querySelectorAll('.feature-card'),
+          {
+            y: 60,
+            opacity: 0,
+            rotateX: -8,
+            duration: 0.8,
+            stagger: 0.1,
+          },
+          '-=0.38',
+        )
+        .from(
+          section.querySelectorAll('.journey-step'),
+          {
+            scale: 0.72,
+            opacity: 0,
+            duration: 0.45,
+            stagger: 0.07,
+          },
+          '-=0.2',
+        );
+    }, section);
+  }
+
+  private createJourneyMotion(): void {
+    const section = this.featureSection?.nativeElement;
+    const orb = this.journeyOrb?.nativeElement;
+    const gsap = this.gsap;
+    if (!section || !orb || !gsap || this.reducedMotion) {
+      return;
+    }
+
+    this.xTo = gsap.quickTo(orb, 'x', { duration: 0.65, ease: 'power3.out' });
+    this.yTo = gsap.quickTo(orb, 'y', { duration: 0.65, ease: 'power3.out' });
+
+    const update = (): void => {
+      this.ticking = false;
+      const rect = section.getBoundingClientRect();
+      const viewportHeight =
+        window.innerHeight || document.documentElement.clientHeight;
+      const progress = this.clamp(
+        (viewportHeight - rect.top) / (rect.height + viewportHeight),
+        0,
+        1,
+      );
+      const width = section.clientWidth;
+      const height = section.clientHeight;
+
+      this.xTo?.(this.lerp(width * 0.78, width * 0.18, progress));
+      this.yTo?.(this.lerp(110, height - 160, progress));
+    };
+
+    const requestUpdate = (): void => {
+      if (this.ticking) {
+        return;
+      }
+      this.ticking = true;
+      window.requestAnimationFrame(update);
+    };
+
+    this.ngZone.runOutsideAngular(() => {
+      window.addEventListener('scroll', requestUpdate, { passive: true });
+      window.addEventListener('resize', requestUpdate);
+    });
+
+    this.scrollListener = () =>
+      window.removeEventListener('scroll', requestUpdate);
+    this.resizeListener = () =>
+      window.removeEventListener('resize', requestUpdate);
+    requestUpdate();
+  }
+
+  private lerp(start: number, end: number, progress: number): number {
+    return start + (end - start) * progress;
+  }
+
+  private clamp(value: number, min: number, max: number): number {
+    return Math.min(Math.max(value, min), max);
   }
 }

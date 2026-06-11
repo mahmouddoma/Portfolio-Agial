@@ -1,30 +1,74 @@
-<h2>{{ isArabic ? "قائمة دوراتنا" : "Our Courses List" }}</h2>
+<section #servicesSection class="courses-section" aria-labelledby="courses-title">
+  <span #courseSignal class="course-signal" aria-hidden="true"></span>
 
-<h3 class="title">{{ isArabic ? "الدورات الشائعة" : "Popular Courses" }}</h3>
+  <div class="courses-shell">
+    <header class="courses-header">
+      <span class="section-kicker course-gsap-title">{{ section.kicker }}</span>
+      <h2 id="courses-title" class="courses-title course-gsap-title">
+        {{ section.title }}
+      </h2>
+      <p class="courses-description course-gsap-title">
+        {{ section.description }}
+      </p>
+    </header>
 
-<div class="services-container" [class.rtl]="isArabic" appInViewport animationType="fade-in" staggerDelay="1">
-  <div *ngFor="let service of services; let i = index" class="col-md-6 service-details" data-animate>
-    <h3 class="course-name">
-      {{ service.courseNameAr }}
-    </h3>
-    <!-- <p class="students-count">
-      {{ isArabic ? "الطلاب:" : "Students:" }} {{ service.studentsCount }}
-    </p> -->
-    <p class="lessons-hours">
-      {{ isArabic ? "الدروس:" : "Lessons:" }} {{ service.lessons }} |
-      {{ isArabic ? "الساعات:" : "Hours:" }} {{ service.hours }}
-    </p>
-    <p class="instructor">
-      {{ isArabic ? "المدرب:" : "Instructor:" }} {{ service.instructorAr }}
-    </p>
-    <div class="instructors-arabic">
-      {{ isArabic ? "المدرسين:" : "Instructors:" }}
-      <ul>
-        <li *ngFor="let instructor of service.instructorsAr">
-          {{ instructor }}
-        </li>
-      </ul>
+    <article class="featured-course" [attr.aria-label]="featuredCourse.title">
+      <div class="featured-course__media">
+        <img [src]="featuredCourse.image" [alt]="featuredCourse.title" loading="lazy" />
+      </div>
+
+      <div class="featured-course__content">
+        <span class="course-category">{{ featuredCourse.category }}</span>
+        <h3>{{ featuredCourse.title }}</h3>
+        <p>{{ featuredCourse.summary }}</p>
+
+        <div class="featured-course__stats">
+          @for (stat of featuredCourse.stats; track stat.label) {
+            <div>
+              <strong>{{ stat.value }}</strong>
+              <span>{{ stat.label }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    </article>
+
+    <div class="courses-grid">
+      @for (course of courses; track course.id; let index = $index) {
+        <article class="course-card" [class.course-card--featured]="index === 0">
+          <div class="course-card__image">
+            <img [src]="course.image" [alt]="course.title" loading="lazy" />
+            <span>{{ course.category }}</span>
+          </div>
+
+          <div class="course-card__body">
+            <div class="course-card__topline">
+              <span>{{ course.duration }}</span>
+              <span>{{ course.sessions }} جلسة</span>
+            </div>
+
+            <h3>{{ course.title }}</h3>
+            <p>{{ course.summary }}</p>
+
+            <div class="course-meta">
+              <span>المستوى</span>
+              <strong>{{ course.level }}</strong>
+            </div>
+
+            <div class="course-instructors">
+              @for (instructor of course.instructors; track instructor) {
+                <span>{{ instructor }}</span>
+              }
+            </div>
+
+            <div class="course-tags">
+              @for (tag of course.tags; track tag) {
+                <span>{{ tag }}</span>
+              }
+            </div>
+          </div>
+        </article>
+      }
     </div>
-    <img [src]="service.image" alt="Course image" class="course-image" />
   </div>
-</div>
+</section>

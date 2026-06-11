@@ -12,7 +12,7 @@ export interface CounterItem {
   target: number;
   icon: string;
   count: number;
-  interval?: any;
+  interval?: ReturnType<typeof setInterval>;
   duration?: number;
 }
 

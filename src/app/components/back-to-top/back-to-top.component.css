@@ -1,84 +1,86 @@
 .fixed-buttons {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  right: var(--space-5);
+  bottom: var(--space-5);
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--space-3);
 }
 
 .back-to-top-btn {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  font-size: 20px;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
-  width: 60px;
-  height: 60px;
+  width: 56px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: var(--gradient-main);
+  border: 1px solid color-mix(in srgb, var(--color-white) 20%, transparent);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-md);
+  color: var(--color-white);
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 900;
+  transition:
+    transform var(--motion-base) var(--motion-ease),
+    box-shadow var(--motion-base) var(--motion-ease),
+    filter var(--motion-base) var(--motion-ease);
 }
 
-/* Button appearance when hovered */
 .back-to-top-btn:hover {
-  background-color: #0056b3;
-  transform: scale(1.1);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-lg);
+  filter: brightness(1.05);
+  transform: translateY(-4px) scale(1.04);
 }
 
-/* Focus styling */
 .back-to-top-btn:focus {
   outline: none;
-  box-shadow: 0 0 10px rgba(0, 123, 255, 0.7);
+  box-shadow: 0 0 0 0.25rem color-mix(in srgb, var(--color-primary) 28%, transparent);
 }
 
 .whatsapp-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 60px;
-  height: 60px;
-  background-color: #25d366;
-  color: white;
+  width: 56px;
+  height: 56px;
+  background: var(--color-success);
   border: none;
-  border-radius: 50%;
-  font-size: 28px;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 14px 30px color-mix(in srgb, var(--color-success) 24%, transparent);
+  color: var(--color-white);
   cursor: pointer;
+  font-size: 28px;
   text-decoration: none;
-  box-shadow: 0 4px 8px rgba(37, 211, 102, 0.3);
-  transition: all 0.3s ease;
+  transition:
+    transform var(--motion-base) var(--motion-ease),
+    box-shadow var(--motion-base) var(--motion-ease),
+    filter var(--motion-base) var(--motion-ease);
 }
 
 .whatsapp-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 12px rgba(37, 211, 102, 0.4);
-  background-color: #20ba59;
+  box-shadow: 0 18px 38px color-mix(in srgb, var(--color-success) 32%, transparent);
+  filter: brightness(1.04);
+  transform: translateY(-4px) scale(1.04);
 }
 
-/* RTL Support */
 [dir="rtl"] .fixed-buttons {
   right: auto;
-  left: 20px;
+  left: var(--space-5);
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .fixed-buttons {
-    bottom: 15px;
-    right: 15px;
-    gap: 0.75rem;
+    right: var(--space-4);
+    bottom: var(--space-4);
+    gap: var(--space-2);
   }
 
   .whatsapp-btn,
   .back-to-top-btn {
-    width: 50px;
-    height: 50px;
+    width: 48px;
+    height: 48px;
     font-size: 24px;
   }
 }

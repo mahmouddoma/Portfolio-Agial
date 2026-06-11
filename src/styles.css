@@ -121,7 +121,7 @@ button, a {
 
 button:hover, a:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--color-brand-ink) 6%, transparent);
 }
 
 
@@ -187,12 +187,12 @@ button:hover, a:hover {
   18% {
     opacity: 1;
     transform: translateY(0) scale(1);
-    box-shadow: 0 4px 16px rgba(13, 95, 249, 0.08);
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--color-primary) 8%, transparent);
   }
   82% {
     opacity: 1;
     transform: translateY(0) scale(1);
-    box-shadow: 0 4px 16px rgba(13, 95, 249, 0.08);
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--color-primary) 8%, transparent);
   }
   100% {
     opacity: 0;

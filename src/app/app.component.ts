@@ -9,6 +9,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { OurServicesComponent } from './components/our-services/our-services.component';
 import { PackagesComponent } from './components/packages/packages.component';
+import { StudentJourneyComponent } from './components/student-journey/student-journey.component';
 
 // Directives
 import { InViewportDirective } from './directives/directives/in-viewport.directive';
@@ -26,6 +27,7 @@ import { InViewportDirective } from './directives/directives/in-viewport.directi
     HeaderComponent,
     OurServicesComponent,
     PackagesComponent,
+    StudentJourneyComponent,
     // Directives
     InViewportDirective
   ],

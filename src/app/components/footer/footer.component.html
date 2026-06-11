@@ -2,9 +2,15 @@
   <div class="footer-content">
     <!-- Company Info -->
     <div class="footer-section company-info">
-      <h3 class="company-heading">{{companyName}}</h3>
-      <img src="https://ajyalalquran.somee.com/assets/images/agialLogo.jpg" [alt]="companyName + ' logo'" width="100"
-        height="100" class="img-navbar" loading="lazy" />
+      <h3 class="company-heading">{{ companyName }}</h3>
+      <img
+        src="assets/images/Logo.jpg"
+        [alt]="companyName + ' logo'"
+        width="100"
+        height="100"
+        class="img-navbar"
+        loading="lazy"
+      />
     </div>
 
     <!-- Quick Links -->
@@ -12,8 +18,13 @@
       <h4>روابط سريعة</h4>
       <ul>
         <li *ngFor="let link of quickLinks">
-          <a class="nav-link" [routerLink]="link.path" routerLinkActive="active" (click)="scrollTo($event)">
-            {{link.text}}
+          <a
+            class="nav-link"
+            [routerLink]="link.path"
+            routerLinkActive="active"
+            (click)="scrollTo($event)"
+          >
+            {{ link.text }}
           </a>
         </li>
       </ul>
@@ -24,19 +35,24 @@
       <h4>اتصل بنا</h4>
       <p>
         البريد الإلكتروني:
-        <a [href]="'mailto:' + contactInfo.email">{{contactInfo.email}}</a>
+        <a [href]="'mailto:' + contactInfo.email">{{ contactInfo.email }}</a>
       </p>
-      <p>الهاتف: {{contactInfo.phone}}</p>
-      <p>العنوان: {{contactInfo.address}}</p>
+      <p>الهاتف: {{ contactInfo.phone }}</p>
+      <p>العنوان: {{ contactInfo.address }}</p>
     </div>
 
     <!-- Social Media -->
     <div class="footer-section social-media">
       <h4>تابعنا</h4>
       <div class="social-links">
-        <a *ngFor="let social of socialLinks" [href]="social.url" target="_blank" rel="noopener noreferrer"
-          [attr.aria-label]="social.ariaLabel">
-          <i class="fab fa-{{social.icon}}" aria-hidden="true"></i>
+        <a
+          *ngFor="let social of socialLinks"
+          [href]="social.url"
+          target="_blank"
+          rel="noopener noreferrer"
+          [attr.aria-label]="social.ariaLabel"
+        >
+          <i class="fab fa-{{ social.icon }}" aria-hidden="true"></i>
         </a>
       </div>
     </div>
@@ -44,6 +60,6 @@
 
   <!-- Footer Bottom -->
   <div class="footer-bottom">
-    <p>&copy; {{currentYear}} {{companyName}}. جميع الحقوق محفوظة.</p>
+    <p>&copy; {{ currentYear }} {{ companyName }}. جميع الحقوق محفوظة.</p>
   </div>
 </footer>

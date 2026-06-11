@@ -1,39 +1,116 @@
-<section class="testimonials-section container-fluid py-5 animate-on-scroll" aria-labelledby="testimonials-title" appInViewport>
-  <div class="row mb-5">
-    <div class="col-12 text-center">
-      <h2 id="testimonials-title" class="section-header mb-3">إنجازات الطلاب الخاتمين</h2>
-      <p class="section-subtitle mx-auto">
-        شاهد قصص نجاح طلابنا وتجاربهم المميزة في رحلة تعلم القرآن الكريم
+<section
+  #sectionRef
+  class="testimonials-section"
+  aria-labelledby="testimonials-title"
+  appInViewport
+>
+  <div class="testimonials-shell">
+    <header class="testimonials-header">
+      <span class="section-kicker gsap-title">قصص الختم</span>
+      <h2 id="testimonials-title" class="section-header gsap-title">
+        إنجازات الطلاب الخاتمين
+      </h2>
+      <p class="section-subtitle gsap-title">
+        تجربة جديدة لعرض رحلات الطلاب: قصة واضحة، أرقام مختصرة، وحركة تفاعلية تكشف أثر المتابعة اليومية.
       </p>
-    </div>
-  </div>
+    </header>
 
-  <div class="row justify-content-center">
-    <div class="col-12 col-lg-8">
-      <div class="testimonials-slider position-relative">
-        <div class="swiper" role="region" aria-label="شرائح إنجازات الطلاب">
-          <div class="swiper-wrapper">
-            <div *ngFor="let slide of slides; let i = index" class="swiper-slide text-center" role="group"
-              [attr.aria-label]="slide.title">
-              <div class="testimonial-image-wrapper">
-                <img [src]="slide.image" [alt]="slide.title" class="testimonial-image" loading="lazy" />
-              </div>
-              <div class="testimonial-content mt-4">
-                <p class="testimonial-text mb-3">{{ slide.subtitle }}</p>
-                <h3 class="testimonial-name">{{ slide.title }}</h3>
-                <p class="testimonial-role mb-0">طالب</p>
-              </div>
+    <div class="achievement-stage">
+      <aside class="achievement-summary gsap-panel" aria-label="ملخص الإنجازات">
+        <span class="summary-label">دفعة هذا الشهر</span>
+        <strong class="summary-stat">
+          <span class="summary-value">3</span>
+          <span class="summary-unit">قصص</span>
+        </strong>
+        <p>نماذج من تقدم الطلاب في الحفظ، التجويد، والمراجعة الفردية.</p>
+        <div class="summary-line" aria-hidden="true"></div>
+      </aside>
+
+      <article
+        #storyCard
+        class="story-card gsap-panel"
+        [attr.aria-label]="activeSlide().name + ' - ' + activeSlide().achievement"
+      >
+        <div class="story-card__top story-motion">
+          <span class="story-count">{{ formattedActiveIndex() }} / {{ totalSlides() }}</span>
+          <span class="story-program">{{ activeSlide().program }}</span>
+        </div>
+
+        <div class="story-card__body">
+          <div class="portrait-frame story-motion">
+            <img
+              class="student-portrait"
+              [src]="activeSlide().image"
+              [alt]="activeSlide().name"
+              loading="lazy"
+            />
+          </div>
+
+          <div class="story-content">
+            <blockquote class="story-quote story-motion">
+              {{ activeSlide().quote }}
+            </blockquote>
+
+            <div class="student-meta story-motion">
+              <h3>{{ activeSlide().name }}</h3>
+              <p>{{ activeSlide().role }} - {{ activeSlide().achievement }}</p>
+            </div>
+
+            <div class="achievement-metrics story-motion">
+              @for (metric of activeSlide().metrics; track metric.label) {
+                <div class="metric-card">
+                  <strong>{{ metric.value }}</strong>
+                  <span>{{ metric.label }}</span>
+                </div>
+              }
             </div>
           </div>
         </div>
 
-        <button class="nav-button prev-button" aria-label="السابق">
-          <span class="arrow-icon">&#10094;</span>
-        </button>
-        <button class="nav-button next-button" aria-label="التالي">
-          <span class="arrow-icon">&#10095;</span>
-        </button>
+        <div class="story-progress" aria-hidden="true">
+          <span #progressBar></span>
+        </div>
+      </article>
+
+      <nav class="story-thumbnails gsap-panel" aria-label="اختيار قصة الطالب">
+        @for (slide of slides; track slide.id; let index = $index) {
+          <button
+            #thumbnailButton
+            type="button"
+            class="thumbnail-card gsap-chip"
+            [class.active]="isActive(index)"
+            [attr.aria-current]="isActive(index) ? 'true' : null"
+            (click)="goToSlide(index)"
+          >
+            <img [src]="slide.image" [alt]="slide.name" loading="lazy" />
+            <span>
+              <strong>{{ slide.name }}</strong>
+              <small>{{ slide.achievement }}</small>
+            </span>
+          </button>
+        }
+      </nav>
+    </div>
+
+    <div class="story-controls gsap-panel">
+      <button type="button" class="control-button" aria-label="القصة السابقة" (click)="previousSlide()">
+        <span aria-hidden="true">→</span>
+      </button>
+
+      <div class="story-dots" aria-label="مؤشرات القصص">
+        @for (slide of slides; track slide.id; let index = $index) {
+          <button
+            type="button"
+            [class.active]="isActive(index)"
+            [attr.aria-label]="'عرض قصة ' + slide.name"
+            (click)="goToSlide(index)"
+          ></button>
+        }
       </div>
+
+      <button type="button" class="control-button" aria-label="القصة التالية" (click)="nextSlide()">
+        <span aria-hidden="true">←</span>
+      </button>
     </div>
   </div>
 </section>

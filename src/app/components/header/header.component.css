@@ -1,19 +1,26 @@
 .custom-navbar {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  inset: 0 0 auto;
   z-index: 1030;
-  padding: 1rem 0;
-  transition: all 0.3s ease;
-  background-color: transparent;
-  /* backdrop-filter: blur(10px); */
+  padding: 1rem clamp(0.75rem, 3vw, 2rem);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-brand-ink) 72%, transparent),
+    color-mix(in srgb, var(--color-brand-ink) 0%, transparent)
+  );
+  transition:
+    padding var(--motion-base) var(--motion-ease),
+    background var(--motion-base) var(--motion-ease),
+    box-shadow var(--motion-base) var(--motion-ease),
+    border-color var(--motion-base) var(--motion-ease);
 }
 
 .custom-navbar.scrolled {
-  background-color: white;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  padding: 0.5rem 0;
+  padding-block: 0.65rem;
+  background: color-mix(in srgb, var(--color-bg-surface) 88%, transparent);
+  border-bottom: 1px solid var(--color-border-subtle);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(18px);
 }
 
 .navbar-brand {
@@ -21,82 +28,106 @@
 }
 
 .img-navbar {
-  border-radius: 50%;
-  transition: transform 0.3s ease;
+  border: 2px solid color-mix(in srgb, var(--color-primary) 60%, var(--color-white));
+  border-radius: var(--radius-pill);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--color-brand-ink) 18%, transparent);
+  transition:
+    transform var(--motion-base) var(--motion-ease),
+    box-shadow var(--motion-base) var(--motion-ease);
 }
 
 .navbar-brand:hover .img-navbar {
-  transform: scale(1.1);
+  box-shadow: 0 16px 34px color-mix(in srgb, var(--color-brand-ink) 22%, transparent);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.navbar-nav {
+  gap: 0.35rem;
 }
 
 .nav-link {
-  color: white;
-  font-weight: 500;
-  padding: 0.5rem 1rem !important;
-  transition: color 0.3s ease;
+  position: relative;
+  border-radius: var(--radius-pill);
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  padding: 0.6rem 1rem !important;
+  transition:
+    color var(--motion-fast) var(--motion-ease),
+    background var(--motion-fast) var(--motion-ease),
+    transform var(--motion-fast) var(--motion-ease);
 }
 
-.scrolled .nav-link {
-  color: #333;
+.custom-navbar.scrolled .nav-link {
+  color: var(--color-text-brand);
 }
 
 .nav-link:hover,
 .nav-link.active {
-  color: #0d6efd;
+  background: color-mix(in srgb, var(--color-primary) 18%, transparent);
+  color: var(--color-primary);
+  transform: translateY(-1px);
+}
+
+.custom-navbar.scrolled .nav-link:hover,
+.custom-navbar.scrolled .nav-link.active {
+  color: var(--color-primary-active);
 }
 
 .navbar-toggler {
-  border: none;
-  padding: 0.25rem;
-  color: white;
-}
-
-.scrolled .navbar-toggler {
-  color: #333;
+  border: 1px solid color-mix(in srgb, var(--color-white) 45%, transparent);
+  border-radius: var(--radius-md);
+  padding: 0.45rem;
+  background: color-mix(in srgb, var(--color-white) 10%, transparent);
 }
 
 .navbar-toggler:focus {
-  box-shadow: none;
+  box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--color-primary) 28%, transparent);
 }
 
-/* Responsive styles */
+.custom-navbar.scrolled .navbar-toggler {
+  border-color: var(--color-border-default);
+  background: var(--color-bg-surface);
+}
+
 @media (max-width: 991.98px) {
   .navbar-collapse {
-    background: white;
-    border-radius: 8px;
-    padding: 1rem;
-    margin-top: 1rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: var(--space-4);
+    padding: var(--space-4);
+    background: color-mix(in srgb, var(--color-bg-surface) 94%, transparent);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(18px);
   }
 
   .nav-link {
-    color: #333 !important;
+    color: var(--color-text-brand) !important;
     text-align: center;
-    padding: 0.75rem !important;
+    padding: 0.85rem 1rem !important;
   }
 
   .navbar-nav {
-    gap: 0.5rem;
+    gap: var(--space-2);
   }
 }
 
 @media (max-width: 575.98px) {
   .custom-navbar {
-    padding: 0.5rem 0;
+    padding: 0.6rem 0.85rem;
   }
+
   .nav-link {
-    font-size: 0.875rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: var(--font-size-sm);
+    white-space: normal;
   }
+
   .navbar-brand img {
-    width: 35px;
-    height: 35px;
+    height: 38px;
+    width: 38px;
   }
 }
 
-/* RTL Support */
 [dir="rtl"] .navbar-toggler {
   margin-left: 0;
   margin-right: auto;

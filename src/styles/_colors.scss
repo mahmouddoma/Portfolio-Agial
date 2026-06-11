@@ -1,0 +1,104 @@
+$color-white: #ffffff;
+$color-black: #000000;
+
+// Primary palette: mint green
+$mint-50: #f0fdf8;
+$mint-100: #dcfcef;
+$mint-200: #b9f6de;
+$mint-300: #86ecc3;
+$mint-400: #56c596;
+$mint-500: #2fb37e;
+$mint-600: #219467;
+$mint-700: #1c7654;
+$mint-800: #1b5e47;
+$mint-900: #174d3c;
+
+// Neutral palette
+$gray-50: #f8fafc;
+$gray-100: #f1f5f9;
+$gray-200: #e2e8f0;
+$gray-300: #cbd5e1;
+$gray-400: #94a3b8;
+$gray-500: #64748b;
+$gray-600: #475569;
+$gray-700: #334155;
+$gray-800: #1e293b;
+$gray-900: #0f172a;
+
+// Supporting brand tones from the visual direction
+$brand-ink: #001b2e;
+$brand-teal: #1f7a8c;
+$brand-aqua: #5eead4;
+$brand-ice: #cffafe;
+$brand-paper: #f8fafc;
+
+// Semantic colors
+$success: #16a34a;
+$success-soft: #dcfce7;
+$success-strong: #166534;
+
+$warning: #f59e0b;
+$warning-soft: #fef3c7;
+$warning-strong: #92400e;
+
+$error: #dc2626;
+$error-soft: #fee2e2;
+$error-strong: #991b1b;
+
+$info: #0284c7;
+$info-soft: #e0f2fe;
+$info-strong: #075985;
+
+// Background colors
+$background-page: $gray-50;
+$background-surface: $color-white;
+$background-surface-soft: $mint-50;
+$background-surface-muted: $gray-100;
+$background-inverse: $brand-ink;
+$background-overlay: rgba($brand-ink, 0.72);
+
+// Text colors
+$text-primary: $gray-900;
+$text-secondary: $gray-600;
+$text-muted: $gray-500;
+$text-inverse: $color-white;
+$text-brand: $brand-ink;
+$text-link: $mint-700;
+
+// Border colors
+$border-subtle: $gray-200;
+$border-default: $gray-300;
+$border-strong: $gray-400;
+$border-primary: $mint-400;
+$border-inverse: rgba($color-white, 0.16);
+
+// Gradients
+$gradient-main: linear-gradient(135deg, $brand-ink 0%, $brand-teal 45%, $mint-400 100%);
+$gradient-soft: linear-gradient(135deg, $mint-50 0%, $brand-ice 55%, $brand-paper 100%);
+$gradient-dark: linear-gradient(135deg, $brand-ink 0%, $mint-900 100%);
+
+$primary-palette: (
+  50: $mint-50,
+  100: $mint-100,
+  200: $mint-200,
+  300: $mint-300,
+  400: $mint-400,
+  500: $mint-500,
+  600: $mint-600,
+  700: $mint-700,
+  800: $mint-800,
+  900: $mint-900
+);
+
+$neutral-palette: (
+  50: $gray-50,
+  100: $gray-100,
+  200: $gray-200,
+  300: $gray-300,
+  400: $gray-400,
+  500: $gray-500,
+  600: $gray-600,
+  700: $gray-700,
+  800: $gray-800,
+  900: $gray-900
+);
