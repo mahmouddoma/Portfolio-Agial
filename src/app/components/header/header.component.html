@@ -1,59 +1,51 @@
-<nav
-  class="navbar navbar-expand-lg custom-navbar"
-  [ngClass]="{ scrolled: isScrolled }"
->
-  <div class="container-fluid">
-    <a class="navbar-brand d-lg-none" href="#">
+<header #navbarRef class="site-header" [class.site-header--scrolled]="isScrolled">
+  <nav class="site-header__shell" [attr.aria-label]="navigationAriaLabel()">
+    <a class="site-brand" href="#about" [attr.aria-label]="brandName()" (click)="scrollTo($event, 'about')">
       <img
         src="assets/images/Logo.jpg"
-        alt="شعار أجيال القرآن"
-        width="40"
-        height="40"
-        class="img-navbar"
+        [alt]="brandLogoAlt()"
+        width="42"
+        height="42"
         loading="lazy"
+        decoding="async"
       />
+      <span>{{ brandName() }}</span>
     </a>
 
     <button
-      class="navbar-toggler"
       type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
+      class="menu-toggle"
+      aria-controls="primary-navigation"
+      [attr.aria-expanded]="isMenuOpen"
+      [attr.aria-label]="menuToggleAriaLabel()"
+      (click)="toggleMenu()"
     >
-      <span class="navbar-toggler-icon"></span>
+      <span></span>
+      <span></span>
+      <span></span>
     </button>
 
-    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-      <ul class="navbar-nav align-items-center">
-        <li class="nav-item">
-          <a class="nav-link active" href="#about">من نحن</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#features">الميزات</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#our-services">خدماتنا</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#packages">الباقات</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#contact">اتصل بنا</a>
-        </li>
-      </ul>
-      <a class="navbar-brand d-none d-lg-block mx-3" href="#">
-        <img
-          src="assets/images/Logo.jpg"
-          alt="شعار أجيال القرآن"
-          width="50"
-          height="50"
-          class="img-navbar"
-          loading="lazy"
-        />
-      </a>
+    <div id="primary-navigation" class="nav-panel" [class.nav-panel--open]="isMenuOpen">
+      @for (item of navItems(); track item.id) {
+        <a
+          class="nav-link"
+          [class.nav-link--active]="isActive(item.id)"
+          [attr.aria-current]="isActive(item.id) ? 'page' : null"
+          [href]="'#' + item.id"
+          (click)="scrollTo($event, item.id)"
+        >
+          {{ item.label }}
+        </a>
+      }
+
+      <button
+        type="button"
+        class="language-toggle"
+        [attr.aria-label]="languageSwitchAriaLabel()"
+        (click)="toggleLanguage()"
+      >
+        {{ languageSwitchLabel() }}
+      </button>
     </div>
-  </div>
-</nav>
+  </nav>
+</header>

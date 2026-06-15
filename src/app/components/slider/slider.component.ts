@@ -2,7 +2,6 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  NgZone,
   OnDestroy,
   QueryList,
   ViewChild,
@@ -12,11 +11,20 @@ import {
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TESTIMONIAL_CONTENT } from '../../data/site-content';
+import { LanguageService } from '../../services/language.service';
 
 type GsapApi = typeof import('gsap').gsap;
 type GsapContext = ReturnType<GsapApi['context']>;
 type GsapTimeline = ReturnType<GsapApi['timeline']>;
-type GsapTween = ReturnType<GsapApi['to']>;
+type ScrollTriggerApi = typeof import('gsap/ScrollTrigger').ScrollTrigger;
+
+interface StackScrollTrigger {
+  readonly start: number;
+  readonly end: number;
+  scroll(position: number): void;
+  update(): void;
+}
 
 interface AchievementMetric {
   label: string;
@@ -43,122 +51,108 @@ interface TestimonialSlide {
 })
 export class SliderComponent implements AfterViewInit, OnDestroy {
   @ViewChild('sectionRef') private sectionRef?: ElementRef<HTMLElement>;
-  @ViewChild('storyCard') private storyCard?: ElementRef<HTMLElement>;
-  @ViewChild('progressBar') private progressBar?: ElementRef<HTMLElement>;
-  @ViewChildren('thumbnailButton') private thumbnailButtons?: QueryList<ElementRef<HTMLButtonElement>>;
+  @ViewChild('stackPin') private stackPin?: ElementRef<HTMLElement>;
+  @ViewChild('storyStack') private storyStack?: ElementRef<HTMLElement>;
+  @ViewChildren('stackCard') private stackCards?: QueryList<ElementRef<HTMLElement>>;
 
-  private readonly ngZone = inject(NgZone);
-  private readonly autoplayDuration = 7200;
+  private readonly language = inject(LanguageService);
   private gsap?: GsapApi;
   private animationContext?: GsapContext;
-  private slideTimeline?: GsapTimeline;
-  private progressTween?: GsapTween;
-  private autoplayId?: number;
   private reducedMotion = false;
   private destroyed = false;
+  private readonly stackHoldDuration = 1.15;
+  private readonly stackTransitionDuration = 1.05;
+  private stackTimeline?: GsapTimeline;
+  private stackScrollTrigger?: StackScrollTrigger;
 
-  readonly slides: readonly TestimonialSlide[] = [
-    {
-      id: 1,
-      name: 'أحمد محمد',
-      role: 'طالب خاتم',
-      program: 'برنامج الختم المتقن',
-      achievement: 'ختم القرآن كاملًا خلال عامين',
-      quote:
-        'بدأت الرحلة بحفظ قصير يومي، ومع المتابعة الفردية والتقييم المستمر وصلت إلى الختم بثبات وثقة.',
-      image: 'medium-shot-boy-first-communion-portrait.jpg',
-      metrics: [
-        { label: 'مدة الرحلة', value: '24 شهر' },
-        { label: 'نسبة الالتزام', value: '96%' },
-        { label: 'المراجعة', value: 'يومية' },
-      ],
-    },
-    {
-      id: 2,
-      name: 'عبد الرحمن خالد',
-      role: 'متقن تلاوة',
-      program: 'برنامج التلاوة والتجويد',
-      achievement: 'إتقان أحكام التجويد والتلاوة الصحيحة',
-      quote:
-        'التدريب العملي على المخارج والوقف والابتداء جعل التلاوة أوضح، والمراجعة الصوتية ساعدتني أرى تقدمي أسبوعًا بعد أسبوع.',
-      image: 'muslims-reading-from-quran.jpg',
-      metrics: [
-        { label: 'جلسات تقييم', value: '48' },
-        { label: 'تحسن الأداء', value: '82%' },
-        { label: 'المتابعة', value: 'أسبوعية' },
-      ],
-    },
-    {
-      id: 3,
-      name: 'محمد عبد الله',
-      role: 'طالب متميز',
-      program: 'برنامج المتابعة الفردية',
-      achievement: 'بناء عادة حفظ ومراجعة مستقرة',
-      quote:
-        'أكثر ما صنع الفارق هو وضوح الخطة، كل أسبوع أعرف المطلوب مني، والمعلم يتابعني بخطوات صغيرة لكنها مؤثرة.',
-      image: 'silhouette-woman-reading-quran.jpg',
-      metrics: [
-        { label: 'معدل الحفظ', value: '5 أيام' },
-        { label: 'اختبارات ناجحة', value: '18' },
-        { label: 'خطة شخصية', value: 'مفعلة' },
-      ],
-    },
-  ];
+  readonly section = computed(() => ({
+    kicker: this.language.text(TESTIMONIAL_CONTENT.kicker),
+    title: this.language.text(TESTIMONIAL_CONTENT.title),
+    description: this.language.text(TESTIMONIAL_CONTENT.description),
+    summaryAria: this.language.text(TESTIMONIAL_CONTENT.summaryAria),
+    summaryLabel: this.language.text(TESTIMONIAL_CONTENT.summaryLabel),
+    summaryValue: this.language.text(TESTIMONIAL_CONTENT.summaryValue),
+    summaryUnit: this.language.text(TESTIMONIAL_CONTENT.summaryUnit),
+    summaryText: this.language.text(TESTIMONIAL_CONTENT.summaryText),
+    stackAria: this.language.text(TESTIMONIAL_CONTENT.stackAria),
+    thumbnailsAria: this.language.text(TESTIMONIAL_CONTENT.thumbnailsAria),
+    previousAria: this.language.text(TESTIMONIAL_CONTENT.previousAria),
+    nextAria: this.language.text(TESTIMONIAL_CONTENT.nextAria),
+    dotsAria: this.language.text(TESTIMONIAL_CONTENT.dotsAria),
+    showStoryPrefix: this.language.text(TESTIMONIAL_CONTENT.showStoryPrefix),
+  }));
+
+  readonly slides = computed<readonly TestimonialSlide[]>(() =>
+    TESTIMONIAL_CONTENT.slides.map((slide) => ({
+      id: slide.id,
+      name: this.language.text(slide.name),
+      role: this.language.text(slide.role),
+      program: this.language.text(slide.program),
+      achievement: this.language.text(slide.achievement),
+      quote: this.language.text(slide.quote),
+      image: slide.image,
+      metrics: slide.metrics.map((metric) => ({
+        label: this.language.text(metric.label),
+        value: this.language.text(metric.value),
+      })),
+    })),
+  );
 
   readonly activeIndex = signal(0);
-  readonly activeSlide = computed(() => this.slides[this.activeIndex()]);
-  readonly formattedActiveIndex = computed(() => `${this.activeIndex() + 1}`.padStart(2, '0'));
-  readonly totalSlides = computed(() => `${this.slides.length}`.padStart(2, '0'));
 
   async ngAfterViewInit(): Promise<void> {
-    const { gsap } = await import('gsap');
+    const [{ gsap }, { ScrollTrigger }] = await Promise.all([
+      import('gsap'),
+      import('gsap/ScrollTrigger'),
+    ]);
     if (this.destroyed) {
       return;
     }
 
+    gsap.registerPlugin(ScrollTrigger);
     this.gsap = gsap;
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    this.createEntranceAnimation();
-    this.animateActiveStory();
-    this.startAutoplay();
+    this.createStackExperience(ScrollTrigger);
   }
 
   ngOnDestroy(): void {
     this.destroyed = true;
-    this.stopAutoplay();
-    this.progressTween?.kill();
-    this.slideTimeline?.kill();
     this.animationContext?.revert();
+    this.stackTimeline = undefined;
+    this.stackScrollTrigger = undefined;
   }
 
   nextSlide(): void {
-    this.goToSlide((this.activeIndex() + 1) % this.slides.length);
+    this.goToSlide((this.activeIndex() + 1) % this.slides().length);
   }
 
   previousSlide(): void {
-    const previousIndex = this.activeIndex() === 0 ? this.slides.length - 1 : this.activeIndex() - 1;
+    const previousIndex = this.activeIndex() === 0 ? this.slides().length - 1 : this.activeIndex() - 1;
     this.goToSlide(previousIndex);
   }
 
   goToSlide(index: number): void {
-    if (index === this.activeIndex()) {
-      this.restartAutoplay();
+    const nextIndex = this.normalizeIndex(index);
+    this.activeIndex.set(nextIndex);
+
+    if (this.seekStackCard(nextIndex)) {
       return;
     }
 
-    this.activeIndex.set(index);
-    this.restartAutoplay();
-    this.scheduleStoryAnimation();
+    this.scrollToStackCard(nextIndex);
   }
 
   isActive(index: number): boolean {
     return index === this.activeIndex();
   }
 
-  private createEntranceAnimation(): void {
+  private createStackExperience(ScrollTrigger: ScrollTriggerApi): void {
     const section = this.sectionRef?.nativeElement;
+    const pin = this.stackPin?.nativeElement;
+    const storyStack = this.storyStack?.nativeElement;
+    const cards = this.stackCards?.map((card) => card.nativeElement) ?? [];
     const gsap = this.gsap;
-    if (!section || !gsap || this.reducedMotion) {
+    if (!section || !pin || !storyStack || !cards.length || !gsap || this.reducedMotion) {
       return;
     }
 
@@ -191,83 +185,147 @@ export class SliderComponent implements AfterViewInit, OnDestroy {
           },
           '-=0.28'
         );
+
+      gsap.set(cards, {
+        opacity: (index: number) => (index === 0 ? 1 : 0),
+        xPercent: -50,
+        yPercent: -50,
+        y: (index: number) => (index === 0 ? 0 : 150),
+        scale: (index: number) => 1 - index * 0.035,
+        rotate: (index: number) => index * -1.5,
+        transformOrigin: '50% 100%',
+      });
+
+      const isDesktop = window.matchMedia('(min-width: 992px)').matches;
+      const pinTarget = isDesktop ? pin : storyStack;
+
+      const timeline = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: {
+          trigger: pinTarget,
+          start: isDesktop ? 'top 10%' : 'top 14%',
+          end: `+=${Math.max(isDesktop ? 3200 : 2400, cards.length * (isDesktop ? 1100 : 820))}`,
+          scrub: 0.65,
+          pin: true,
+          anticipatePin: 1,
+          onUpdate: (self: { progress: number }) => {
+            this.syncActiveIndex(self.progress, cards.length);
+          },
+        },
+      });
+      const timelineWithTrigger = timeline as GsapTimeline & { scrollTrigger?: StackScrollTrigger };
+      this.stackTimeline = timeline;
+      this.stackScrollTrigger = timelineWithTrigger.scrollTrigger;
+
+      const holdState = { value: 0 };
+      const holdDuration = this.stackHoldDuration;
+      const transitionDuration = this.stackTransitionDuration;
+
+      timeline.to(holdState, {
+        value: 0.2,
+        duration: holdDuration,
+      });
+
+      cards.forEach((card, index) => {
+        if (index === 0) {
+          return;
+        }
+
+        timeline
+          .to(
+            card,
+            {
+              y: 0,
+              opacity: 1,
+              scale: 1,
+              rotate: 0,
+              duration: transitionDuration,
+            },
+            '>',
+          )
+          .to(
+            cards[index - 1],
+            {
+              y: -42,
+              scale: 0.94,
+              opacity: 0.58,
+              duration: transitionDuration,
+            },
+            '<',
+          )
+          .to(
+            holdState,
+            {
+              value: index,
+              duration: holdDuration,
+            },
+            '>',
+          );
+      });
+
+      ScrollTrigger.refresh();
     }, section);
   }
 
-  private scheduleStoryAnimation(): void {
-    window.requestAnimationFrame(() => this.animateActiveStory());
+  private syncActiveIndex(progress: number, count: number): void {
+    const nextIndex = Math.min(count - 1, Math.round(progress * (count - 1)));
+    if (nextIndex !== this.activeIndex()) {
+      this.activeIndex.set(nextIndex);
+    }
   }
 
-  private animateActiveStory(): void {
-    const card = this.storyCard?.nativeElement;
-    const progressBar = this.progressBar?.nativeElement;
-    const thumbnails = this.thumbnailButtons?.map((button) => button.nativeElement) ?? [];
-    const gsap = this.gsap;
+  private seekStackCard(index: number): boolean {
+    const trigger = this.stackScrollTrigger;
+    const timeline = this.stackTimeline;
+    const cardCount = this.stackCards?.length ?? this.slides().length;
+    if (!trigger || !timeline || cardCount < 2) {
+      return false;
+    }
 
-    this.slideTimeline?.kill();
-    this.progressTween?.kill();
+    const progress = this.getStackProgressForIndex(index, cardCount);
+    const targetScroll = trigger.start + (trigger.end - trigger.start) * progress;
 
-    if (!card || !gsap || this.reducedMotion) {
+    trigger.scroll(targetScroll);
+    trigger.update();
+    timeline.progress(progress);
+    this.activeIndex.set(index);
+
+    return true;
+  }
+
+  private getStackProgressForIndex(index: number, count: number): number {
+    const maxIndex = Math.max(count - 1, 0);
+    const clampedIndex = Math.min(Math.max(index, 0), maxIndex);
+    const totalDuration =
+      this.stackHoldDuration + maxIndex * (this.stackTransitionDuration + this.stackHoldDuration);
+
+    if (totalDuration <= 0) {
+      return 0;
+    }
+
+    const stablePhase =
+      clampedIndex === 0
+        ? this.stackHoldDuration / 2
+        : this.stackHoldDuration +
+          (clampedIndex - 1) * (this.stackTransitionDuration + this.stackHoldDuration) +
+          this.stackTransitionDuration +
+          this.stackHoldDuration / 2;
+
+    return stablePhase / totalDuration;
+  }
+
+  private normalizeIndex(index: number): number {
+    return Math.min(Math.max(index, 0), this.slides().length - 1);
+  }
+
+  private scrollToStackCard(index: number): void {
+    if (this.stackScrollTrigger) {
       return;
     }
 
-    const animatedItems = card.querySelectorAll('.story-motion');
-
-    this.slideTimeline = gsap
-      .timeline({ defaults: { ease: 'power3.out' } })
-      .fromTo(
-        card,
-        { y: 24, opacity: 0.92, scale: 0.985 },
-        { y: 0, opacity: 1, scale: 1, duration: 0.55 }
-      )
-      .fromTo(
-        animatedItems,
-        { y: 26, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.56, stagger: 0.07 },
-        '-=0.32'
-      )
-      .fromTo(
-        card.querySelector('.student-portrait'),
-        { scale: 0.86, rotate: -3, opacity: 0 },
-        { scale: 1, rotate: 0, opacity: 1, duration: 0.7 },
-        '-=0.5'
-      );
-
-    if (thumbnails.length) {
-      gsap.fromTo(
-        thumbnails,
-        { y: 8, opacity: 0.7 },
-        { y: 0, opacity: 1, duration: 0.35, stagger: 0.04, ease: 'power2.out' }
-      );
-    }
-
-    if (progressBar) {
-      gsap.set(progressBar, { scaleX: 0, transformOrigin: 'right center' });
-      this.progressTween = gsap.to(progressBar, {
-        scaleX: 1,
-        duration: this.autoplayDuration / 1000,
-        ease: 'none',
-      });
-    }
-  }
-
-  private startAutoplay(): void {
-    this.stopAutoplay();
-    this.ngZone.runOutsideAngular(() => {
-      this.autoplayId = window.setInterval(() => {
-        this.ngZone.run(() => this.nextSlide());
-      }, this.autoplayDuration);
+    this.stackCards?.get(index)?.nativeElement.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
     });
-  }
-
-  private restartAutoplay(): void {
-    this.startAutoplay();
-  }
-
-  private stopAutoplay(): void {
-    if (this.autoplayId) {
-      window.clearInterval(this.autoplayId);
-      this.autoplayId = undefined;
-    }
   }
 }

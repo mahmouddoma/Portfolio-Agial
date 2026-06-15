@@ -2,18 +2,20 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  NgZone,
   OnDestroy,
   ViewChild,
+  ViewChildren,
+  QueryList,
   computed,
   inject,
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { JOURNEY_CONTENT } from '../../data/site-content';
+import { LanguageService } from '../../services/language.service';
 
 type GsapApi = typeof import('gsap').gsap;
 type GsapContext = ReturnType<GsapApi['context']>;
-type GsapQuickTo = ReturnType<GsapApi['quickTo']>;
 
 interface JourneyStep {
   id: number;
@@ -33,94 +35,53 @@ interface JourneyStep {
 })
 export class StudentJourneyComponent implements AfterViewInit, OnDestroy {
   @ViewChild('journeySection') private journeySection?: ElementRef<HTMLElement>;
-  @ViewChild('journeySignal') private journeySignal?: ElementRef<HTMLElement>;
+  @ViewChild('journeyPathProgress') private journeyPathProgress?: ElementRef<SVGPathElement>;
+  @ViewChildren('journeyStep') private journeyStepElements?: QueryList<ElementRef<HTMLElement>>;
 
-  private readonly ngZone = inject(NgZone);
-  private gsap?: GsapApi;
+  private readonly language = inject(LanguageService);
   private context?: GsapContext;
-  private xTo?: GsapQuickTo;
-  private yTo?: GsapQuickTo;
-  private scrollCleanup?: () => void;
-  private resizeCleanup?: () => void;
-  private ticking = false;
   private destroyed = false;
   private reducedMotion = false;
 
   readonly activeStepIndex = signal(0);
 
-  readonly activeStep = computed(() => this.steps[this.activeStepIndex()]);
+  readonly section = computed(() => ({
+    kicker: this.language.text(JOURNEY_CONTENT.section.kicker),
+    title: this.language.text(JOURNEY_CONTENT.section.title),
+    description: this.language.text(JOURNEY_CONTENT.section.description),
+    panelAria: this.language.text(JOURNEY_CONTENT.panelAria),
+    mapAria: this.language.text(JOURNEY_CONTENT.mapAria),
+  }));
 
-  readonly section = {
-    kicker: 'رحلة الطالب',
-    title: 'من أول تقييم إلى إتقان مستمر',
-    description:
-      'نحوّل التعلم من دروس متفرقة إلى مسار واضح: تقييم، خطة، حلقة، متابعة، ثم إنجاز قابل للقياس.',
-  };
+  readonly steps = computed<readonly JourneyStep[]>(() =>
+    JOURNEY_CONTENT.steps.map((step) => ({
+      id: step.id,
+      phase: step.phase,
+      title: this.language.text(step.title),
+      description: this.language.text(step.description),
+      metric: this.language.text(step.metric),
+      detail: this.language.text(step.detail),
+    })),
+  );
 
-  readonly steps: readonly JourneyStep[] = [
-    {
-      id: 1,
-      phase: '01',
-      title: 'تقييم المستوى',
-      description:
-        'نبدأ بفهم مستوى الطالب في الحفظ والتلاوة والالتزام، ثم نحدد نقطة البداية المناسبة.',
-      metric: '15 دقيقة',
-      detail: 'جلسة تعريف قصيرة تحدد المسار المناسب من غير تعقيد.',
-    },
-    {
-      id: 2,
-      phase: '02',
-      title: 'اختيار المسار',
-      description:
-        'نربط هدف الطالب ببرنامج واضح للحفظ، التجويد، التفسير، أو المتابعة الفردية.',
-      metric: '4 مسارات',
-      detail: 'كل مسار له مدة، مستوى، ومعلم مناسب لطبيعة الطالب.',
-    },
-    {
-      id: 3,
-      phase: '03',
-      title: 'حلقة مباشرة',
-      description:
-        'يدخل الطالب في حلقة منظمة مع معلم يتابع الأداء ويصحح التلاوة خطوة بخطوة.',
-      metric: 'مباشر',
-      detail: 'تجربة تعلم حية تركّز على التدرج والثبات.',
-    },
-    {
-      id: 4,
-      phase: '04',
-      title: 'متابعة وتقارير',
-      description:
-        'ولي الأمر والمعلم يشاهدان مؤشرات التقدم، الحضور، المراجعة، ونقاط التحسن.',
-      metric: 'أسبوعي',
-      detail: 'تقارير مختصرة تساعد الطالب يكمل بثقة ووضوح.',
-    },
-    {
-      id: 5,
-      phase: '05',
-      title: 'إنجاز مستمر',
-      description:
-        'كل إنجاز يتحول إلى خطة مراجعة جديدة حتى لا يكون التقدم مؤقتا.',
-      metric: 'مستمر',
-      detail: 'الهدف ليس الحفظ فقط، بل تثبيت ما تم تعلمه.',
-    },
-  ];
+  readonly activeStep = computed(() => this.steps()[this.activeStepIndex()]);
 
   async ngAfterViewInit(): Promise<void> {
-    const { gsap } = await import('gsap');
+    const [{ gsap }, { ScrollTrigger }, { DrawSVGPlugin }] = await Promise.all([
+      import('gsap'),
+      import('gsap/ScrollTrigger'),
+      import('gsap/DrawSVGPlugin'),
+    ]);
     if (this.destroyed) {
       return;
     }
 
-    this.gsap = gsap;
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    this.createEntranceAnimation();
-    this.createScrollMotion();
+    await this.createJourneyMotion(gsap, ScrollTrigger, DrawSVGPlugin);
   }
 
   ngOnDestroy(): void {
     this.destroyed = true;
-    this.scrollCleanup?.();
-    this.resizeCleanup?.();
     this.context?.revert();
   }
 
@@ -128,100 +89,35 @@ export class StudentJourneyComponent implements AfterViewInit, OnDestroy {
     this.activeStepIndex.set(index);
   }
 
-  private createEntranceAnimation(): void {
+  private async createJourneyMotion(
+    gsap: GsapApi,
+    ScrollTrigger: typeof import('gsap/ScrollTrigger').ScrollTrigger,
+    DrawSVGPlugin: typeof import('gsap/DrawSVGPlugin').DrawSVGPlugin,
+  ): Promise<void> {
     const section = this.journeySection?.nativeElement;
-    const gsap = this.gsap;
+    const path = this.journeyPathProgress?.nativeElement;
+    const steps = this.journeyStepElements?.map((step) => step.nativeElement) ?? [];
     if (!section || !gsap || this.reducedMotion) {
       return;
     }
 
-    this.context = gsap.context(() => {
-      gsap
-        .timeline({ defaults: { ease: 'power3.out' } })
-        .from(section.querySelectorAll('.journey-gsap-title'), {
-          y: 42,
-          opacity: 0,
-          duration: 0.78,
-          stagger: 0.1,
-        })
-        .from(
-          section.querySelector('.journey-stage'),
-          {
-            y: 64,
-            opacity: 0,
-            scale: 0.98,
-            duration: 0.82,
-          },
-          '-=0.35',
-        )
-        .from(
-          section.querySelectorAll('.journey-step'),
-          {
-            x: 36,
-            opacity: 0,
-            duration: 0.58,
-            stagger: 0.07,
-          },
-          '-=0.42',
-        );
-    }, section);
-  }
-
-  private createScrollMotion(): void {
-    const section = this.journeySection?.nativeElement;
-    const signal = this.journeySignal?.nativeElement;
-    const gsap = this.gsap;
-    if (!section || !signal || !gsap || this.reducedMotion) {
+    const { setupStudentJourneyMotion } = await import('../../animations/student-journey.animations');
+    if (this.destroyed) {
       return;
     }
 
-    this.xTo = gsap.quickTo(signal, 'x', { duration: 0.72, ease: 'power3.out' });
-    this.yTo = gsap.quickTo(signal, 'y', { duration: 0.72, ease: 'power3.out' });
+    gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin);
 
-    const update = (): void => {
-      this.ticking = false;
-
-      const rect = section.getBoundingClientRect();
-      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-      const progress = this.clamp(
-        (viewportHeight - rect.top) / (rect.height + viewportHeight),
-        0,
-        1,
-      );
-      const stepIndex = Math.min(
-        this.steps.length - 1,
-        Math.floor(progress * this.steps.length),
-      );
-
-      this.activeStepIndex.set(stepIndex);
-      this.xTo?.(this.lerp(section.clientWidth * 0.74, section.clientWidth * 0.18, progress));
-      this.yTo?.(this.lerp(120, section.clientHeight - 140, progress));
-    };
-
-    const requestUpdate = (): void => {
-      if (this.ticking) {
-        return;
-      }
-
-      this.ticking = true;
-      window.requestAnimationFrame(update);
-    };
-
-    this.ngZone.runOutsideAngular(() => {
-      window.addEventListener('scroll', requestUpdate, { passive: true });
-      window.addEventListener('resize', requestUpdate);
-    });
-
-    this.scrollCleanup = () => window.removeEventListener('scroll', requestUpdate);
-    this.resizeCleanup = () => window.removeEventListener('resize', requestUpdate);
-    requestUpdate();
-  }
-
-  private lerp(start: number, end: number, progress: number): number {
-    return start + (end - start) * progress;
-  }
-
-  private clamp(value: number, min: number, max: number): number {
-    return Math.min(Math.max(value, min), max);
+    this.context = gsap.context(() => {
+      setupStudentJourneyMotion({
+        section,
+        path,
+        steps,
+        stepCount: this.steps().length,
+        gsap,
+        ScrollTrigger,
+        onActiveStepChange: (index) => this.activeStepIndex.set(index),
+      });
+    }, section);
   }
 }

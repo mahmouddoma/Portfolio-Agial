@@ -5,7 +5,7 @@
 .counters-section {
   position: relative;
   padding: 0;
-  direction: rtl;
+  direction: inherit;
 }
 
 .counter-container {
@@ -54,11 +54,20 @@
   transform: translateY(-6px);
 }
 
+.counter-item--active {
+  border-color: var(--color-primary-border);
+  box-shadow:
+    0 18px 48px color-mix(in srgb, var(--color-primary) 18%, transparent),
+    var(--shadow-md);
+}
+
 .counter-item:hover::before {
   transform: scaleX(1);
 }
 
 .counter-icon {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -76,12 +85,14 @@
 }
 
 .counter-number {
+  position: relative;
+  z-index: 1;
   direction: ltr;
   display: flex;
   align-items: baseline;
   justify-content: center;
   gap: var(--space-1);
-  margin-bottom: var(--space-3);
+  margin: var(--space-1) 0 var(--space-4);
 }
 
 .counter-value {
@@ -89,23 +100,57 @@
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
-  font-size: clamp(2rem, 3vw, 2.8rem);
+  font-size: clamp(3rem, 6vw, 5.25rem);
   font-weight: 900;
   line-height: 1;
 }
 
 .counter-suffix {
   color: var(--color-primary-active);
-  font-size: var(--font-size-xl);
+  font-size: clamp(1.3rem, 2vw, 2rem);
   font-weight: 900;
 }
 
+.counter-number::after {
+  content: "";
+  position: absolute;
+  inset: -0.8rem 8%;
+  background:
+    radial-gradient(circle at 12% 24%, var(--color-primary) 0 3px, transparent 4px),
+    radial-gradient(circle at 82% 20%, var(--color-primary) 0 3px, transparent 4px),
+    radial-gradient(circle at 92% 72%, var(--color-primary) 0 3px, transparent 4px),
+    radial-gradient(circle at 22% 82%, var(--color-primary) 0 3px, transparent 4px);
+  opacity: 0;
+  transform: scale(0.72);
+  pointer-events: none;
+}
+
+.counter-item--active .counter-number::after {
+  animation: counter-particles 900ms var(--motion-ease) both;
+}
+
 .counter-label {
+  position: relative;
+  z-index: 1;
   margin: 0;
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: 800;
   line-height: 1.6;
+}
+
+@keyframes counter-particles {
+  0% {
+    opacity: 0;
+    transform: scale(0.72);
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.18);
+  }
 }
 
 .visually-hidden {

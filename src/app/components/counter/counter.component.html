@@ -1,13 +1,15 @@
 <section class="counters-section" aria-labelledby="counters-title">
-  <h2 id="counters-title" class="visually-hidden">إحصائيات أجيال القرآن</h2>
+  <h2 id="counters-title" class="visually-hidden">{{ getTitle() }}</h2>
 
   <div class="counter-container">
-    @for (counter of counters; track counter.label) {
+    @for (counter of counters; track counter.icon; let index = $index) {
       <article
         #counterElement
         class="counter-item"
+        [class.counter-item--active]="counter.started"
+        [attr.data-counter-index]="index"
         role="region"
-        [attr.aria-label]="counter.label"
+        [attr.aria-label]="getCounterLabel(counter)"
       >
         <div class="counter-icon" aria-hidden="true">
           <i [class]="counter.icon"></i>
@@ -20,7 +22,7 @@
           <span class="counter-suffix" aria-hidden="true">+</span>
         </div>
 
-        <p class="counter-label">{{ counter.label }}</p>
+        <p class="counter-label">{{ getCounterLabel(counter) }}</p>
       </article>
     }
   </div>

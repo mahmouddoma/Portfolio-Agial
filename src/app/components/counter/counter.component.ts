@@ -11,6 +11,7 @@ import {
   inject,
 } from '@angular/core';
 import { CounterService, CounterItem } from '../../services/counter.service';
+import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-counter',
@@ -22,9 +23,14 @@ import { CounterService, CounterItem } from '../../services/counter.service';
 export class CounterComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('counterElement') counterElements!: QueryList<ElementRef<HTMLElement>>;
   private readonly counterService = inject(CounterService);
+  private readonly language = inject(LanguageService);
   private readonly cdRef = inject(ChangeDetectorRef);
   private observer: IntersectionObserver | null = null;
   counters: CounterItem[] = this.counterService.getCounters();
+  readonly title = {
+    ar: 'إحصائيات أجيال القرآن',
+    en: 'Ajyal Al Quran statistics',
+  };
   private triggered: boolean = false;
 
   ngOnInit(): void {
@@ -47,8 +53,9 @@ export class CounterComponent implements OnInit, AfterViewInit, OnDestroy {
   private setupIntersectionObserver(): void {
     if ('IntersectionObserver' in window) {
       this.observer = this.counterService.createIntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
+            const index = this.getCounterIndex(entry.target);
             this.startSingleCounter(index);
             this.observer?.unobserve(entry.target);
           }
@@ -68,6 +75,9 @@ export class CounterComponent implements OnInit, AfterViewInit, OnDestroy {
   private startSingleCounter(index: number): void {
     const counter = this.counters[index];
     if (!counter) return;
+
+    counter.started = true;
+    this.cdRef.markForCheck();
 
     const startTime = performance.now();
     const startValue = 0;
@@ -111,6 +121,23 @@ export class CounterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   formatNumber(value: number): string {
-    return this.counterService.formatNumber(value);
+    return this.language.formatNumber(value);
+  }
+
+  getCounterLabel(counter: CounterItem): string {
+    return this.language.text(counter.label);
+  }
+
+  getTitle(): string {
+    return this.language.text(this.title);
+  }
+
+  private getCounterIndex(target: Element): number {
+    if (!(target instanceof HTMLElement)) {
+      return -1;
+    }
+
+    const index = Number(target.dataset['counterIndex']);
+    return Number.isInteger(index) ? index : -1;
   }
 }

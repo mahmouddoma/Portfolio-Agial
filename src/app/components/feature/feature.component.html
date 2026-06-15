@@ -3,52 +3,58 @@
   class="feature-section"
   aria-labelledby="feature-title"
 >
-  <div #journeyOrb class="journey-orb" aria-hidden="true"></div>
-
   <div class="feature-shell">
     <header class="feature-header">
       <span class="section-kicker feature-gsap-title">{{
-        section.kicker
+        section().kicker
       }}</span>
       <h2 id="feature-title" class="feature-title feature-gsap-title">
-        {{ section.title }}
+        {{ section().title }}
       </h2>
       <p class="feature-description feature-gsap-title">
-        {{ section.description }}
+        {{ section().description }}
       </p>
     </header>
 
-    <div class="journey-rail" aria-hidden="true">
-      @for (feature of features; track feature.id) {
-        <span class="journey-step">{{ feature.id }}</span>
-      }
-    </div>
+    <div class="feature-showcase">
+      <aside class="feature-visual-panel" [attr.aria-label]="section().visualAria">
+        <div class="feature-visual-frame">
+          @for (feature of features(); track feature.id; let index = $index) {
+            <figure
+              #featureVisual
+              class="feature-visual"
+              [class.feature-visual--active]="isActive(index)"
+            >
+              <img [src]="feature.image" [alt]="feature.title" loading="lazy" decoding="async" />
+              <figcaption>
+                <span>{{ feature.eyebrow }}</span>
+                <strong>{{ feature.highlight.value }}</strong>
+              </figcaption>
+            </figure>
+          }
+        </div>
+      </aside>
 
-    <div class="feature-grid">
-      @for (feature of features; track feature.id; let index = $index) {
-        <article
-          #featureCard
-          class="feature-card"
-          [class.feature-card--raised]="index % 2 === 1"
-          [attr.aria-label]="feature.title"
-        >
-          <div class="feature-card__media">
-            <img [src]="feature.image" [alt]="feature.title" loading="lazy" />
-            <span class="feature-card__number">{{ feature.id }}</span>
-          </div>
-
-          <div class="feature-card__content">
-            <span class="feature-card__eyebrow">{{ feature.eyebrow }}</span>
+      <div class="feature-copy-track">
+        @for (feature of features(); track feature.id; let index = $index) {
+          <article
+            #featurePanel
+            class="feature-panel"
+            [class.feature-panel--active]="isActive(index)"
+            [attr.aria-label]="feature.title"
+          >
+            <span class="feature-panel__number">{{ feature.id }}</span>
+            <span class="feature-panel__eyebrow">{{ feature.eyebrow }}</span>
             <h3>{{ feature.title }}</h3>
             <p>{{ feature.description }}</p>
-          </div>
 
-          <div class="feature-card__highlight">
-            <span>{{ feature.highlight.label }}</span>
-            <strong>{{ feature.highlight.value }}</strong>
-          </div>
-        </article>
-      }
+            <div class="feature-panel__highlight">
+              <span>{{ feature.highlight.label }}</span>
+              <strong>{{ feature.highlight.value }}</strong>
+            </div>
+          </article>
+        }
+      </div>
     </div>
 
     <div class="feature-counter-bridge" aria-hidden="true">

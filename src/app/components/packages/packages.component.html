@@ -1,49 +1,102 @@
-<div class="packages-container">
-  <div class="packages-header">
-    <div class="section-title">الباقات</div>
-    <div class="section-description">اختر الباقة المناسبة لك</div>
-  </div>
+<section #packagesSection class="packages-container" aria-labelledby="packages-title">
+  <div class="packages-shell">
+    <header class="packages-header packages-gsap-title">
+      <span class="section-title">{{ section().kicker }}</span>
+      <h2 id="packages-title" class="section-description">{{ section().title }}</h2>
+      <p class="packages-lead">
+        {{ section().description }}
+      </p>
+    </header>
 
-  <div class="swiper-container">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide" *ngFor="let package of packages">
-        <div class="package-item animate-on-scroll" appInViewport [ngClass]="{
-            'package-diamond': package.name.includes('الماسية'),
-            'package-fort': package.name.includes('الحصون'),
-            'package-bronze': package.name.includes('برونزية'),
-            'package-silver': package.name.includes('الفضية'),
-            'package-gold': package.name.includes('ذهبية')
-          }">
-          <div class="package-title">{{ package.name }}</div>
-          <div class="package-price">
-            <strong *ngIf="package.currency === 'LE'">
-              {{ package.price }} ج.م / الشهر
-            </strong>
-            <strong *ngIf="package.currency === 'SAR'">
-              {{ package.price }} ريال / الشهر
-            </strong>
-            <strong *ngIf="package.currency === 'USD'">
-              ${{ package.price }} / month
-            </strong>
-          </div>
-     
-          
-          
-          <ul class="package-features">
-            <li>الدقائق الكلية: {{ package.totalMinutes }}</li>
-            <!-- <li>عدد المشتركين: {{ package.subscriberCount }}</li> -->
-            <li>نوع الاشتراك: {{ package.subscribeType }}</li>
-          </ul>
-          <a href="https://ajyalalquran.somee.com/#/add-packages" target="_blank">
-            <button class="btn-select">اشترك الآن</button>
-          </a>
+    @if (error) {
+      <p class="error-message" role="alert">{{ error }}</p>
+    }
+
+    <div class="packages-board packages-gsap-panel">
+      <div
+        class="packages-carousel"
+        [attr.aria-label]="section().carouselAria"
+        (pointerenter)="pausePackageAutoplay()"
+        (pointerleave)="resumePackageAutoplay()"
+        (focusin)="pausePackageAutoplay()"
+        (focusout)="resumePackageAutoplay()"
+      >
+        <button
+          type="button"
+          class="package-nav package-nav--prev"
+          [attr.aria-label]="section().previousAria"
+          [disabled]="isFirstPackage()"
+          (click)="previousPackage()"
+        >
+          <span aria-hidden="true">‹</span>
+        </button>
+
+        <div #packagesTrack class="packages-track" (scroll)="syncActivePackageFromScroll()">
+          @for (packageItem of packageCards; track packageItem.name) {
+            <article
+              [class]="packageItem.styleClass"
+              [class.package-card--active]="activePackageIndex() === $index"
+              [attr.data-package-kind]="packageItem.kind"
+              (mousemove)="tiltPackage($event)"
+              (mouseleave)="tiltPackage($event)"
+            >
+              <div class="package-ribbon">{{ packageItem.badge }}</div>
+
+              <div class="package-head">
+                <span class="package-duration">{{ packageItem.totalHours }}</span>
+                <span class="package-type">{{ packageItem.displaySubscribeType }}</span>
+              </div>
+
+              <h3 class="package-title">{{ packageItem.displayName }}</h3>
+
+              <div class="package-price" [attr.aria-label]="section().priceAria">
+                <span class="package-price__prefix">{{ packageItem.pricePrefix }}</span>
+                <strong>{{ packageItem.price }}</strong>
+                <span>{{ packageItem.priceSuffix }}</span>
+              </div>
+
+              <ul class="package-features">
+                @for (feature of packageItem.features; track feature.label) {
+                  <li>
+                    <span>{{ feature.label }}</span>
+                    <strong>{{ feature.value }}</strong>
+                  </li>
+                }
+              </ul>
+
+              <a
+                class="btn-select"
+                href="https://ajyalalquran.somee.com/#/add-packages"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {{ section().subscribe }}
+              </a>
+            </article>
+          }
         </div>
+
+        <button
+          type="button"
+          class="package-nav package-nav--next"
+          [attr.aria-label]="section().nextAria"
+          [disabled]="isLastPackage()"
+          (click)="nextPackage()"
+        >
+          <span aria-hidden="true">›</span>
+        </button>
+      </div>
+
+      <div class="package-dots" [attr.aria-label]="section().dotsAria">
+        @for (packageItem of packageCards; track packageItem.name; let index = $index) {
+          <button
+            type="button"
+            [class.active]="activePackageIndex() === index"
+            [attr.aria-label]="section().showPrefix + ' ' + packageItem.displayName"
+            (click)="goToPackage(index)"
+          ></button>
+        }
       </div>
     </div>
-    <!-- Swiper navigation buttons -->
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
-    <!-- Swiper pagination -->
-    <!-- <div class="swiper-pagination"></div> -->
   </div>
-</div>
+</section>

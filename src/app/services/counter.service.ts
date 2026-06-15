@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { COUNTER_CONTENT } from '../data/site-content';
+import type { LocalizedText } from './language.service';
 
 export interface CounterConfig {
   duration?: number;
@@ -8,10 +10,11 @@ export interface CounterConfig {
 }
 
 export interface CounterItem {
-  label: string;
+  label: LocalizedText;
   target: number;
   icon: string;
   count: number;
+  started?: boolean;
   interval?: ReturnType<typeof setInterval>;
   duration?: number;
 }
@@ -26,36 +29,13 @@ export class CounterService {
   private readonly DEFAULT_ROOT_MARGIN = '0px 0px -10% 0px';
 
   getCounters(): CounterItem[] {
-    return [
-      {
-        label: 'طلابنا السعداء',
-        target: 1900,
-        icon: 'fa-solid fa-users',
-        count: 0,
-        duration: 2000,
-      },
-      {
-        label: 'الجوائز المحققة',
-        target: 500,
-        icon: 'fa-solid fa-trophy',
-        count: 0,
-        duration: 1500,
-      },
-      {
-        label: 'الشركات التي تثق بنا',
-        target: 200,
-        icon: 'fa-solid fa-building',
-        count: 0,
-        duration: 1800,
-      },
-      {
-        label: 'الدول التي وصلنا إليها',
-        target: 50,
-        icon: 'fa-solid fa-globe',
-        count: 0,
-        duration: 1200,
-      },
-    ];
+    return COUNTER_CONTENT.map((counter) => ({
+      label: counter.label,
+      target: counter.target,
+      icon: counter.icon,
+      count: 0,
+      duration: counter.duration,
+    }));
   }
 
   createIntersectionObserver(

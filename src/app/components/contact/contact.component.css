@@ -3,7 +3,7 @@
   background:
     radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--color-primary) 18%, transparent), transparent 30%),
     linear-gradient(180deg, var(--color-bg-page), var(--color-bg-surface));
-  direction: rtl;
+  direction: inherit;
 }
 
 .section-title {

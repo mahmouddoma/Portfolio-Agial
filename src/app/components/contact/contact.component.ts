@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, computed, inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ContactService, ContactFormData } from '../../services/contact.service';
+import { CONTACT_CONTENT } from '../../data/site-content';
+import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-contact',
@@ -11,14 +13,30 @@ import { ContactService, ContactFormData } from '../../services/contact.service'
   styleUrl: './contact.component.css'
 })
 export class ContactComponent implements OnInit {
+  private readonly fb = inject(FormBuilder);
+  private readonly contactService = inject(ContactService);
+  private readonly language = inject(LanguageService);
+
   contactForm!: FormGroup;
   isSubmitting = false;
   submitResult: { success: boolean; message: string } | null = null;
 
-  constructor(
-    private fb: FormBuilder,
-    private contactService: ContactService
-  ) {}
+  readonly content = computed(() => ({
+    title: this.language.text(CONTACT_CONTENT.title),
+    description: this.language.text(CONTACT_CONTENT.description),
+    fields: {
+      name: this.language.text(CONTACT_CONTENT.fields.name),
+      email: this.language.text(CONTACT_CONTENT.fields.email),
+      phone: this.language.text(CONTACT_CONTENT.fields.phone),
+      message: this.language.text(CONTACT_CONTENT.fields.message),
+    },
+    submit: this.language.text(CONTACT_CONTENT.submit),
+    submitting: this.language.text(CONTACT_CONTENT.submitting),
+    phone: this.language.text(CONTACT_CONTENT.phone),
+    email: this.language.text(CONTACT_CONTENT.email),
+    address: this.language.text(CONTACT_CONTENT.address),
+    addressValue: this.language.text(CONTACT_CONTENT.addressValue),
+  }));
 
   ngOnInit(): void {
     this.initForm();
@@ -38,15 +56,15 @@ export class ContactComponent implements OnInit {
     if (!control || !control.errors || !control.touched) return '';
 
     const errors = control.errors;
-    const errorMessages: { [key: string]: string } = {
-      required: 'هذا الحقل مطلوب',
-      email: 'يرجى إدخال بريد إلكتروني صحيح',
-      minlength: `يجب أن يكون الحد الأدنى ${control.errors['minlength']?.requiredLength} حروف`,
-      pattern: 'يرجى إدخال رقم هاتف صحيح'
+    const errorMessages: Record<string, string> = {
+      required: this.language.text(CONTACT_CONTENT.errors.required),
+      email: this.language.text(CONTACT_CONTENT.errors.email),
+      minlength: `${this.language.text(CONTACT_CONTENT.errors.minlength)} ${control.errors['minlength']?.requiredLength} ${this.language.text(CONTACT_CONTENT.errors.chars)}`,
+      pattern: this.language.text(CONTACT_CONTENT.errors.pattern),
     };
 
     const firstError = Object.keys(errors)[0];
-    return errorMessages[firstError] || 'خطأ في الإدخال';
+    return errorMessages[firstError] || this.language.text(CONTACT_CONTENT.errors.fallback);
   }
 
   hasError(field: string): boolean {
@@ -74,7 +92,7 @@ export class ContactComponent implements OnInit {
         error: (error) => {
           this.submitResult = {
             success: false,
-            message: 'عذراً، حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة مرة أخرى.'
+            message: this.language.text(CONTACT_CONTENT.errors.submit)
           };
         },
         complete: () => {

@@ -1,3 +1,19 @@
+:host(.slide-bottom-emerge) .footer-container {
+  opacity: 0;
+  clip-path: inset(14% 0 0);
+  transform: translateY(46px);
+  transition:
+    clip-path var(--motion-page) var(--motion-ease-soft),
+    opacity var(--motion-page) var(--motion-ease-soft),
+    transform var(--motion-page) var(--motion-ease-soft);
+}
+
+:host(.slide-bottom-emerge.show) .footer-container {
+  opacity: 1;
+  clip-path: inset(0);
+  transform: translateY(0);
+}
+
 .footer-container {
   position: relative;
   overflow: hidden;
@@ -6,7 +22,7 @@
     radial-gradient(circle at 16% 12%, color-mix(in srgb, var(--color-primary) 26%, transparent), transparent 28%),
     var(--gradient-dark);
   color: var(--color-text-inverse);
-  text-align: right;
+  text-align: start;
 }
 
 .footer-content {
@@ -15,7 +31,7 @@
   gap: var(--space-8);
   max-width: 1200px;
   margin: 0 auto;
-  direction: rtl;
+  direction: inherit;
 }
 
 .footer-section {

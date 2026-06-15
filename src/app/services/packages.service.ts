@@ -1,39 +1,120 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable , of} from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+
+export type PackageCurrencyField = 'priceLE' | 'priceReyal' | 'priceDollar';
+export type PackageCurrency = 'LE' | 'SAR' | 'USD';
+
+interface PackageApiItem {
+  name: string;
+  totalMinutes: number;
+  priceLE?: number;
+  priceReyal?: number;
+  priceDollar?: number;
+  subscriberCount: number;
+  subscribeType?: {
+    name?: string;
+  };
+}
+
+export interface PackagePlan {
+  name: string;
+  totalMinutes: number;
+  price: number;
+  currency: PackageCurrency;
+  subscriberCount: number;
+  subscribeType: string;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class PackagesService {
   private apiUrl = 'https://ajyalalquran.somee.com/api/Subscribe';
+  private readonly mockPackages: readonly PackageApiItem[] = [
+    {
+      name: 'الباقة البرونزية',
+      totalMinutes: 480,
+      priceLE: 950,
+      priceReyal: 75,
+      priceDollar: 25,
+      subscriberCount: 18,
+      subscribeType: { name: 'حلقتان أسبوعياً' },
+    },
+    {
+      name: 'الباقة الفضية',
+      totalMinutes: 720,
+      priceLE: 1350,
+      priceReyal: 110,
+      priceDollar: 35,
+      subscriberCount: 24,
+      subscribeType: { name: '3 حلقات أسبوعياً' },
+    },
+    {
+      name: 'الباقة الذهبية',
+      totalMinutes: 960,
+      priceLE: 1750,
+      priceReyal: 145,
+      priceDollar: 45,
+      subscriberCount: 31,
+      subscribeType: { name: '4 حلقات أسبوعياً' },
+    },
+    {
+      name: 'الباقة الماسية',
+      totalMinutes: 1440,
+      priceLE: 2450,
+      priceReyal: 205,
+      priceDollar: 65,
+      subscriberCount: 42,
+      subscribeType: { name: 'متابعة يومية' },
+    },
+    {
+      name: 'باقة الحصون',
+      totalMinutes: 600,
+      priceLE: 1200,
+      priceReyal: 95,
+      priceDollar: 32,
+      subscriberCount: 16,
+      subscribeType: { name: 'تحصين ومراجعة' },
+    },
+  ];
 
   constructor(private http: HttpClient) {}
 
-  getPackages(currency: 'priceLE' | 'priceReyal' | 'priceDollar' = 'priceDollar'): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl).pipe(
-      map((packages) => {
-        const hasValid = packages.some(pkg => pkg[currency] && pkg[currency] > 0);
-        let usedCurrency = currency;
+  getMockPackages(currency: PackageCurrencyField = 'priceDollar'): PackagePlan[] {
+    return this.mapPackages(this.mockPackages, currency);
+  }
 
-        if (!hasValid) {
-          if (currency !== 'priceDollar' && packages.some(pkg => pkg['priceDollar'] && pkg['priceDollar'] > 0)) {
-            usedCurrency = 'priceDollar';
-          } else if (currency !== 'priceLE' && packages.some(pkg => pkg['priceLE'] && pkg['priceLE'] > 0)) {
-            usedCurrency = 'priceLE';
-          }
-        }
-        
-        return packages.map((pkg: any) => ({
-          name: pkg.name,
-          totalMinutes: pkg.totalMinutes,
-          price: pkg[usedCurrency],
-          currency: usedCurrency === 'priceLE' ? 'LE' : usedCurrency === 'priceReyal' ? 'SAR' : 'USD',
-          subscriberCount: pkg.subscriberCount,
-          subscribeType: pkg.subscribeType.name,
-        }));
-      })
+  getPackages(currency: PackageCurrencyField = 'priceDollar'): Observable<PackagePlan[]> {
+    return this.http.get<PackageApiItem[]>(this.apiUrl).pipe(
+      map((packages) => this.mapPackages(packages.length ? packages : this.mockPackages, currency)),
+      catchError(() => of(this.mapPackages(this.mockPackages, currency))),
     );
+  }
+
+  private mapPackages(
+    packages: readonly PackageApiItem[],
+    currency: PackageCurrencyField,
+  ): PackagePlan[] {
+    const hasValid = packages.some(pkg => (pkg[currency] ?? 0) > 0);
+    let usedCurrency = currency;
+
+    if (!hasValid) {
+      if (currency !== 'priceDollar' && packages.some(pkg => (pkg.priceDollar ?? 0) > 0)) {
+        usedCurrency = 'priceDollar';
+      } else if (currency !== 'priceLE' && packages.some(pkg => (pkg.priceLE ?? 0) > 0)) {
+        usedCurrency = 'priceLE';
+      }
+    }
+
+    return packages.map((pkg) => ({
+      name: pkg.name,
+      totalMinutes: pkg.totalMinutes,
+      price: pkg[usedCurrency] ?? 0,
+      currency: usedCurrency === 'priceLE' ? 'LE' : usedCurrency === 'priceReyal' ? 'SAR' : 'USD',
+      subscriberCount: pkg.subscriberCount,
+      subscribeType: pkg.subscribeType?.name ?? '',
+    }));
   }
 }

@@ -129,7 +129,15 @@
 html {
   background: var(--color-bg-page);
   color-scheme: light;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  scroll-padding-top: 84px;
   scroll-behavior: smooth;
+}
+
+[id] {
+  scroll-margin-top: 84px;
 }
 
 body {
@@ -138,6 +146,15 @@ body {
   font-family: var(--font-family-base);
   line-height: var(--line-height-base);
   overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+}
+
+app-root {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 ::selection {
@@ -242,5 +259,74 @@ body {
     scroll-behavior: auto !important;
     transition-duration: 1ms !important;
     transition-delay: 0ms !important;
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+    scroll-padding-top: 74px;
+  }
+
+  [id] {
+    scroll-margin-top: 74px;
+  }
+}
+
+@media (min-width: 992px) and (max-height: 760px) {
+  .testimonials-section {
+    padding-block: clamp(3.75rem, 7vh, 5rem);
+  }
+
+  .testimonials-section .testimonials-header {
+    margin-bottom: clamp(1.75rem, 4vh, 2.5rem);
+  }
+
+  .testimonials-section .section-header {
+    font-size: clamp(2rem, 4vw, 3.8rem);
+  }
+
+  .testimonials-section .story-stack {
+    min-height: clamp(530px, 70vh, 640px);
+  }
+
+  .testimonials-section .story-card__top {
+    padding: var(--space-5) var(--space-6) 0;
+  }
+
+  .testimonials-section .story-card__body {
+    grid-template-columns: minmax(170px, 0.7fr) minmax(0, 1.45fr);
+    gap: clamp(1rem, 2vw, 2rem);
+    padding: var(--space-4) var(--space-6) var(--space-6);
+  }
+
+  .testimonials-section .portrait-frame {
+    width: min(190px, 100%);
+  }
+
+  .testimonials-section .story-content {
+    gap: var(--space-3);
+  }
+
+  .testimonials-section .story-quote {
+    font-size: clamp(1.05rem, 1.55vw, 1.38rem);
+    line-height: 1.58;
+  }
+
+  .testimonials-section .achievement-metrics {
+    gap: var(--space-2);
+  }
+
+  .testimonials-section .metric-card {
+    min-height: 82px;
+    padding: 0.65rem;
+  }
+
+  .testimonials-section .metric-card strong {
+    font-size: clamp(1rem, 1.4vw, 1.18rem);
+  }
+
+  .testimonials-section .metric-card span {
+    font-size: 0.78rem;
+    line-height: 1.45;
   }
 }

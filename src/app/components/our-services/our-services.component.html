@@ -1,29 +1,27 @@
 <section #servicesSection class="courses-section" aria-labelledby="courses-title">
-  <span #courseSignal class="course-signal" aria-hidden="true"></span>
-
   <div class="courses-shell">
     <header class="courses-header">
-      <span class="section-kicker course-gsap-title">{{ section.kicker }}</span>
+      <span class="section-kicker course-gsap-title">{{ section().kicker }}</span>
       <h2 id="courses-title" class="courses-title course-gsap-title">
-        {{ section.title }}
+        {{ section().title }}
       </h2>
       <p class="courses-description course-gsap-title">
-        {{ section.description }}
+        {{ section().description }}
       </p>
     </header>
 
-    <article class="featured-course" [attr.aria-label]="featuredCourse.title">
+    <article class="featured-course" [attr.aria-label]="featuredCourse().title">
       <div class="featured-course__media">
-        <img [src]="featuredCourse.image" [alt]="featuredCourse.title" loading="lazy" />
+        <img [src]="featuredCourse().image" [alt]="featuredCourse().title" loading="lazy" decoding="async" />
       </div>
 
       <div class="featured-course__content">
-        <span class="course-category">{{ featuredCourse.category }}</span>
-        <h3>{{ featuredCourse.title }}</h3>
-        <p>{{ featuredCourse.summary }}</p>
+        <span class="course-category">{{ featuredCourse().category }}</span>
+        <h3>{{ featuredCourse().title }}</h3>
+        <p>{{ featuredCourse().summary }}</p>
 
         <div class="featured-course__stats">
-          @for (stat of featuredCourse.stats; track stat.label) {
+          @for (stat of featuredCourse().stats; track stat.label) {
             <div>
               <strong>{{ stat.value }}</strong>
               <span>{{ stat.label }}</span>
@@ -34,24 +32,24 @@
     </article>
 
     <div class="courses-grid">
-      @for (course of courses; track course.id; let index = $index) {
+      @for (course of courses(); track course.id; let index = $index) {
         <article class="course-card" [class.course-card--featured]="index === 0">
           <div class="course-card__image">
-            <img [src]="course.image" [alt]="course.title" loading="lazy" />
+            <img [src]="course.image" [alt]="course.title" loading="lazy" decoding="async" />
             <span>{{ course.category }}</span>
           </div>
 
           <div class="course-card__body">
             <div class="course-card__topline">
               <span>{{ course.duration }}</span>
-              <span>{{ course.sessions }} جلسة</span>
+              <span>{{ course.sessions }} {{ section().sessionUnit }}</span>
             </div>
 
             <h3>{{ course.title }}</h3>
             <p>{{ course.summary }}</p>
 
             <div class="course-meta">
-              <span>المستوى</span>
+              <span>{{ section().levelLabel }}</span>
               <strong>{{ course.level }}</strong>
             </div>
 

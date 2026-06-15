@@ -2,9 +2,9 @@
   <div class="container" appInViewport animationType="fade-in" staggerDelay="1">
     <div class="row justify-content-center mb-5" data-animate>
       <div class="col-12 col-md-8 text-center" data-animate>
-        <h2 class="section-title mb-4" data-animate>اتصل بنا</h2>
+        <h2 class="section-title mb-4" data-animate>{{ content().title }}</h2>
         <p class="section-description" data-animate>
-          نحن هنا للإجابة على استفساراتك
+          {{ content().description }}
         </p>
       </div>
     </div>
@@ -35,7 +35,7 @@
                   type="text"
                   class="form-control"
                   [ngClass]="{ 'is-invalid': hasError('name') }"
-                  placeholder="الاسم"
+                  [placeholder]="content().fields.name"
                   formControlName="name"
                   required
                 />
@@ -51,7 +51,7 @@
                   type="email"
                   class="form-control"
                   [ngClass]="{ 'is-invalid': hasError('email') }"
-                  placeholder="البريد الإلكتروني"
+                  [placeholder]="content().fields.email"
                   formControlName="email"
                   required
                 />
@@ -67,7 +67,7 @@
                   type="tel"
                   class="form-control"
                   [ngClass]="{ 'is-invalid': hasError('phone') }"
-                  placeholder="رقم الهاتف"
+                  [placeholder]="content().fields.phone"
                   formControlName="phone"
                 />
                 <div *ngIf="hasError('phone')" class="invalid-feedback">
@@ -82,7 +82,7 @@
                   class="form-control"
                   [ngClass]="{ 'is-invalid': hasError('message') }"
                   rows="5"
-                  placeholder="رسالتك"
+                  [placeholder]="content().fields.message"
                   formControlName="message"
                   required
                 ></textarea>
@@ -104,7 +104,7 @@
                   role="status"
                   aria-hidden="true"
                 ></span>
-                {{ isSubmitting ? "جاري الإرسال..." : "إرسال" }}
+                {{ isSubmitting ? content().submitting : content().submit }}
               </button>
             </div>
           </div>
@@ -116,22 +116,22 @@
       <div class="col-12 col-md-4" data-animate>
         <div class="contact-info text-center p-3" data-animate>
           <i class="fas fa-phone mb-3"></i>
-          <h4 class="h5">الهاتف</h4>
+          <h4 class="h5">{{ content().phone }}</h4>
           <p class="mb-0">+1234567890</p>
         </div>
       </div>
       <div class="col-12 col-md-4" data-animate>
         <div class="contact-info text-center p-3" data-animate>
           <i class="fas fa-envelope mb-3"></i>
-          <h4 class="h5">البريد الإلكتروني</h4>
+          <h4 class="h5">{{ content().email }}</h4>
           <p class="mb-0">info&#64;example.com</p>
         </div>
       </div>
       <div class="col-12 col-md-4" data-animate>
         <div class="contact-info text-center p-3" data-animate>
           <i class="fas fa-map-marker-alt mb-3"></i>
-          <h4 class="h5">العنوان</h4>
-          <p class="mb-0">123 شارع المثال، المدينة</p>
+          <h4 class="h5">{{ content().address }}</h4>
+          <p class="mb-0">{{ content().addressValue }}</p>
         </div>
       </div>
     </div>

@@ -1,12 +1,21 @@
 <div class="fixed-buttons">
-  <button *ngIf="showButton" class="back-to-top-btn" (click)="scrollToTop()">
-    ↑
-  </button>
+  @if (showButton()) {
+    <button
+      type="button"
+      class="back-to-top-btn"
+      [attr.aria-label]="backToTopAria()"
+      (click)="scrollToTop()"
+    >
+      <span aria-hidden="true">↑</span>
+    </button>
+  }
+
   <a
     href="https://wa.me/+1234567890"
     target="_blank"
+    rel="noopener noreferrer"
     class="whatsapp-btn"
-    aria-label="تواصل معنا عبر واتساب"
+    [attr.aria-label]="whatsappAria()"
   >
     <i class="fab fa-whatsapp"></i>
   </a>
