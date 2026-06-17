@@ -13,117 +13,48 @@
     }
 
     <div class="packages-board packages-gsap-panel">
-      <div
-        class="packages-carousel"
-        [attr.aria-label]="section().carouselAria"
-        (pointerenter)="pausePackageAutoplay()"
-        (pointerleave)="resumePackageAutoplay()"
-        (focusin)="pausePackageAutoplay()"
-        (focusout)="resumePackageAutoplay()"
-      >
-        <!-- Desktop: prev button sits in left grid column -->
-        <button
-          type="button"
-          class="package-nav package-nav--prev"
-          [attr.aria-label]="section().previousAria"
-          [disabled]="isFirstPackage()"
-          (click)="previousPackage()"
-        >
-          <span aria-hidden="true">&#8249;</span>
-        </button>
+      <div class="packages-grid">
+        @for (packageItem of packageCards; track packageItem.name) {
+          <article
+            [class]="packageItem.styleClass"
+            [attr.data-package-kind]="packageItem.kind"
+            (mousemove)="tiltPackage($event)"
+            (mouseleave)="tiltPackage($event)"
+          >
+            <div class="package-ribbon">{{ packageItem.badge }}</div>
 
-        <!-- Scrollable track -->
-        <div #packagesTrack class="packages-track" (scroll)="syncActivePackageFromScroll()">
-          @for (packageItem of packageCards; track packageItem.name) {
-            <article
-              [class]="packageItem.styleClass"
-              [class.package-card--active]="activePackageIndex() === $index"
-              [attr.data-package-kind]="packageItem.kind"
-              (mousemove)="tiltPackage($event)"
-              (mouseleave)="tiltPackage($event)"
+            <div class="package-head">
+              <span class="package-duration">{{ packageItem.totalHours }}</span>
+              <span class="package-type">{{ packageItem.displaySubscribeType }}</span>
+            </div>
+
+            <h3 class="package-title">{{ packageItem.displayName }}</h3>
+
+            <div class="package-price" [attr.aria-label]="section().priceAria">
+              <span class="package-price__prefix">{{ packageItem.pricePrefix }}</span>
+              <strong>{{ packageItem.price }}</strong>
+              <span>{{ packageItem.priceSuffix }}</span>
+            </div>
+
+            <ul class="package-features">
+              @for (feature of packageItem.features; track feature.label) {
+                <li>
+                  <span>{{ feature.label }}</span>
+                  <strong>{{ feature.value }}</strong>
+                </li>
+              }
+            </ul>
+
+            <a
+              class="btn-select"
+              href="https://ajyalalquran.somee.com/#/add-packages"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              <div class="package-ribbon">{{ packageItem.badge }}</div>
-
-              <div class="package-head">
-                <span class="package-duration">{{ packageItem.totalHours }}</span>
-                <span class="package-type">{{ packageItem.displaySubscribeType }}</span>
-              </div>
-
-              <h3 class="package-title">{{ packageItem.displayName }}</h3>
-
-              <div class="package-price" [attr.aria-label]="section().priceAria">
-                <span class="package-price__prefix">{{ packageItem.pricePrefix }}</span>
-                <strong>{{ packageItem.price }}</strong>
-                <span>{{ packageItem.priceSuffix }}</span>
-              </div>
-
-              <ul class="package-features">
-                @for (feature of packageItem.features; track feature.label) {
-                  <li>
-                    <span>{{ feature.label }}</span>
-                    <strong>{{ feature.value }}</strong>
-                  </li>
-                }
-              </ul>
-
-              <a
-                class="btn-select"
-                href="https://ajyalalquran.somee.com/#/add-packages"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {{ section().subscribe }}
-              </a>
-            </article>
-          }
-        </div>
-
-        <!-- Desktop: next button sits in right grid column -->
-        <button
-          type="button"
-          class="package-nav package-nav--next"
-          [attr.aria-label]="section().nextAria"
-          [disabled]="isLastPackage()"
-          (click)="nextPackage()"
-        >
-          <span aria-hidden="true">&#8250;</span>
-        </button>
-      </div>
-
-      <!-- Dots + mobile nav row -->
-      <div class="packages-controls">
-        <div class="packages-nav-row">
-          <button
-            type="button"
-            class="package-nav package-nav--prev package-nav--mobile"
-            [attr.aria-label]="section().previousAria"
-            [disabled]="isFirstPackage()"
-            (click)="previousPackage()"
-          >
-            <span aria-hidden="true">&#8249;</span>
-          </button>
-
-          <div class="package-dots" [attr.aria-label]="section().dotsAria">
-            @for (packageItem of packageCards; track packageItem.name; let index = $index) {
-              <button
-                type="button"
-                [class.active]="activePackageIndex() === index"
-                [attr.aria-label]="section().showPrefix + ' ' + packageItem.displayName"
-                (click)="goToPackage(index)"
-              ></button>
-            }
-          </div>
-
-          <button
-            type="button"
-            class="package-nav package-nav--next package-nav--mobile"
-            [attr.aria-label]="section().nextAria"
-            [disabled]="isLastPackage()"
-            (click)="nextPackage()"
-          >
-            <span aria-hidden="true">&#8250;</span>
-          </button>
-        </div>
+              {{ section().subscribe }}
+            </a>
+          </article>
+        }
       </div>
     </div>
   </div>

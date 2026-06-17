@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, signal, OnInit, OnDestroy } from '@angular/core';
 
 export type PortfolioLogoIconVariant = 'full' | 'mark';
 export type PortfolioLogoIconAnimation = 'intro' | 'loop' | 'none';
@@ -32,6 +32,7 @@ interface LogoBackgroundRect {
       [class.portfolio-logo-icon--loop]="animation() === 'loop'"
       [class.portfolio-logo-icon--static]="animation() === 'none'"
     >
+      @if (renderTrigger()) {
       <svg
         class="portfolio-logo-icon__svg"
         [attr.viewBox]="viewBox()"
@@ -95,6 +96,7 @@ interface LogoBackgroundRect {
           }
         </g>
       </svg>
+      }
     </span>
   `,
   styles: [
@@ -250,8 +252,27 @@ interface LogoBackgroundRect {
     `,
   ],
 })
-export class PortfolioLogoIconComponent {
+export class PortfolioLogoIconComponent implements OnInit, OnDestroy {
   readonly variant    = input<PortfolioLogoIconVariant>('full');
+  readonly renderTrigger = signal(true);
+  private intervalId?: any;
+
+  ngOnInit(): void {
+    if (this.animation() === 'loop') {
+      this.intervalId = setInterval(() => {
+        this.renderTrigger.set(false);
+        setTimeout(() => {
+          this.renderTrigger.set(true);
+        }, 50);
+      }, 5000);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+  }
   readonly animation  = input<PortfolioLogoIconAnimation>('intro');
   readonly width      = input<string | null>(null);
   readonly accentColor     = input('#00d7ff');

@@ -56,15 +56,11 @@ export class PackagesComponent implements OnInit, AfterViewInit, OnDestroy {
   private animationContext?: GsapContext;
   private viewReady = false;
   private reducedMotion = false;
-  private packageAutoplayId?: number;
-  private packageLoadFailed = false;
-  private readonly packageAutoplayDelay = 4200;
-
   packages: PackagePlan[] = [];
   packageCards: PackageCardViewModel[] = [];
-  readonly activePackageIndex = signal(0);
   error: string | null = null;
   currencyField: PackageCurrencyField = 'priceDollar';
+  packageLoadFailed = false;
 
   readonly section = computed(() => ({
     kicker: this.language.text(PACKAGE_CONTENT.sectionKicker),
@@ -100,14 +96,11 @@ export class PackagesComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.viewReady = true;
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    this.scrollToPackage(this.activePackageIndex(), false);
     this.setupPackagesMotion();
-    this.startPackageAutoplay();
   }
 
   ngOnDestroy(): void {
     this.animationContext?.revert();
-    this.stopPackageAutoplay();
   }
 
   detectUserCurrencyAndLoadPackages(): void {
@@ -172,71 +165,15 @@ export class PackagesComponent implements OnInit, AfterViewInit, OnDestroy {
     card.style.setProperty('--tilt-y', `${rotateY}deg`);
   }
 
-  previousPackage(): void {
-    this.goToPackage(this.activePackageIndex() - 1);
-  }
-
-  nextPackage(): void {
-    this.goToPackage(this.activePackageIndex() + 1);
-  }
-
-  goToPackage(index: number): void {
-    const nextIndex = this.normalizePackageIndex(index);
-    this.activePackageIndex.set(nextIndex);
-    this.scrollToPackage(nextIndex, true);
-    this.restartPackageAutoplay();
-  }
-
-  syncActivePackageFromScroll(): void {
-    const track = this.packagesTrack?.nativeElement;
-    if (!track) {
-      return;
-    }
-
-    const cards = Array.from(track.querySelectorAll<HTMLElement>('.package-card'));
-    const trackCenter = track.getBoundingClientRect().left + track.clientWidth / 2;
-    const closestIndex = cards.reduce(
-      (closest, card, index) => {
-        const rect = card.getBoundingClientRect();
-        const distance = Math.abs(rect.left + rect.width / 2 - trackCenter);
-        return distance < closest.distance ? { index, distance } : closest;
-      },
-      { index: this.activePackageIndex(), distance: Number.POSITIVE_INFINITY },
-    ).index;
-
-    if (closestIndex !== this.activePackageIndex()) {
-      this.activePackageIndex.set(closestIndex);
-    }
-  }
-
-  isFirstPackage(): boolean {
-    return false;
-  }
-
-  isLastPackage(): boolean {
-    return false;
-  }
-
-  pausePackageAutoplay(): void {
-    this.stopPackageAutoplay();
-  }
-
-  resumePackageAutoplay(): void {
-    this.startPackageAutoplay();
-  }
-
   private setPackages(data: readonly PackagePlan[]): void {
     this.packages = [...data];
     this.packageCards = this.createPackageCards(data);
-    this.activePackageIndex.set(Math.min(this.activePackageIndex(), Math.max(this.packageCards.length - 1, 0)));
     if (!this.viewReady) {
       return;
     }
 
     this.cdr.detectChanges();
-    window.requestAnimationFrame(() => this.scrollToPackage(this.activePackageIndex(), false));
     this.setupPackagesMotion();
-    this.startPackageAutoplay();
   }
 
   private createPackageCards(packages: readonly PackagePlan[]): PackageCardViewModel[] {
@@ -322,59 +259,6 @@ export class PackagesComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.language.text(PACKAGE_CONTENT.monthSuffix);
   }
 
-  private scrollToPackage(index: number, smooth: boolean): void {
-    const track = this.packagesTrack?.nativeElement;
-    const card = track?.querySelectorAll<HTMLElement>('.package-card').item(index);
-    if (!track || !card) {
-      return;
-    }
-
-    const trackRect = track.getBoundingClientRect();
-    const cardRect = card.getBoundingClientRect();
-    const distanceToCenter =
-      cardRect.left + cardRect.width / 2 - (trackRect.left + trackRect.width / 2);
-
-    track.scrollBy({
-      left: distanceToCenter,
-      behavior: smooth ? 'smooth' : 'auto',
-    });
-  }
-
-  private normalizePackageIndex(index: number): number {
-    const count = this.packageCards.length;
-    if (!count) {
-      return 0;
-    }
-
-    return ((index % count) + count) % count;
-  }
-
-  private startPackageAutoplay(): void {
-    this.stopPackageAutoplay();
-
-    if (!this.viewReady || this.packageCards.length < 2) {
-      return;
-    }
-
-    this.packageAutoplayId = window.setInterval(() => {
-      const nextIndex = (this.activePackageIndex() + 1) % this.packageCards.length;
-      this.activePackageIndex.set(nextIndex);
-      this.scrollToPackage(nextIndex, true);
-    }, this.packageAutoplayDelay);
-  }
-
-  private stopPackageAutoplay(): void {
-    if (!this.packageAutoplayId) {
-      return;
-    }
-
-    window.clearInterval(this.packageAutoplayId);
-    this.packageAutoplayId = undefined;
-  }
-
-  private restartPackageAutoplay(): void {
-    this.startPackageAutoplay();
-  }
 
   private async setupPackagesMotion(): Promise<void> {
     if (!this.viewReady || this.reducedMotion || !this.packagesSection?.nativeElement) {

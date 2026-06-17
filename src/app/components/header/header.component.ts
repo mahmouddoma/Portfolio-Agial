@@ -76,6 +76,12 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
 
     this.activeSectionId.set(targetElementId);
     this.closeMenu();
+
+    const element = document.getElementById(targetElementId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     void this.router.navigate([], {
       fragment: targetElementId,
       onSameUrlNavigation: 'reload',
@@ -102,6 +108,7 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
   async ngAfterViewInit(): Promise<void> {
     this.onWindowScroll();
     await this.createHeaderMotion();
+    this.scrollToInitialFragment();
   }
 
   ngOnDestroy(): void {
@@ -147,6 +154,19 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
 
     if (currentItem && currentItem.id !== this.activeSectionId()) {
       this.activeSectionId.set(currentItem.id);
+    }
+  }
+
+  private scrollToInitialFragment(): void {
+    const fragment = this.router.parseUrl(this.router.url).fragment;
+    if (fragment) {
+      setTimeout(() => {
+        const element = document.getElementById(fragment);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          this.activeSectionId.set(fragment);
+        }
+      }, 500);
     }
   }
 

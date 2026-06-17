@@ -152,3 +152,108 @@
           ╵ [32m^[0m
 
 [39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'packageLoadFailed' does not exist on type 'PackagesComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/packages/packages.component.ts:83:13:
+[37m      83 │     if (this.[32mpackageLoadFailed[37m) {
+         ╵              [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'packageLoadFailed' does not exist on type 'PackagesComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/packages/packages.component.ts:130:13:
+[37m      130 │         this.[32mpackageLoadFailed[37m = false;
+          ╵              [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'packageLoadFailed' does not exist on type 'PackagesComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/packages/packages.component.ts:135:13:
+[37m      135 │         this.[32mpackageLoadFailed[37m = true;
+          ╵              [32m~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mExpected "}" to go with "{"[0m [css-syntax-error]
+
+    src/app/components/packages/packages.component.css:334:0:
+[37m      334 │ [32m[37m
+          │ [32m^[37m
+          ╵ [32m}[0m
+
+  The unbalanced "{" is here:
+
+    src/app/components/packages/packages.component.css:268:26:
+[37m      268 │ @media (max-width: 768px) [32m{[37m
+          ╵                           [32m^[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'packageLoadFailed' does not exist on type 'PackagesComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/packages/packages.component.ts:83:13:
+[37m      83 │     if (this.[32mpackageLoadFailed[37m) {
+         ╵              [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'packageLoadFailed' does not exist on type 'PackagesComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/packages/packages.component.ts:130:13:
+[37m      130 │         this.[32mpackageLoadFailed[37m = false;
+          ╵              [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'packageLoadFailed' does not exist on type 'PackagesComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/packages/packages.component.ts:135:13:
+[37m      135 │         this.[32mpackageLoadFailed[37m = true;
+          ╵              [32m~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mExpected "}" to go with "{"[0m [1m[35m[plugin angular-compiler][0m [css-syntax-error]
+
+    src/app/components/packages/packages.component.css:334:0:
+[37m      334 │ [32m[37m
+          │ [32m^[37m
+          ╵ [32m}[0m
+
+  The unbalanced "{" is here:
+
+    src/app/components/packages/packages.component.css:268:26:
+[37m      268 │ @media (max-width: 768px) [32m{[37m
+          ╵                           [32m^[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mExpected "}" to go with "{"[0m [css-syntax-error]
+
+    src/app/components/packages/packages.component.css:334:0:
+[37m      334 │ [32m[37m
+          │ [32m^[37m
+          ╵ [32m}[0m
+
+  The unbalanced "{" is here:
+
+    src/app/components/packages/packages.component.css:268:26:
+[37m      268 │ @media (max-width: 768px) [32m{[37m
+          ╵                           [32m^[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mExpected "}" to go with "{"[0m [1m[35m[plugin angular-compiler][0m [css-syntax-error]
+
+    src/app/components/packages/packages.component.css:334:0:
+[37m      334 │ [32m[37m
+          │ [32m^[37m
+          ╵ [32m}[0m
+
+  The unbalanced "{" is here:
+
+    src/app/components/packages/packages.component.css:268:26:
+[37m      268 │ @media (max-width: 768px) [32m{[37m
+          ╵                           [32m^[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'renderTrigger' does not exist on type 'PortfolioLogoIconComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/portfolio-logo-icon/portfolio-logo-icon.component.ts:35:11:
+[37m      35 │       @if ([32mrenderTrigger[37m()) {
+         ╵            [32m~~~~~~~~~~~~~[0m
+
+[39m[22m
