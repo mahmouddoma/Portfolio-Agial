@@ -235,18 +235,34 @@
 @media (max-width: 1180px) {
   .feature-showcase {
     grid-template-columns: 1fr;
+    gap: clamp(2rem, 5vw, 3.5rem);
     direction: inherit;
   }
 
   .feature-visual-panel {
     position: relative;
     top: auto;
+    width: min(100%, 760px);
+    margin-inline: auto;
+  }
+
+  .feature-visual-frame {
+    min-height: clamp(340px, 48vw, 500px);
+  }
+
+  .feature-copy-track {
+    width: min(100%, 820px);
+    margin-inline: auto;
   }
 }
 
 @media (max-width: 768px) {
   .feature-section {
-    padding: var(--space-16) var(--space-3);
+    padding: var(--space-10) var(--space-3);
+  }
+
+  .feature-showcase {
+    gap: clamp(1.5rem, 5vw, 3rem);
   }
 
   .feature-visual-frame {

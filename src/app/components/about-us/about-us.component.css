@@ -232,9 +232,9 @@
 
   .hero-title {
     font-size: clamp(2rem, 8.2vw, 2.45rem);
-    max-width: 9em;
-    text-wrap: pretty;
+    text-wrap: balance;
     white-space: normal;
+    word-break: break-word;
   }
 
   .hero-description {

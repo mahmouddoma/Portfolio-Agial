@@ -68,14 +68,18 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
 
   scrollTo(event: Event, sectionId?: string): void {
     event.preventDefault();
-    const targetElementId = sectionId ?? (event.currentTarget as HTMLAnchorElement).hash.replace('#', '');
-    const targetElement = document.getElementById(targetElementId);
-    if (targetElement) {
-      targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      this.activeSectionId.set(targetElementId);
-      void this.router.navigate([], { fragment: targetElementId });
-      this.closeMenu();
+
+    const targetElementId = sectionId ?? this.getSectionIdFromEvent(event);
+    if (!targetElementId) {
+      return;
     }
+
+    this.activeSectionId.set(targetElementId);
+    this.closeMenu();
+    void this.router.navigate([], {
+      fragment: targetElementId,
+      onSameUrlNavigation: 'reload',
+    });
   }
 
   toggleMenu(): void {
@@ -144,5 +148,13 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
     if (currentItem && currentItem.id !== this.activeSectionId()) {
       this.activeSectionId.set(currentItem.id);
     }
+  }
+
+  private getSectionIdFromEvent(event: Event): string | null {
+    if (!(event.currentTarget instanceof HTMLAnchorElement)) {
+      return null;
+    }
+
+    return event.currentTarget.hash.replace('#', '') || null;
   }
 }

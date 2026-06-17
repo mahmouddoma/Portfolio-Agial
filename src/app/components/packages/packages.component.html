@@ -21,6 +21,7 @@
         (focusin)="pausePackageAutoplay()"
         (focusout)="resumePackageAutoplay()"
       >
+        <!-- Desktop: prev button sits in left grid column -->
         <button
           type="button"
           class="package-nav package-nav--prev"
@@ -28,9 +29,10 @@
           [disabled]="isFirstPackage()"
           (click)="previousPackage()"
         >
-          <span aria-hidden="true">‹</span>
+          <span aria-hidden="true">&#8249;</span>
         </button>
 
+        <!-- Scrollable track -->
         <div #packagesTrack class="packages-track" (scroll)="syncActivePackageFromScroll()">
           @for (packageItem of packageCards; track packageItem.name) {
             <article
@@ -76,6 +78,7 @@
           }
         </div>
 
+        <!-- Desktop: next button sits in right grid column -->
         <button
           type="button"
           class="package-nav package-nav--next"
@@ -83,19 +86,44 @@
           [disabled]="isLastPackage()"
           (click)="nextPackage()"
         >
-          <span aria-hidden="true">›</span>
+          <span aria-hidden="true">&#8250;</span>
         </button>
       </div>
 
-      <div class="package-dots" [attr.aria-label]="section().dotsAria">
-        @for (packageItem of packageCards; track packageItem.name; let index = $index) {
+      <!-- Dots + mobile nav row -->
+      <div class="packages-controls">
+        <div class="packages-nav-row">
           <button
             type="button"
-            [class.active]="activePackageIndex() === index"
-            [attr.aria-label]="section().showPrefix + ' ' + packageItem.displayName"
-            (click)="goToPackage(index)"
-          ></button>
-        }
+            class="package-nav package-nav--prev package-nav--mobile"
+            [attr.aria-label]="section().previousAria"
+            [disabled]="isFirstPackage()"
+            (click)="previousPackage()"
+          >
+            <span aria-hidden="true">&#8249;</span>
+          </button>
+
+          <div class="package-dots" [attr.aria-label]="section().dotsAria">
+            @for (packageItem of packageCards; track packageItem.name; let index = $index) {
+              <button
+                type="button"
+                [class.active]="activePackageIndex() === index"
+                [attr.aria-label]="section().showPrefix + ' ' + packageItem.displayName"
+                (click)="goToPackage(index)"
+              ></button>
+            }
+          </div>
+
+          <button
+            type="button"
+            class="package-nav package-nav--next package-nav--mobile"
+            [attr.aria-label]="section().nextAria"
+            [disabled]="isLastPackage()"
+            (click)="nextPackage()"
+          >
+            <span aria-hidden="true">&#8250;</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>

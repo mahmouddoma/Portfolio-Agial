@@ -1,68 +1,90 @@
 <footer class="footer-container">
-  <div class="footer-content">
-    <!-- Company Info -->
-    <div class="footer-section company-info">
-      <h3 class="company-heading">{{ companyName() }}</h3>
-      <img
-        src="assets/images/Logo.jpg"
-        [alt]="companyLogoAlt()"
-        width="100"
-        height="100"
-        class="img-navbar"
-        loading="lazy"
-        decoding="async"
-      />
-    </div>
+  <div class="footer-inner">
 
-    <!-- Quick Links -->
-    <div class="footer-section quick-links">
-      <h4>{{ content().quickLinksTitle }}</h4>
-      <ul>
-        @for (link of quickLinks(); track link.id) {
+    <!-- ── Row 1: Brand + Quick Links + Contact ──────────────────────────── -->
+    <div class="footer-content">
+
+      <!-- Brand -->
+      <div class="footer-col footer-col--brand">
+        <div class="brand-block">
+          <img
+            src="assets/images/Logo.jpg"
+            [alt]="companyLogoAlt()"
+            width="52"
+            height="52"
+            class="brand-logo"
+            loading="lazy"
+            decoding="async"
+          />
+          <h3 class="brand-name">{{ companyName() }}</h3>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="footer-col footer-col--links">
+        <h4 class="footer-heading">{{ content().quickLinksTitle }}</h4>
+        <ul class="footer-links-list">
+          @for (link of quickLinks(); track link.id) {
+            <li>
+              <a [href]="'#' + link.id" (click)="scrollTo($event, link.id)">
+                {{ link.text }}
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div class="footer-col footer-col--contact">
+        <h4 class="footer-heading">{{ content().contactTitle }}</h4>
+        <ul class="footer-contact-list">
           <li>
-            <a
-              class="nav-link"
-              [href]="'#' + link.id"
-              (click)="scrollTo($event, link.id)"
-            >
-              {{ link.text }}
-            </a>
+            <i class="fas fa-envelope" aria-hidden="true"></i>
+            <a [href]="'mailto:' + contactInfo.email">{{ contactInfo.email }}</a>
           </li>
-        }
-      </ul>
+          <li>
+            <i class="fas fa-phone" aria-hidden="true"></i>
+            <span>{{ contactInfo.phone }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Social -->
+      <div class="footer-col footer-col--social">
+        <h4 class="footer-heading">{{ content().followTitle }}</h4>
+        <div class="social-links">
+          @for (social of socialLinks; track social.icon) {
+            <a
+              [href]="social.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              [attr.aria-label]="social.ariaLabel"
+            >
+              <i class="fab fa-{{ social.icon }}" aria-hidden="true"></i>
+            </a>
+          }
+        </div>
+      </div>
+
     </div>
 
-    <!-- Contact Info -->
-    <div class="footer-section contact-info">
-      <h4>{{ content().contactTitle }}</h4>
-      <p>
-        {{ content().emailLabel }}:
-        <a [href]="'mailto:' + contactInfo.email">{{ contactInfo.email }}</a>
+    <!-- ── Footer Bottom ───────────────────────────────────────────────────── -->
+    <div class="footer-bottom">
+      <p class="footer-rights">
+        &copy; {{ currentYear }} {{ companyName() }}. {{ content().rights }}
       </p>
-      <p>{{ content().phoneLabel }}: {{ contactInfo.phone }}</p>
-      <p>{{ content().addressLabel }}: {{ content().address }}</p>
-    </div>
 
-    <!-- Social Media -->
-    <div class="footer-section social-media">
-      <h4>{{ content().followTitle }}</h4>
-      <div class="social-links">
-        @for (social of socialLinks; track social.icon) {
-          <a
-            [href]="social.url"
-            target="_blank"
-            rel="noopener noreferrer"
-            [attr.aria-label]="social.ariaLabel"
-          >
-            <i class="fab fa-{{ social.icon }}" aria-hidden="true"></i>
-          </a>
-        }
+      <div class="footer-powered">
+        <span class="powered-label">Powered by</span>
+        <app-portfolio-logo-icon
+          variant="full"
+          animation="loop"
+          accentColor="#00d7ff"
+          textColor="#e8f0fe"
+          width="clamp(72px, 10vw, 120px)"
+        />
       </div>
     </div>
-  </div>
 
-  <!-- Footer Bottom -->
-  <div class="footer-bottom">
-    <p>&copy; {{ currentYear }} {{ companyName() }}. {{ content().rights }}</p>
   </div>
 </footer>

@@ -19,11 +19,20 @@ export function setupStudentJourneyMotion(config: StudentJourneyMotionConfig): v
   const { section, path, steps, stepCount, gsap, ScrollTrigger, onActiveStepChange } = config;
   const stage = section.querySelector<HTMLElement>('.journey-stage');
   const panel = section.querySelector<HTMLElement>('.journey-panel');
+  const pathTrack = section.querySelector<SVGPathElement>('.journey-path__track');
+  const isCompact = window.matchMedia('(max-width: 900px)').matches;
   const isMobile = window.matchMedia('(max-width: 560px)').matches;
   let activeStepIndex = -1;
 
   gsap
-    .timeline({ defaults: { ease: 'power3.out' } })
+    .timeline({
+      defaults: { ease: 'power3.out' },
+      scrollTrigger: {
+        trigger: section,
+        start: isCompact ? 'top 82%' : 'top 76%',
+        once: true,
+      },
+    })
     .from(section.querySelectorAll('.journey-gsap-title'), {
       y: 42,
       opacity: 0,
@@ -46,6 +55,7 @@ export function setupStudentJourneyMotion(config: StudentJourneyMotionConfig): v
         x: isMobile ? 0 : 36,
         y: isMobile ? 24 : 0,
         opacity: 0,
+        immediateRender: false,
         duration: 0.58,
         stagger: 0.07,
       },
@@ -56,7 +66,10 @@ export function setupStudentJourneyMotion(config: StudentJourneyMotionConfig): v
     return;
   }
 
-  gsap.set(path, { drawSVG: '0%' });
+  gsap.set(path, { drawSVG: '0%', opacity: 1 });
+  if (pathTrack) {
+    gsap.set(pathTrack, { opacity: isCompact ? 0.95 : 1 });
+  }
   gsap.set(steps, { '--step-glow': 0 });
 
   const activateStep = (index: number): void => {
@@ -70,19 +83,31 @@ export function setupStudentJourneyMotion(config: StudentJourneyMotionConfig): v
     setStepGlow(steps, stepIndex, gsap);
 
     window.requestAnimationFrame(() => {
-      animateJourneyPanel(panel, gsap);
+      animateJourneyPanel(panel, gsap, isCompact);
     });
   };
 
   activateStep(0);
+
+  if (isCompact) {
+    steps.forEach((step, index) => {
+      ScrollTrigger.create({
+        trigger: step,
+        start: 'top 72%',
+        end: 'bottom 46%',
+        onEnter: () => activateStep(index),
+        onEnterBack: () => activateStep(index),
+      });
+    });
+  }
 
   gsap.to(path, {
     drawSVG: '100%',
     ease: 'none',
     scrollTrigger: {
       trigger: stage ?? section,
-      start: isMobile ? 'top 72%' : 'top 68%',
-      end: isMobile ? 'bottom 58%' : 'bottom 44%',
+      start: isCompact ? 'top 74%' : 'top 68%',
+      end: isCompact ? 'bottom 38%' : 'bottom 44%',
       scrub: 0.75,
       onUpdate: (self: JourneyScrollState) => {
         activateStep(getActiveStepIndexFromPath(self.progress, stepCount));
@@ -102,7 +127,7 @@ function getActiveStepIndexFromPath(progress: number, stepCount: number): number
   return Math.min(maxIndex, Math.floor(clampedProgress * stepCount));
 }
 
-function animateJourneyPanel(panel: HTMLElement | null, gsap: GsapApi): void {
+function animateJourneyPanel(panel: HTMLElement | null, gsap: GsapApi, isCompact: boolean): void {
   if (!panel) {
     return;
   }
@@ -113,8 +138,17 @@ function animateJourneyPanel(panel: HTMLElement | null, gsap: GsapApi): void {
 
   gsap.fromTo(
     panel,
-    { y: 12, scale: 0.985 },
-    { y: 0, scale: 1, duration: 0.36, ease: 'power2.out', overwrite: true },
+    {
+      y: isCompact ? 18 : 12,
+      scale: isCompact ? 0.94 : 0.985,
+    },
+    {
+      y: 0,
+      scale: 1,
+      duration: isCompact ? 0.46 : 0.36,
+      ease: isCompact ? 'back.out(1.45)' : 'power2.out',
+      overwrite: true,
+    },
   );
 
   gsap.fromTo(
