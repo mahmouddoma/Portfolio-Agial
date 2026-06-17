@@ -83,10 +83,13 @@
 
 .packages-track {
   display: flex;
+  align-items: stretch;
+  min-height: max-content;
   gap: clamp(0.85rem, 1.7vw, 1.25rem);
   direction: ltr;
-  padding: var(--space-5) var(--space-2) var(--space-5);
+  padding: var(--space-5) var(--space-2) clamp(2.5rem, 4vw, 3rem);
   overflow-x: auto;
+  overflow-y: hidden;
   overscroll-behavior-inline: contain;
   scroll-behavior: smooth;
   scroll-padding-inline: var(--space-2);
@@ -98,7 +101,6 @@
   display: none;
 }
 
-
 .package-card {
   --package-accent: var(--color-primary);
   --tilt-x: 0deg;
@@ -107,6 +109,7 @@
   position: relative;
   display: grid;
   flex: 0 0 clamp(268px, 24vw, 300px);
+  min-height: max-content;
   grid-template-rows: auto auto auto auto 1fr auto;
   gap: var(--space-3);
   padding: var(--space-5) var(--space-4);
