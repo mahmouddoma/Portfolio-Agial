@@ -11,7 +11,8 @@ import {
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { JOURNEY_CONTENT } from '../../data/site-content';
+import { SiteContentFacade } from '../../core/content/site-content.facade';
+import { EditableContentDirective } from '../../core/live-edit/editable-content.directive';
 import { LanguageService } from '../../services/language.service';
 
 type GsapApi = typeof import('gsap').gsap;
@@ -19,6 +20,7 @@ type GsapContext = ReturnType<GsapApi['context']>;
 
 interface JourneyStep {
   id: number;
+  index: number;
   phase: string;
   title: string;
   description: string;
@@ -29,7 +31,7 @@ interface JourneyStep {
 @Component({
   selector: 'app-student-journey',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, EditableContentDirective],
   templateUrl: './student-journey.component.html',
   styleUrl: './student-journey.component.css',
 })
@@ -39,23 +41,27 @@ export class StudentJourneyComponent implements AfterViewInit, OnDestroy {
   @ViewChildren('journeyStep') private journeyStepElements?: QueryList<ElementRef<HTMLElement>>;
 
   private readonly language = inject(LanguageService);
+  private readonly siteContent = inject(SiteContentFacade);
   private context?: GsapContext;
   private destroyed = false;
   private reducedMotion = false;
 
   readonly activeStepIndex = signal(0);
 
+  readonly content = computed(() => this.siteContent.content().journey);
+
   readonly section = computed(() => ({
-    kicker: this.language.text(JOURNEY_CONTENT.section.kicker),
-    title: this.language.text(JOURNEY_CONTENT.section.title),
-    description: this.language.text(JOURNEY_CONTENT.section.description),
-    panelAria: this.language.text(JOURNEY_CONTENT.panelAria),
-    mapAria: this.language.text(JOURNEY_CONTENT.mapAria),
+    kicker: this.language.text(this.content().section.kicker),
+    title: this.language.text(this.content().section.title),
+    description: this.language.text(this.content().section.description),
+    panelAria: this.language.text(this.content().panelAria),
+    mapAria: this.language.text(this.content().mapAria),
   }));
 
   readonly steps = computed<readonly JourneyStep[]>(() =>
-    JOURNEY_CONTENT.steps.map((step) => ({
+    this.content().steps.map((step: any, index: number) => ({
       id: step.id,
+      index,
       phase: step.phase,
       title: this.language.text(step.title),
       description: this.language.text(step.description),

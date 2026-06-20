@@ -12,7 +12,8 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CounterComponent } from '../counter/counter.component';
-import { FEATURE_CONTENT } from '../../data/site-content';
+import { SiteContentFacade } from '../../core/content/site-content.facade';
+import { EditableContentDirective } from '../../core/live-edit/editable-content.directive';
 import { LanguageService } from '../../services/language.service';
 
 type GsapApi = typeof import('gsap').gsap;
@@ -25,6 +26,7 @@ interface FeatureHighlight {
 
 interface Feature {
   id: number;
+  index: number;
   eyebrow: string;
   title: string;
   description: string;
@@ -35,7 +37,7 @@ interface Feature {
 @Component({
   selector: 'app-feature',
   standalone: true,
-  imports: [CommonModule, CounterComponent],
+  imports: [CommonModule, CounterComponent, EditableContentDirective],
   templateUrl: './feature.component.html',
   styleUrl: './feature.component.css',
 })
@@ -45,20 +47,24 @@ export class FeatureComponent implements AfterViewInit, OnDestroy {
   @ViewChildren('featureVisual') private featureVisuals?: QueryList<ElementRef<HTMLElement>>;
 
   private readonly language = inject(LanguageService);
+  private readonly siteContent = inject(SiteContentFacade);
   private animationContext?: GsapContext;
   private destroyed = false;
   private reducedMotion = false;
 
+  readonly content = computed(() => this.siteContent.content().features);
+
   readonly section = computed(() => ({
-    kicker: this.language.text(FEATURE_CONTENT.section.kicker),
-    title: this.language.text(FEATURE_CONTENT.section.title),
-    description: this.language.text(FEATURE_CONTENT.section.description),
-    visualAria: this.language.text(FEATURE_CONTENT.visualAria),
+    kicker: this.language.text(this.content().section.kicker),
+    title: this.language.text(this.content().section.title),
+    description: this.language.text(this.content().section.description),
+    visualAria: this.language.text(this.content().visualAria),
   }));
 
   readonly features = computed<readonly Feature[]>(() =>
-    FEATURE_CONTENT.features.map((feature) => ({
+    this.content().features.map((feature: any, index: number) => ({
       id: feature.id,
+      index,
       eyebrow: this.language.text(feature.eyebrow),
       title: this.language.text(feature.title),
       description: this.language.text(feature.description),

@@ -5,23 +5,58 @@
 >
   <div class="testimonials-shell">
     <header class="testimonials-header">
-      <span class="section-kicker gsap-title">{{ section().kicker }}</span>
-      <h2 id="testimonials-title" class="section-header gsap-title">
+      <span
+        class="section-kicker gsap-title"
+        [appEditableContent]="'testimonials.kicker'"
+        editableLabel="Testimonials kicker"
+        editableType="text"
+      >{{ section().kicker }}</span>
+      <h2
+        id="testimonials-title"
+        class="section-header gsap-title"
+        [appEditableContent]="'testimonials.title'"
+        editableLabel="Testimonials title"
+        editableType="text"
+      >
         {{ section().title }}
       </h2>
-      <p class="section-subtitle gsap-title">
+      <p
+        class="section-subtitle gsap-title"
+        [appEditableContent]="'testimonials.description'"
+        editableLabel="Testimonials description"
+        editableType="textarea"
+      >
         {{ section().description }}
       </p>
     </header>
 
     <div class="achievement-stage">
       <aside class="achievement-summary gsap-panel" [attr.aria-label]="section().summaryAria">
-        <span class="summary-label">{{ section().summaryLabel }}</span>
+        <span
+          class="summary-label"
+          [appEditableContent]="'testimonials.summaryLabel'"
+          editableLabel="Summary label"
+          editableType="text"
+        >{{ section().summaryLabel }}</span>
         <strong class="summary-stat">
-          <span class="summary-value">{{ section().summaryValue }}</span>
-          <span class="summary-unit">{{ section().summaryUnit }}</span>
+          <span
+            class="summary-value"
+            [appEditableContent]="'testimonials.summaryValue'"
+            editableLabel="Summary value"
+            editableType="text"
+          >{{ section().summaryValue }}</span>
+          <span
+            class="summary-unit"
+            [appEditableContent]="'testimonials.summaryUnit'"
+            editableLabel="Summary unit"
+            editableType="text"
+          >{{ section().summaryUnit }}</span>
         </strong>
-        <p>{{ section().summaryText }}</p>
+        <p
+          [appEditableContent]="'testimonials.summaryText'"
+          editableLabel="Summary text"
+          editableType="textarea"
+        >{{ section().summaryText }}</p>
         <div class="summary-line" aria-hidden="true"></div>
       </aside>
 
@@ -36,7 +71,12 @@
             >
               <div class="story-card__top story-motion">
                 <span class="story-count">{{ index + 1 }} / {{ slides().length }}</span>
-                <span class="story-program">{{ slide.program }}</span>
+                <span
+                  class="story-program"
+                  [appEditableContent]="'testimonials.slides.' + slide.index + '.program'"
+                  editableLabel="Story program"
+                  editableType="text"
+                >{{ slide.program }}</span>
               </div>
 
               <div class="story-card__body">
@@ -47,24 +87,56 @@
                     [alt]="slide.name"
                     loading="lazy"
                     decoding="async"
+                    [appEditableContent]="'testimonials.slides.' + slide.index + '.image'"
+                    editableLabel="Story image"
+                    editableType="image"
                   />
                 </div>
 
                 <div class="story-content">
-                  <blockquote class="story-quote story-motion">
+                  <blockquote
+                    class="story-quote story-motion"
+                    [appEditableContent]="'testimonials.slides.' + slide.index + '.quote'"
+                    editableLabel="Story quote"
+                    editableType="textarea"
+                  >
                     {{ slide.quote }}
                   </blockquote>
 
                   <div class="student-meta story-motion">
-                    <h3>{{ slide.name }}</h3>
-                    <p>{{ slide.role }} - {{ slide.achievement }}</p>
+                    <h3
+                      [appEditableContent]="'testimonials.slides.' + slide.index + '.name'"
+                      editableLabel="Story student name"
+                      editableType="text"
+                    >{{ slide.name }}</h3>
+                    <p>
+                      <span
+                        [appEditableContent]="'testimonials.slides.' + slide.index + '.role'"
+                        editableLabel="Story role"
+                        editableType="text"
+                      >{{ slide.role }}</span>
+                      -
+                      <span
+                        [appEditableContent]="'testimonials.slides.' + slide.index + '.achievement'"
+                        editableLabel="Story achievement"
+                        editableType="textarea"
+                      >{{ slide.achievement }}</span>
+                    </p>
                   </div>
 
                   <div class="achievement-metrics story-motion">
                     @for (metric of slide.metrics; track metric.label) {
                       <div class="metric-card">
-                        <strong>{{ metric.value }}</strong>
-                        <span>{{ metric.label }}</span>
+                        <strong
+                          [appEditableContent]="metric.valuePath"
+                          editableLabel="Story metric value"
+                          editableType="text"
+                        >{{ metric.value }}</strong>
+                        <span
+                          [appEditableContent]="metric.labelPath"
+                          editableLabel="Story metric label"
+                          editableType="text"
+                        >{{ metric.label }}</span>
                       </div>
                     }
                   </div>

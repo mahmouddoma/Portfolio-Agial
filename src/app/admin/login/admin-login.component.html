@@ -1,0 +1,41 @@
+<main class="admin-login-page">
+  <section class="admin-card admin-login-card" aria-labelledby="admin-login-title">
+    <h1 id="admin-login-title" class="admin-title">تسجيل دخول الأدمن</h1>
+    <p class="admin-muted">
+      ادخل البريد المصرح به، وسيظهر لك كود OTP تجريبي للدخول إلى لوحة التحكم.
+    </p>
+
+    <form class="admin-form" [formGroup]="emailForm" (ngSubmit)="requestOtp()">
+      <div class="admin-field">
+        <label for="admin-email">البريد الإلكتروني</label>
+        <input id="admin-email" class="admin-input" type="email" formControlName="email" />
+      </div>
+
+      <button class="admin-button" type="submit">إرسال OTP</button>
+    </form>
+
+    @if (isOtpStep) {
+      <form class="admin-form" [formGroup]="otpForm" (ngSubmit)="verifyOtp()">
+        <div class="admin-otp">
+          كود الدخول التجريبي:
+          <strong>{{ otpCode }}</strong>
+        </div>
+
+        <div class="admin-field">
+          <label for="admin-otp">كود OTP</label>
+          <input id="admin-otp" class="admin-input" type="text" inputmode="numeric" formControlName="code" />
+        </div>
+
+        <button class="admin-button" type="submit">دخول الداشبورد</button>
+      </form>
+    }
+
+    @if (message) {
+      <p class="admin-success">{{ message }}</p>
+    }
+
+    @if (error) {
+      <p class="admin-error">{{ error }}</p>
+    }
+  </section>
+</main>

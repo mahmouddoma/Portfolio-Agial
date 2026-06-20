@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, computed, inject, signal } from '@angular/core';
-import { BACK_TO_TOP_CONTENT } from '../../data/site-content';
+import { SiteContentFacade } from '../../core/content/site-content.facade';
 import { LanguageService } from '../../services/language.service';
 
 @Component({
@@ -12,10 +12,12 @@ import { LanguageService } from '../../services/language.service';
 })
 export class BackToTopComponent {
   private readonly language = inject(LanguageService);
+  private readonly siteContent = inject(SiteContentFacade);
 
   readonly showButton = signal(false);
-  readonly backToTopAria = computed(() => this.language.text(BACK_TO_TOP_CONTENT.backToTopAria));
-  readonly whatsappAria = computed(() => this.language.text(BACK_TO_TOP_CONTENT.whatsappAria));
+  readonly backToTopContent = computed(() => this.siteContent.content().footer.backToTop);
+  readonly backToTopAria = computed(() => this.language.text(this.backToTopContent().backToTopAria));
+  readonly whatsappAria = computed(() => this.language.text(this.backToTopContent().whatsappAria));
 
   // Listen for the window's scroll event
   @HostListener('window:scroll')

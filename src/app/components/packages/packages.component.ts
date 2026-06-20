@@ -14,7 +14,8 @@ import {
 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PackageCurrencyField, PackagePlan, PackagesService } from '../../services/packages.service';
-import { PACKAGE_CONTENT } from '../../data/site-content';
+import { SiteContentFacade } from '../../core/content/site-content.facade';
+import { EditableContentDirective } from '../../core/live-edit/editable-content.directive';
 import { LanguageService } from '../../services/language.service';
 
 type GsapApi = typeof import('gsap').gsap;
@@ -27,6 +28,7 @@ interface PackageFeatureRow {
 }
 
 interface PackageCardViewModel extends PackagePlan {
+  sourceIndex: number;
   badge: string;
   displayName: string;
   displaySubscribeType: string;
@@ -41,7 +43,7 @@ interface PackageCardViewModel extends PackagePlan {
 @Component({
   selector: 'app-packages',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, EditableContentDirective],
   templateUrl: './packages.component.html',
   styleUrl: './packages.component.css',
 })
@@ -51,6 +53,7 @@ export class PackagesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private readonly packagesService = inject(PackagesService);
   private readonly language = inject(LanguageService);
+  private readonly siteContent = inject(SiteContentFacade);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly http = inject(HttpClient);
   private animationContext?: GsapContext;
@@ -62,27 +65,34 @@ export class PackagesComponent implements OnInit, AfterViewInit, OnDestroy {
   currencyField: PackageCurrencyField = 'priceDollar';
   packageLoadFailed = false;
 
+  readonly content = computed(() => this.siteContent.content().packages);
+
   readonly section = computed(() => ({
-    kicker: this.language.text(PACKAGE_CONTENT.sectionKicker),
-    title: this.language.text(PACKAGE_CONTENT.title),
-    description: this.language.text(PACKAGE_CONTENT.description),
-    carouselAria: this.language.text(PACKAGE_CONTENT.carouselAria),
-    previousAria: this.language.text(PACKAGE_CONTENT.previousAria),
-    nextAria: this.language.text(PACKAGE_CONTENT.nextAria),
-    priceAria: this.language.text(PACKAGE_CONTENT.priceAria),
-    dotsAria: this.language.text(PACKAGE_CONTENT.dotsAria),
-    showPrefix: this.language.text(PACKAGE_CONTENT.showPrefix),
-    subscribe: this.language.text(PACKAGE_CONTENT.subscribe),
+    kicker: this.language.text(this.content().sectionKicker),
+    title: this.language.text(this.content().title),
+    description: this.language.text(this.content().description),
+    carouselAria: this.language.text(this.content().carouselAria),
+    previousAria: this.language.text(this.content().previousAria),
+    nextAria: this.language.text(this.content().nextAria),
+    priceAria: this.language.text(this.content().priceAria),
+    dotsAria: this.language.text(this.content().dotsAria),
+    showPrefix: this.language.text(this.content().showPrefix),
+    subscribe: this.language.text(this.content().subscribe),
   }));
 
   private readonly languageSync = effect(() => {
     this.language.currentLanguage();
+    this.content();
     if (this.packages.length) {
       this.packageCards = this.createPackageCards(this.packages);
     }
 
     if (this.packageLoadFailed) {
-      this.error = this.language.text(PACKAGE_CONTENT.error);
+      this.error = this.language.text(this.content().error);
+    }
+
+    if (this.content().useLocalPlans) {
+      this.setPackages(this.packagesService.getMockPackages(this.currencyField));
     }
 
     this.cdr.markForCheck();
@@ -134,7 +144,7 @@ export class PackagesComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       error: (err: unknown) => {
         this.packageLoadFailed = true;
-        this.error = this.language.text(PACKAGE_CONTENT.error);
+        this.error = this.language.text(this.content().error);
         console.error(err);
       },
     });
@@ -177,12 +187,13 @@ export class PackagesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private createPackageCards(packages: readonly PackagePlan[]): PackageCardViewModel[] {
-    return packages.map((packageItem) => {
+    return packages.map((packageItem, sourceIndex) => {
       const kind = this.getPackageKind(packageItem.name);
       const isFeatured = kind === 'diamond';
 
       return {
         ...packageItem,
+        sourceIndex,
         badge: this.getPackageBadge(kind),
         displayName: this.getPackageDisplayName(kind),
         displaySubscribeType: this.getPackageSubscribeType(kind, packageItem.subscribeType),
@@ -190,19 +201,19 @@ export class PackagesComponent implements OnInit, AfterViewInit, OnDestroy {
         styleClass: `package-card package-${kind}${isFeatured ? ' package-featured' : ''}`,
         pricePrefix: packageItem.currency === 'USD' ? '$' : '',
         priceSuffix: this.getPriceSuffix(packageItem.currency),
-        totalHours: `${this.language.formatNumber(Math.round(packageItem.totalMinutes / 60))} ${this.language.text(PACKAGE_CONTENT.totalHoursUnit)}`,
+        totalHours: `${this.language.formatNumber(Math.round(packageItem.totalMinutes / 60))} ${this.language.text(this.content().totalHoursUnit)}`,
         features: [
           {
-            label: this.language.text(PACKAGE_CONTENT.monthlyMinutes),
-            value: `${this.language.formatNumber(packageItem.totalMinutes)} ${this.language.text(PACKAGE_CONTENT.minuteUnit)}`,
+            label: this.language.text(this.content().monthlyMinutes),
+            value: `${this.language.formatNumber(packageItem.totalMinutes)} ${this.language.text(this.content().minuteUnit)}`,
           },
           {
-            label: this.language.text(PACKAGE_CONTENT.subscriptionMode),
+            label: this.language.text(this.content().subscriptionMode),
             value: this.getPackageSubscribeType(kind, packageItem.subscribeType),
           },
           {
-            label: this.language.text(PACKAGE_CONTENT.followUpSeats),
-            value: `${this.language.formatNumber(packageItem.subscriberCount)} ${this.language.text(PACKAGE_CONTENT.studentUnit)}`,
+            label: this.language.text(this.content().followUpSeats),
+            value: `${this.language.formatNumber(packageItem.subscriberCount)} ${this.language.text(this.content().studentUnit)}`,
           },
         ],
       };
@@ -236,27 +247,27 @@ export class PackagesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private getPackageBadge(kind: PackageKind): string {
-    return this.language.text(PACKAGE_CONTENT.badges[kind]);
+    return this.language.text(this.content().badges[kind]);
   }
 
   private getPackageDisplayName(kind: PackageKind): string {
-    return this.language.text(PACKAGE_CONTENT.names[kind]);
+    return this.language.text(this.content().names[kind]);
   }
 
   private getPackageSubscribeType(kind: PackageKind, fallback: string): string {
-    return kind === 'default' && fallback ? fallback : this.language.text(PACKAGE_CONTENT.subscribeTypes[kind]);
+    return kind === 'default' && fallback ? fallback : this.language.text(this.content().subscribeTypes[kind]);
   }
 
   private getPriceSuffix(currency: PackagePlan['currency']): string {
     if (currency === 'LE') {
-      return this.language.text(PACKAGE_CONTENT.egpSuffix);
+      return this.language.text(this.content().egpSuffix);
     }
 
     if (currency === 'SAR') {
-      return this.language.text(PACKAGE_CONTENT.sarSuffix);
+      return this.language.text(this.content().sarSuffix);
     }
 
-    return this.language.text(PACKAGE_CONTENT.monthSuffix);
+    return this.language.text(this.content().monthSuffix);
   }
 
 

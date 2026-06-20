@@ -2,13 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, computed, inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ContactService, ContactFormData } from '../../services/contact.service';
-import { CONTACT_CONTENT } from '../../data/site-content';
+import { SiteContentFacade } from '../../core/content/site-content.facade';
+import { EditableContentDirective } from '../../core/live-edit/editable-content.directive';
 import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, EditableContentDirective],
   templateUrl: './contact.component.html',
   styleUrl: './contact.component.css'
 })
@@ -16,26 +17,29 @@ export class ContactComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly contactService = inject(ContactService);
   private readonly language = inject(LanguageService);
+  private readonly siteContent = inject(SiteContentFacade);
 
   contactForm!: FormGroup;
   isSubmitting = false;
   submitResult: { success: boolean; message: string } | null = null;
 
+  readonly contactContent = computed(() => this.siteContent.content().contact);
+
   readonly content = computed(() => ({
-    title: this.language.text(CONTACT_CONTENT.title),
-    description: this.language.text(CONTACT_CONTENT.description),
+    title: this.language.text(this.contactContent().title),
+    description: this.language.text(this.contactContent().description),
     fields: {
-      name: this.language.text(CONTACT_CONTENT.fields.name),
-      email: this.language.text(CONTACT_CONTENT.fields.email),
-      phone: this.language.text(CONTACT_CONTENT.fields.phone),
-      message: this.language.text(CONTACT_CONTENT.fields.message),
+      name: this.language.text(this.contactContent().fields.name),
+      email: this.language.text(this.contactContent().fields.email),
+      phone: this.language.text(this.contactContent().fields.phone),
+      message: this.language.text(this.contactContent().fields.message),
     },
-    submit: this.language.text(CONTACT_CONTENT.submit),
-    submitting: this.language.text(CONTACT_CONTENT.submitting),
-    phone: this.language.text(CONTACT_CONTENT.phone),
-    email: this.language.text(CONTACT_CONTENT.email),
-    address: this.language.text(CONTACT_CONTENT.address),
-    addressValue: this.language.text(CONTACT_CONTENT.addressValue),
+    submit: this.language.text(this.contactContent().submit),
+    submitting: this.language.text(this.contactContent().submitting),
+    phone: this.language.text(this.contactContent().phone),
+    email: this.language.text(this.contactContent().email),
+    address: this.language.text(this.contactContent().address),
+    addressValue: this.language.text(this.contactContent().addressValue),
   }));
 
   ngOnInit(): void {
@@ -57,14 +61,14 @@ export class ContactComponent implements OnInit {
 
     const errors = control.errors;
     const errorMessages: Record<string, string> = {
-      required: this.language.text(CONTACT_CONTENT.errors.required),
-      email: this.language.text(CONTACT_CONTENT.errors.email),
-      minlength: `${this.language.text(CONTACT_CONTENT.errors.minlength)} ${control.errors['minlength']?.requiredLength} ${this.language.text(CONTACT_CONTENT.errors.chars)}`,
-      pattern: this.language.text(CONTACT_CONTENT.errors.pattern),
+      required: this.language.text(this.contactContent().errors.required),
+      email: this.language.text(this.contactContent().errors.email),
+      minlength: `${this.language.text(this.contactContent().errors.minlength)} ${control.errors['minlength']?.requiredLength} ${this.language.text(this.contactContent().errors.chars)}`,
+      pattern: this.language.text(this.contactContent().errors.pattern),
     };
 
     const firstError = Object.keys(errors)[0];
-    return errorMessages[firstError] || this.language.text(CONTACT_CONTENT.errors.fallback);
+    return errorMessages[firstError] || this.language.text(this.contactContent().errors.fallback);
   }
 
   hasError(field: string): boolean {
@@ -92,7 +96,7 @@ export class ContactComponent implements OnInit {
         error: (error) => {
           this.submitResult = {
             success: false,
-            message: this.language.text(CONTACT_CONTENT.errors.submit)
+            message: this.language.text(this.contactContent().errors.submit)
           };
         },
         complete: () => {

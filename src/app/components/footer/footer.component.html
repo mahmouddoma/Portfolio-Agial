@@ -8,26 +8,43 @@
       <div class="footer-col footer-col--brand">
         <div class="brand-block">
           <img
-            src="assets/images/Logo.jpg"
+            [src]="logoSrc()"
             [alt]="companyLogoAlt()"
             width="52"
             height="52"
             class="brand-logo"
             loading="lazy"
             decoding="async"
+            [appEditableContent]="'header.logoSrc'"
+            editableLabel="Footer logo"
+            editableType="image"
           />
-          <h3 class="brand-name">{{ companyName() }}</h3>
+          <h3
+            class="brand-name"
+            [appEditableContent]="'footer.companyName'"
+            editableLabel="Footer company name"
+            editableType="text"
+          >{{ companyName() }}</h3>
         </div>
       </div>
 
       <!-- Quick Links -->
       <div class="footer-col footer-col--links">
-        <h4 class="footer-heading">{{ content().quickLinksTitle }}</h4>
+        <h4
+          class="footer-heading"
+          [appEditableContent]="'footer.quickLinksTitle'"
+          editableLabel="Footer quick links title"
+          editableType="text"
+        >{{ content().quickLinksTitle }}</h4>
         <ul class="footer-links-list">
           @for (link of quickLinks(); track link.id) {
             <li>
               <a [href]="'#' + link.id" (click)="scrollTo($event, link.id)">
-                {{ link.text }}
+                <span
+                  [appEditableContent]="'nav.' + $index + '.label'"
+                  editableLabel="Footer nav label"
+                  editableType="text"
+                >{{ link.text }}</span>
               </a>
             </li>
           }
@@ -36,29 +53,52 @@
 
       <!-- Contact -->
       <div class="footer-col footer-col--contact">
-        <h4 class="footer-heading">{{ content().contactTitle }}</h4>
+        <h4
+          class="footer-heading"
+          [appEditableContent]="'footer.contactTitle'"
+          editableLabel="Footer contact title"
+          editableType="text"
+        >{{ content().contactTitle }}</h4>
         <ul class="footer-contact-list">
           <li>
             <i class="fas fa-envelope" aria-hidden="true"></i>
-            <a [href]="'mailto:' + contactInfo.email">{{ contactInfo.email }}</a>
+            <a
+              [href]="'mailto:' + contactInfo().email"
+              [appEditableContent]="'footer.contactInfo.email'"
+              editableLabel="Footer email"
+              editableType="email"
+            >{{ contactInfo().email }}</a>
           </li>
           <li>
             <i class="fas fa-phone" aria-hidden="true"></i>
-            <span dir="ltr">{{ contactInfo.phone }}</span>
+            <span
+              dir="ltr"
+              [appEditableContent]="'footer.contactInfo.phone'"
+              editableLabel="Footer phone"
+              editableType="phone"
+            >{{ contactInfo().phone }}</span>
           </li>
         </ul>
       </div>
 
       <!-- Social -->
       <div class="footer-col footer-col--social">
-        <h4 class="footer-heading">{{ content().followTitle }}</h4>
+        <h4
+          class="footer-heading"
+          [appEditableContent]="'footer.followTitle'"
+          editableLabel="Footer social title"
+          editableType="text"
+        >{{ content().followTitle }}</h4>
         <div class="social-links">
-          @for (social of socialLinks; track social.icon) {
+          @for (social of socialLinks(); track social.icon; let socialIndex = $index) {
             <a
               [href]="social.url"
               target="_blank"
               rel="noopener noreferrer"
               [attr.aria-label]="social.ariaLabel"
+              [appEditableContent]="'footer.socialLinks.' + socialIndex + '.url'"
+              editableLabel="Social link URL"
+              editableType="url"
             >
               <i class="fab fa-{{ social.icon }}" aria-hidden="true"></i>
             </a>
@@ -71,7 +111,17 @@
     <!-- ── Footer Bottom ───────────────────────────────────────────────────── -->
     <div class="footer-bottom">
       <p class="footer-rights">
-        &copy; {{ currentYear }} {{ companyName() }}. {{ content().rights }}
+        &copy; {{ currentYear }}
+        <span
+          [appEditableContent]="'footer.companyName'"
+          editableLabel="Footer company name"
+          editableType="text"
+        >{{ companyName() }}</span>.
+        <span
+          [appEditableContent]="'footer.rights'"
+          editableLabel="Footer rights"
+          editableType="text"
+        >{{ content().rights }}</span>
       </p>
 
       <div class="footer-powered">

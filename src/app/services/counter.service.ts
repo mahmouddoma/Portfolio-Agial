@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { COUNTER_CONTENT } from '../data/site-content';
+import { Injectable, inject } from '@angular/core';
+import { SiteContentFacade } from '../core/content/site-content.facade';
 import type { LocalizedText } from './language.service';
 
 export interface CounterConfig {
@@ -23,13 +23,14 @@ export interface CounterItem {
   providedIn: 'root'
 })
 export class CounterService {
+  private readonly siteContent = inject(SiteContentFacade);
   private readonly DEFAULT_ANIMATION_DURATION = 2000;
   private readonly DEFAULT_REFRESH_RATE = 16;
   private readonly DEFAULT_THRESHOLD = 0.5;
   private readonly DEFAULT_ROOT_MARGIN = '0px 0px -10% 0px';
 
   getCounters(): CounterItem[] {
-    return COUNTER_CONTENT.map((counter) => ({
+    return this.siteContent.content().counters.map((counter: any) => ({
       label: counter.label,
       target: counter.target,
       icon: counter.icon,

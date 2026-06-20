@@ -2,8 +2,20 @@
   <div class="container" appInViewport animationType="fade-in" staggerDelay="1">
     <div class="row justify-content-center mb-5" data-animate>
       <div class="col-12 col-md-8 text-center" data-animate>
-        <h2 class="section-title mb-4" data-animate>{{ content().title }}</h2>
-        <p class="section-description" data-animate>
+        <h2
+          class="section-title mb-4"
+          data-animate
+          [appEditableContent]="'contact.title'"
+          editableLabel="Contact title"
+          editableType="text"
+        >{{ content().title }}</h2>
+        <p
+          class="section-description"
+          data-animate
+          [appEditableContent]="'contact.description'"
+          editableLabel="Contact description"
+          editableType="textarea"
+        >
           {{ content().description }}
         </p>
       </div>
@@ -104,7 +116,11 @@
                   role="status"
                   aria-hidden="true"
                 ></span>
-                {{ isSubmitting ? content().submitting : content().submit }}
+                <span
+                  [appEditableContent]="isSubmitting ? 'contact.submitting' : 'contact.submit'"
+                  editableLabel="Contact submit label"
+                  editableType="text"
+                >{{ isSubmitting ? content().submitting : content().submit }}</span>
               </button>
             </div>
           </div>

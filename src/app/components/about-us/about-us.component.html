@@ -10,7 +10,15 @@
       class="slide"
       [class.active]="currentSlide === i"
     >
-      <img [src]="slide.src" [alt]="slide.alt" loading="lazy" decoding="async" />
+      <img
+        [src]="slide.src"
+        [alt]="slide.alt"
+        loading="lazy"
+        decoding="async"
+        [appEditableContent]="slide.path"
+        editableLabel="Hero slide image"
+        editableType="image"
+      />
     </div>
     <div class="overlay"></div>
   </div>
@@ -18,22 +26,53 @@
   <div class="container position-relative z-2 px-3 px-md-4 hero-content">
     <div class="row justify-content-center">
       <div class="col-12 col-md-11 col-lg-9 col-xl-8">
-        <span class="hero-eyebrow">{{ eyebrow() }}</span>
-        <h1 id="hero-title" class="hero-title" [attr.dir]="direction()">{{ sectionTitle() }}</h1>
-        <p class="hero-description">
+        <span
+          class="hero-eyebrow"
+          [appEditableContent]="'hero.eyebrow'"
+          editableLabel="Hero eyebrow"
+          editableType="text"
+        >{{ eyebrow() }}</span>
+        <h1
+          id="hero-title"
+          class="hero-title"
+          [attr.dir]="direction()"
+          [appEditableContent]="'hero.title'"
+          editableLabel="Hero title"
+          editableType="text"
+        >{{ sectionTitle() }}</h1>
+        <p
+          class="hero-description"
+          [appEditableContent]="'hero.description'"
+          editableLabel="Hero description"
+          editableType="textarea"
+        >
           {{ description() }}
         </p>
         <div class="hero-actions">
-          <a class="hero-action hero-action-primary" href="#packages"
+          <a
+            class="hero-action hero-action-primary"
+            href="#packages"
+            [appEditableContent]="'hero.primaryAction'"
+            editableLabel="Hero primary button"
+            editableType="text"
             >{{ primaryAction() }}</a
           >
-          <a class="hero-action hero-action-secondary" href="#our-services"
+          <a
+            class="hero-action hero-action-secondary"
+            href="#our-services"
+            [appEditableContent]="'hero.secondaryAction'"
+            editableLabel="Hero secondary button"
+            editableType="text"
             >{{ secondaryAction() }}</a
           >
         </div>
         <div class="hero-metrics" [attr.aria-label]="metricsAria()">
           @for (metric of metrics(); track metric) {
-            <span>{{ metric }}</span>
+            <span
+              [appEditableContent]="metric.path"
+              editableLabel="Hero metric"
+              editableType="text"
+            >{{ metric.text }}</span>
           }
         </div>
       </div>

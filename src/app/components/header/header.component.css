@@ -77,7 +77,8 @@
 }
 
 .nav-link,
-.language-toggle {
+.language-toggle,
+.admin-login-button {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -121,14 +122,21 @@
   transform: scaleX(1);
 }
 
-.language-toggle {
+.language-toggle,
+.admin-login-button {
   background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: var(--color-white);
   cursor: pointer;
 }
 
-.site-header--scrolled .language-toggle {
+.admin-login-button {
+  background: color-mix(in srgb, #d7b46a 20%, transparent);
+  border-color: color-mix(in srgb, #d7b46a 40%, transparent);
+}
+
+.site-header--scrolled .language-toggle,
+.site-header--scrolled .admin-login-button {
   background: var(--color-primary-subtle);
   border-color: var(--color-primary-border);
   color: var(--color-primary-active);
@@ -206,6 +214,11 @@
   }
 
   .language-toggle {
+    justify-content: center;
+    color: var(--color-primary-active);
+  }
+
+  .admin-login-button {
     justify-content: center;
     color: var(--color-primary-active);
   }

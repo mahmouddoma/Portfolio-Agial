@@ -11,7 +11,8 @@ import {
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TESTIMONIAL_CONTENT } from '../../data/site-content';
+import { SiteContentFacade } from '../../core/content/site-content.facade';
+import { EditableContentDirective } from '../../core/live-edit/editable-content.directive';
 import { LanguageService } from '../../services/language.service';
 
 type GsapApi = typeof import('gsap').gsap;
@@ -20,10 +21,13 @@ type GsapContext = ReturnType<GsapApi['context']>;
 interface AchievementMetric {
   label: string;
   value: string;
+  labelPath: string;
+  valuePath: string;
 }
 
 interface TestimonialSlide {
   id: number;
+  index: number;
   name: string;
   role: string;
   program: string;
@@ -36,7 +40,7 @@ interface TestimonialSlide {
 @Component({
   selector: 'app-slider',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, EditableContentDirective],
   templateUrl: './slider.component.html',
   styleUrls: ['./slider.component.css'],
 })
@@ -45,40 +49,46 @@ export class SliderComponent implements AfterViewInit, OnDestroy {
   @ViewChildren('stackCard') private stackCards?: QueryList<ElementRef<HTMLElement>>;
 
   private readonly language = inject(LanguageService);
+  private readonly siteContent = inject(SiteContentFacade);
   private gsap?: GsapApi;
   private animationContext?: GsapContext;
   private reducedMotion = false;
   private destroyed = false;
 
+  readonly content = computed(() => this.siteContent.content().testimonials);
+
   readonly section = computed(() => ({
-    kicker: this.language.text(TESTIMONIAL_CONTENT.kicker),
-    title: this.language.text(TESTIMONIAL_CONTENT.title),
-    description: this.language.text(TESTIMONIAL_CONTENT.description),
-    summaryAria: this.language.text(TESTIMONIAL_CONTENT.summaryAria),
-    summaryLabel: this.language.text(TESTIMONIAL_CONTENT.summaryLabel),
-    summaryValue: this.language.text(TESTIMONIAL_CONTENT.summaryValue),
-    summaryUnit: this.language.text(TESTIMONIAL_CONTENT.summaryUnit),
-    summaryText: this.language.text(TESTIMONIAL_CONTENT.summaryText),
-    stackAria: this.language.text(TESTIMONIAL_CONTENT.stackAria),
-    thumbnailsAria: this.language.text(TESTIMONIAL_CONTENT.thumbnailsAria),
-    previousAria: this.language.text(TESTIMONIAL_CONTENT.previousAria),
-    nextAria: this.language.text(TESTIMONIAL_CONTENT.nextAria),
-    dotsAria: this.language.text(TESTIMONIAL_CONTENT.dotsAria),
-    showStoryPrefix: this.language.text(TESTIMONIAL_CONTENT.showStoryPrefix),
+    kicker: this.language.text(this.content().kicker),
+    title: this.language.text(this.content().title),
+    description: this.language.text(this.content().description),
+    summaryAria: this.language.text(this.content().summaryAria),
+    summaryLabel: this.language.text(this.content().summaryLabel),
+    summaryValue: this.language.text(this.content().summaryValue),
+    summaryUnit: this.language.text(this.content().summaryUnit),
+    summaryText: this.language.text(this.content().summaryText),
+    stackAria: this.language.text(this.content().stackAria),
+    thumbnailsAria: this.language.text(this.content().thumbnailsAria),
+    previousAria: this.language.text(this.content().previousAria),
+    nextAria: this.language.text(this.content().nextAria),
+    dotsAria: this.language.text(this.content().dotsAria),
+    showStoryPrefix: this.language.text(this.content().showStoryPrefix),
   }));
 
   readonly slides = computed<readonly TestimonialSlide[]>(() =>
-    TESTIMONIAL_CONTENT.slides.map((slide) => ({
+    this.content().slides.map((slide: any, index: number) => ({
       id: slide.id,
+      index,
       name: this.language.text(slide.name),
       role: this.language.text(slide.role),
       program: this.language.text(slide.program),
       achievement: this.language.text(slide.achievement),
       quote: this.language.text(slide.quote),
       image: slide.image,
-      metrics: slide.metrics.map((metric) => ({
+      metrics: slide.metrics.map((metric: any, metricIndex: number) => ({
         label: this.language.text(metric.label),
         value: this.language.text(metric.value),
+        labelPath: `testimonials.slides.${index}.metrics.${metricIndex}.label`,
+        valuePath: `testimonials.slides.${index}.metrics.${metricIndex}.value`,
       })),
     })),
   );

@@ -11,18 +11,21 @@ import {
   signal,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { HEADER_CONTENT, NAV_ITEMS } from '../../data/site-content';
+import { SiteContentFacade } from '../../core/content/site-content.facade';
+import { EditableContentDirective } from '../../core/live-edit/editable-content.directive';
 import type { GsapContext } from '../../services/gsap-animation.service';
 import { LanguageService } from '../../services/language.service';
 
 interface NavItem {
   id: string;
   label: string;
+  path: string;
 }
 
 @Component({
   selector: 'app-header',
   standalone: true,
+  imports: [EditableContentDirective],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
@@ -32,21 +35,27 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly injector = inject(Injector);
   private readonly language = inject(LanguageService);
+  private readonly siteContent = inject(SiteContentFacade);
   private motionContext?: GsapContext;
   private destroyed = false;
 
   readonly navItems = computed<readonly NavItem[]>(() =>
-    NAV_ITEMS.map((item) => ({
+    this.siteContent.content().nav.map((item, index) => ({
       id: item.id,
       label: this.language.text(item.label),
+      path: `nav.${index}.label`,
     })),
   );
   readonly languageSwitchLabel = computed(() => this.language.switchLabel());
   readonly languageSwitchAriaLabel = computed(() => this.language.switchAriaLabel());
-  readonly brandName = computed(() => this.language.text(HEADER_CONTENT.brandName));
-  readonly brandLogoAlt = computed(() => this.language.text(HEADER_CONTENT.logoAlt));
-  readonly navigationAriaLabel = computed(() => this.language.text(HEADER_CONTENT.navigationAria));
-  readonly menuToggleAriaLabel = computed(() => this.language.text(HEADER_CONTENT.menuToggleAria));
+  readonly headerContent = computed(() => this.siteContent.content().header);
+  readonly brandName = computed(() => this.language.text(this.headerContent().brandName));
+  readonly brandLogoAlt = computed(() => this.language.text(this.headerContent().logoAlt));
+  readonly brandLogoSrc = computed(() => this.headerContent().logoSrc);
+  readonly loginLabel = computed(() => this.language.text(this.headerContent().loginLabel));
+  readonly loginAriaLabel = computed(() => this.language.text(this.headerContent().loginAria));
+  readonly navigationAriaLabel = computed(() => this.language.text(this.headerContent().navigationAria));
+  readonly menuToggleAriaLabel = computed(() => this.language.text(this.headerContent().menuToggleAria));
   readonly activeSectionId = signal('about');
 
   isScrolled = false;
@@ -99,6 +108,11 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
   toggleLanguage(): void {
     this.language.toggleLanguage();
     this.closeMenu();
+  }
+
+  openAdminLogin(): void {
+    this.closeMenu();
+    void this.router.navigate(['/admin/login']);
   }
 
   isActive(sectionId: string): boolean {

@@ -1,30 +1,75 @@
 <section #servicesSection class="courses-section" aria-labelledby="courses-title">
   <div class="courses-shell">
     <header class="courses-header">
-      <span class="section-kicker course-gsap-title">{{ section().kicker }}</span>
-      <h2 id="courses-title" class="courses-title course-gsap-title">
+      <span
+        class="section-kicker course-gsap-title"
+        [appEditableContent]="'services.section.kicker'"
+        editableLabel="Courses kicker"
+        editableType="text"
+      >{{ section().kicker }}</span>
+      <h2
+        id="courses-title"
+        class="courses-title course-gsap-title"
+        [appEditableContent]="'services.section.title'"
+        editableLabel="Courses title"
+        editableType="text"
+      >
         {{ section().title }}
       </h2>
-      <p class="courses-description course-gsap-title">
+      <p
+        class="courses-description course-gsap-title"
+        [appEditableContent]="'services.section.description'"
+        editableLabel="Courses description"
+        editableType="textarea"
+      >
         {{ section().description }}
       </p>
     </header>
 
     <article class="featured-course" [attr.aria-label]="featuredCourse().title">
       <div class="featured-course__media">
-        <img [src]="featuredCourse().image" [alt]="featuredCourse().title" loading="lazy" decoding="async" />
+        <img
+          [src]="featuredCourse().image"
+          [alt]="featuredCourse().title"
+          loading="lazy"
+          decoding="async"
+          [appEditableContent]="'services.courses.' + featuredCourse().index + '.image'"
+          editableLabel="Featured course image"
+          editableType="image"
+        />
       </div>
 
       <div class="featured-course__content">
-        <span class="course-category">{{ featuredCourse().category }}</span>
-        <h3>{{ featuredCourse().title }}</h3>
-        <p>{{ featuredCourse().summary }}</p>
+        <span
+          class="course-category"
+          [appEditableContent]="'services.courses.' + featuredCourse().index + '.category'"
+          editableLabel="Featured course category"
+          editableType="text"
+        >{{ featuredCourse().category }}</span>
+        <h3
+          [appEditableContent]="'services.courses.' + featuredCourse().index + '.title'"
+          editableLabel="Featured course title"
+          editableType="text"
+        >{{ featuredCourse().title }}</h3>
+        <p
+          [appEditableContent]="'services.courses.' + featuredCourse().index + '.summary'"
+          editableLabel="Featured course summary"
+          editableType="textarea"
+        >{{ featuredCourse().summary }}</p>
 
         <div class="featured-course__stats">
           @for (stat of featuredCourse().stats; track stat.label) {
             <div>
-              <strong>{{ stat.value }}</strong>
-              <span>{{ stat.label }}</span>
+              <strong
+                [appEditableContent]="stat.valuePath"
+                editableLabel="Course stat value"
+                editableType="text"
+              >{{ stat.value }}</strong>
+              <span
+                [appEditableContent]="stat.labelPath"
+                editableLabel="Course stat label"
+                editableType="text"
+              >{{ stat.label }}</span>
             </div>
           }
         </div>
@@ -35,33 +80,80 @@
       @for (course of courses(); track course.id; let index = $index) {
         <article class="course-card" [class.course-card--featured]="index === 0">
           <div class="course-card__image">
-            <img [src]="course.image" [alt]="course.title" loading="lazy" decoding="async" />
-            <span>{{ course.category }}</span>
+            <img
+              [src]="course.image"
+              [alt]="course.title"
+              loading="lazy"
+              decoding="async"
+              [appEditableContent]="'services.courses.' + course.index + '.image'"
+              editableLabel="Course image"
+              editableType="image"
+            />
+            <span
+              [appEditableContent]="'services.courses.' + course.index + '.category'"
+              editableLabel="Course category"
+              editableType="text"
+            >{{ course.category }}</span>
           </div>
 
           <div class="course-card__body">
             <div class="course-card__topline">
-              <span>{{ course.duration }}</span>
-              <span>{{ course.sessions }} {{ section().sessionUnit }}</span>
+              <span
+                [appEditableContent]="'services.courses.' + course.index + '.duration'"
+                editableLabel="Course duration"
+                editableType="text"
+              >{{ course.duration }}</span>
+              <span>
+                <span
+                  [appEditableContent]="'services.courses.' + course.index + '.sessions'"
+                  editableLabel="Course sessions"
+                  editableType="number"
+                >{{ course.sessions }}</span>
+                {{ section().sessionUnit }}
+              </span>
             </div>
 
-            <h3>{{ course.title }}</h3>
-            <p>{{ course.summary }}</p>
+            <h3
+              [appEditableContent]="'services.courses.' + course.index + '.title'"
+              editableLabel="Course title"
+              editableType="text"
+            >{{ course.title }}</h3>
+            <p
+              [appEditableContent]="'services.courses.' + course.index + '.summary'"
+              editableLabel="Course summary"
+              editableType="textarea"
+            >{{ course.summary }}</p>
 
             <div class="course-meta">
-              <span>{{ section().levelLabel }}</span>
-              <strong>{{ course.level }}</strong>
+              <span
+                [appEditableContent]="'services.levelLabel'"
+                editableLabel="Course level label"
+                editableType="text"
+              >{{ section().levelLabel }}</span>
+              <strong
+                [appEditableContent]="'services.courses.' + course.index + '.level'"
+                editableLabel="Course level"
+                editableType="text"
+              >{{ course.level }}</strong>
             </div>
 
             <div class="course-instructors">
-              @for (instructor of course.instructors; track instructor) {
-                <span>{{ instructor }}</span>
+              @for (instructor of course.instructors; track instructor; let instructorIndex = $index) {
+                <span
+                  [appEditableContent]="'services.courses.' + course.index + '.instructors.' + instructorIndex"
+                  editableLabel="Course instructor"
+                  editableType="text"
+                >{{ instructor }}</span>
               }
             </div>
 
             <div class="course-tags">
-              @for (tag of course.tags; track tag) {
-                <span>{{ tag }}</span>
+              @for (tag of course.tags; track tag; let tagIndex = $index) {
+                <span
+                  [appEditableContent]="'services.courses.' + course.index + '.tags.' + tagIndex"
+                  editableLabel="Course tag"
+                  editableType="text"
+                >{{ tag }}</span>
               }
             </div>
           </div>

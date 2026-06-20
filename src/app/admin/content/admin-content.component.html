@@ -1,0 +1,236 @@
+<section aria-labelledby="admin-content-title">
+  <ng-template #fieldEditor let-field="field">
+    @switch (field.type) {
+      @case ('textarea') {
+        <textarea class="admin-textarea" [ngModel]="field.value" (ngModelChange)="updateField(field, $event)"></textarea>
+      }
+      @case ('number') {
+        <input class="admin-input" type="number" [ngModel]="field.value" (ngModelChange)="updateField(field, $event)" />
+      }
+      @case ('boolean') {
+        <select class="admin-select" [ngModel]="field.value" (ngModelChange)="updateField(field, $event === 'true')">
+          <option value="true">مفعل</option>
+          <option value="false">غير مفعل</option>
+        </select>
+      }
+      @default {
+        <input class="admin-input" [type]="getFieldInputType(field)" [ngModel]="field.value" (ngModelChange)="updateField(field, $event)" />
+      }
+    }
+  </ng-template>
+
+  <div class="admin-content-hero">
+    <div>
+      <h2 id="admin-content-title" class="admin-title">إدارة المحتوى</h2>
+      <p class="admin-muted">واجهة منظمة حسب أقسام البورتفوليو. كل كارت يمثل عنصر حقيقي، وجواه حقوله العربي والإنجليزي جنب بعض.</p>
+    </div>
+    <div class="admin-content-hero-actions">
+      <a class="admin-button" routerLink="/admin/live-edit">Live Edit</a>
+      <button type="button" class="admin-button-secondary" (click)="selectTab('tools')">JSON Tools</button>
+    </div>
+  </div>
+
+  <div class="admin-content-tabs" role="tablist" aria-label="أقسام إدارة المحتوى">
+    @for (tab of tabSummaries(); track tab.id) {
+      <button
+        type="button"
+        class="admin-content-tab"
+        role="tab"
+        [class.active]="selectedTab() === tab.id"
+        [attr.aria-selected]="selectedTab() === tab.id"
+        (click)="selectTab(tab.id)"
+      >
+        <span>{{ tab.label }}</span>
+        <small>
+          @if (tab.id === 'tools') {
+            Import / Export
+          } @else {
+            {{ tab.fieldCount }} حقل · {{ tab.collectionCount }} قائمة
+          }
+        </small>
+      </button>
+    }
+  </div>
+
+  <div class="admin-content-panel">
+    <div class="admin-content-panel-head">
+      <div>
+        <h3>{{ activeTab().label }}</h3>
+        <p class="admin-muted">{{ activeTab().description }}</p>
+      </div>
+
+      @if (activeTab().id !== 'tools') {
+        <div class="admin-content-panel-tools">
+          <div class="admin-content-stats" aria-label="ملخص التاب الحالي">
+            <span><strong>{{ activeTabStats().groups }}</strong> مجموعات</span>
+            <span><strong>{{ activeTabStats().fields }}</strong> حقول</span>
+            <span><strong>{{ activeTabStats().collections }}</strong> قوائم</span>
+          </div>
+
+          <div class="admin-content-search">
+            <input
+              class="admin-input"
+              type="search"
+              placeholder="ابحث باسم العنصر أو القيمة"
+              [ngModel]="searchTerm()"
+              (ngModelChange)="searchTerm.set($event)"
+            />
+            @if (searchTerm()) {
+              <button type="button" class="admin-button-secondary" (click)="clearSearch()">مسح</button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (activeTab().id === 'tools') {
+      <div class="admin-content-tools">
+        <div class="admin-content-tools-head">
+          <div>
+            <strong>نسخة المحتوى الكاملة</strong>
+            <p class="admin-muted m-0">استخدمها للنسخ الاحتياطي أو نقل التعديلات لمتصفح تاني.</p>
+          </div>
+          <div class="admin-content-actions">
+            <button type="button" class="admin-button-secondary" (click)="exportContent()">Export JSON</button>
+            <button type="button" class="admin-button-secondary" (click)="importContent()">Import JSON</button>
+            <button type="button" class="admin-button-danger" (click)="resetContent()">Reset</button>
+          </div>
+        </div>
+
+        <div class="admin-field">
+          <label for="content-json">Import / Export JSON</label>
+          <textarea id="content-json" class="admin-textarea" rows="12" [(ngModel)]="importText"></textarea>
+          @if (importMessage) {
+            <p class="admin-success">{{ importMessage }}</p>
+          }
+        </div>
+      </div>
+    } @else {
+      @if (collections().length) {
+        <div class="admin-collection-list">
+          @for (collection of collections(); track collection.path) {
+            <div class="admin-collection">
+              <div>
+                <strong>{{ collection.label }}</strong>
+                <p class="admin-muted m-0">{{ collection.count }} عنصر داخل هذا القسم</p>
+              </div>
+              <div class="admin-content-actions">
+                <button type="button" class="admin-button-secondary" (click)="addItem(collection)">إضافة نسخة</button>
+                <button type="button" class="admin-button-danger" (click)="removeLastItem(collection)" [disabled]="collection.count <= 1">
+                  حذف آخر عنصر
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      @if (fieldGroups().length) {
+        <div class="admin-content-group-list">
+          @for (group of fieldGroups(); track group.id) {
+
+            <!-- Package Context Banner — only for packages tab -->
+            @if (isPackagesTab()) {
+              @let pkg = getPackageForGroup(group.path);
+              @if (pkg) {
+                @let meta = getPackageMeta(pkg.id);
+                <div class="pkg-context-banner" [style.background]="meta.gradient">
+                  <div class="pkg-context-icon" [style.background]="meta.iconBg">
+                    <span class="pkg-context-emoji" aria-hidden="true">{{ meta.emoji }}</span>
+                  </div>
+                  <div class="pkg-context-info">
+                    <div class="pkg-context-tier">{{ meta.tier }}</div>
+                    <div class="pkg-context-name">{{ pkg.name.ar }} <span class="pkg-context-name-en">/ {{ pkg.name.en }}</span></div>
+                    <div class="pkg-context-details">
+                      <span class="pkg-context-chip">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        {{ pkg.totalMinutes }} دقيقة
+                      </span>
+                      <span class="pkg-context-chip">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        {{ pkg.priceLE }} ج.م · {{ pkg.priceDollar }}$
+                      </span>
+                      @if (pkg.subscribeType?.ar) {
+                        <span class="pkg-context-chip">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                          {{ pkg.subscribeType?.ar }}
+                        </span>
+                      }
+                    </div>
+                  </div>
+                  @if (pkg.image) {
+                    <div class="pkg-context-img-wrap">
+                      <img [src]="pkg.image" [alt]="pkg.name.ar" class="pkg-context-img" />
+                    </div>
+                  }
+                </div>
+              }
+            }
+
+            <article class="admin-content-group-card" [class.pkg-group-card]="isPackagesTab()">
+              <header class="admin-content-group-header" [class.pkg-group-header]="isPackagesTab()">
+                @if (isPackagesTab()) {
+                  @let pkgG = getPackageForGroup(group.path);
+                  @if (pkgG) {
+                    @let metaG = getPackageMeta(pkgG.id);
+                    <div class="pkg-group-accent-bar" [style.background]="metaG.gradient" aria-hidden="true"></div>
+                  }
+                }
+                <div>
+                  <span class="admin-content-kicker">{{ group.kicker }}</span>
+                  <h4>{{ group.title }}</h4>
+                </div>
+                <span class="admin-content-chip">{{ group.fieldCount }} حقل</span>
+              </header>
+
+              <div class="admin-content-control-grid">
+                @for (control of group.controls; track control.id) {
+                  <div class="admin-content-control">
+                    <div class="admin-content-control-head">
+                      <label>{{ control.label }}</label>
+                      <span>{{ control.kind }}</span>
+                    </div>
+
+                    @if (control.ar || control.en) {
+                      <div class="admin-locale-grid">
+                        @if (control.ar) {
+                          <div class="admin-locale-field">
+                            <span class="admin-locale-badge">{{ getLanguageLabel('ar') }}</span>
+                            <ng-container *ngTemplateOutlet="fieldEditor; context: { field: control.ar }"></ng-container>
+                          </div>
+                        }
+
+                        @if (control.en) {
+                          <div class="admin-locale-field">
+                            <span class="admin-locale-badge en">{{ getLanguageLabel('en') }}</span>
+                            <ng-container *ngTemplateOutlet="fieldEditor; context: { field: control.en }"></ng-container>
+                          </div>
+                        }
+                      </div>
+                    }
+
+                    @for (field of control.singles; track field.path) {
+                      <ng-container *ngTemplateOutlet="fieldEditor; context: { field: field }"></ng-container>
+                    }
+
+                    <details class="admin-path-details">
+                      <summary>المسار التقني</summary>
+                      @for (field of control.fields; track field.path) {
+                        <code>{{ field.path }}</code>
+                      }
+                    </details>
+                  </div>
+                }
+              </div>
+            </article>
+          }
+        </div>
+      } @else {
+        <div class="admin-content-empty">
+          <strong>لا توجد نتائج</strong>
+          <p class="admin-muted">جرّب تمسح البحث أو تختار تاب تاني.</p>
+        </div>
+      }
+    }
+  </div>
+</section>

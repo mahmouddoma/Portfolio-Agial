@@ -1,37 +1,53 @@
 import { CommonModule } from '@angular/common';
 import {
-  Component,
-  OnInit,
   AfterViewInit,
-  OnDestroy,
-  ElementRef,
-  ViewChildren,
-  QueryList,
   ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  ViewChildren,
+  effect,
   inject,
 } from '@angular/core';
-import { CounterService, CounterItem } from '../../services/counter.service';
+
+import { SiteContentFacade } from '../../core/content/site-content.facade';
+import { EditableContentDirective } from '../../core/live-edit/editable-content.directive';
+import { CounterItem, CounterService } from '../../services/counter.service';
 import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-counter',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, EditableContentDirective],
   templateUrl: './counter.component.html',
   styleUrl: './counter.component.css',
 })
 export class CounterComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('counterElement') counterElements!: QueryList<ElementRef<HTMLElement>>;
+
   private readonly counterService = inject(CounterService);
   private readonly language = inject(LanguageService);
+  private readonly siteContent = inject(SiteContentFacade);
   private readonly cdRef = inject(ChangeDetectorRef);
   private observer: IntersectionObserver | null = null;
-  counters: CounterItem[] = this.counterService.getCounters();
-  readonly title = {
-    ar: 'إحصائيات أجيال القرآن',
-    en: 'Ajyal Al Quran statistics',
-  };
-  private triggered: boolean = false;
+  private triggered = false;
+
+  counters: CounterItem[] = [];
+
+  private readonly contentSync = effect(() => {
+    this.cleanupCounters();
+    this.counters = this.siteContent.content().counters.map((counter: any) => ({
+      label: counter.label,
+      target: counter.target,
+      icon: counter.icon,
+      count: 0,
+      duration: counter.duration,
+    }));
+    this.triggered = false;
+    this.cdRef.markForCheck();
+  });
 
   ngOnInit(): void {
     this.setupIntersectionObserver();
@@ -39,15 +55,26 @@ export class CounterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.observeCounters();
-    // Fallback: If on small screen or IntersectionObserver not supported, trigger all counters
     if (window.innerWidth <= 768 || !('IntersectionObserver' in window)) {
-      setTimeout(() => this.startAllCounters(), 400); // slight delay for DOM
+      setTimeout(() => this.startAllCounters(), 400);
     }
   }
 
   ngOnDestroy(): void {
     this.cleanupCounters();
     this.observer?.disconnect();
+  }
+
+  formatNumber(value: number): string {
+    return this.language.formatNumber(value);
+  }
+
+  getCounterLabel(counter: CounterItem): string {
+    return this.language.text(counter.label);
+  }
+
+  getTitle(): string {
+    return this.language.text(this.siteContent.content().countersTitle);
   }
 
   private setupIntersectionObserver(): void {
@@ -65,7 +92,9 @@ export class CounterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private observeCounters(): void {
-    if (!this.observer) return;
+    if (!this.observer) {
+      return;
+    }
 
     this.counterElements.forEach((element) => {
       this.observer?.observe(element.nativeElement);
@@ -74,7 +103,9 @@ export class CounterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private startSingleCounter(index: number): void {
     const counter = this.counters[index];
-    if (!counter) return;
+    if (!counter) {
+      return;
+    }
 
     counter.started = true;
     this.cdRef.markForCheck();
@@ -82,7 +113,6 @@ export class CounterComponent implements OnInit, AfterViewInit, OnDestroy {
     const startTime = performance.now();
     const startValue = 0;
 
-    // Cleanup any existing interval
     if (counter.interval) {
       clearInterval(counter.interval);
     }
@@ -90,12 +120,10 @@ export class CounterComponent implements OnInit, AfterViewInit, OnDestroy {
     counter.interval = setInterval(() => {
       const { progress, easeProgress } = this.counterService.calculateProgress(
         startTime,
-        counter.duration
+        counter.duration,
       );
 
-      counter.count = Math.round(
-        startValue + (counter.target - startValue) * easeProgress
-      );
+      counter.count = Math.round(startValue + (counter.target - startValue) * easeProgress);
       this.cdRef.markForCheck();
 
       if (progress >= 1) {
@@ -107,9 +135,12 @@ export class CounterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private startAllCounters(): void {
-    if (this.triggered) return;
+    if (this.triggered) {
+      return;
+    }
+
     this.triggered = true;
-    this.counters.forEach((_, idx) => this.startSingleCounter(idx));
+    this.counters.forEach((_, index) => this.startSingleCounter(index));
   }
 
   private cleanupCounters(): void {
@@ -118,18 +149,6 @@ export class CounterComponent implements OnInit, AfterViewInit, OnDestroy {
         clearInterval(counter.interval);
       }
     });
-  }
-
-  formatNumber(value: number): string {
-    return this.language.formatNumber(value);
-  }
-
-  getCounterLabel(counter: CounterItem): string {
-    return this.language.text(counter.label);
-  }
-
-  getTitle(): string {
-    return this.language.text(this.title);
   }
 
   private getCounterIndex(target: Element): number {

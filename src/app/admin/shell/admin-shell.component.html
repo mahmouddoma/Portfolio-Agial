@@ -1,0 +1,37 @@
+<section class="admin-page admin-layout">
+  <aside class="admin-sidebar">
+    <h1>أجيال القرآن Admin</h1>
+    <nav class="admin-nav" aria-label="Admin navigation">
+      <a class="admin-nav-link" routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a>
+      <a class="admin-nav-link" routerLink="/admin/content" routerLinkActive="active">Content</a>
+      <a class="admin-nav-link" routerLink="/admin/media" routerLinkActive="active">Media</a>
+      <a class="admin-nav-link" routerLink="/admin/live-edit" routerLinkActive="active">Live Edit</a>
+      <a class="admin-nav-link" routerLink="/">عرض البورتفوليو</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div>
+        <strong>{{ adminEmail() }}</strong>
+        <p class="admin-muted m-0">تعديلاتك محفوظة محليا على هذا المتصفح.</p>
+      </div>
+      <button type="button" class="admin-button-secondary" (click)="logout()">تسجيل خروج</button>
+    </div>
+
+    <div class="admin-page-content">
+      <router-outlet></router-outlet>
+    </div>
+
+    <footer class="admin-footer">
+      <span>Powered by</span>
+      <app-portfolio-logo-icon
+        variant="full"
+        animation="none"
+        accentColor="#00d7ff"
+        textColor="#e8f0fe"
+        width="clamp(82px, 9vw, 126px)"
+      />
+    </footer>
+  </main>
+</section>

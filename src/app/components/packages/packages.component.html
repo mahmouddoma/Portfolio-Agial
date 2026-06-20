@@ -1,9 +1,25 @@
 <section #packagesSection class="packages-container" aria-labelledby="packages-title">
   <div class="packages-shell">
     <header class="packages-header packages-gsap-title">
-      <span class="section-title">{{ section().kicker }}</span>
-      <h2 id="packages-title" class="section-description">{{ section().title }}</h2>
-      <p class="packages-lead">
+      <span
+        class="section-title"
+        [appEditableContent]="'packages.sectionKicker'"
+        editableLabel="Packages kicker"
+        editableType="text"
+      >{{ section().kicker }}</span>
+      <h2
+        id="packages-title"
+        class="section-description"
+        [appEditableContent]="'packages.title'"
+        editableLabel="Packages title"
+        editableType="text"
+      >{{ section().title }}</h2>
+      <p
+        class="packages-lead"
+        [appEditableContent]="'packages.description'"
+        editableLabel="Packages description"
+        editableType="textarea"
+      >
         {{ section().description }}
       </p>
     </header>
@@ -21,18 +37,42 @@
             (mousemove)="tiltPackage($event)"
             (mouseleave)="tiltPackage($event)"
           >
-            <div class="package-ribbon">{{ packageItem.badge }}</div>
+            <div
+              class="package-ribbon"
+              [appEditableContent]="'packages.badges.' + packageItem.kind"
+              editableLabel="Package badge"
+              editableType="text"
+            >{{ packageItem.badge }}</div>
 
             <div class="package-head">
-              <span class="package-duration">{{ packageItem.totalHours }}</span>
-              <span class="package-type">{{ packageItem.displaySubscribeType }}</span>
+              <span
+                class="package-duration"
+                [appEditableContent]="'packages.plans.' + packageItem.sourceIndex + '.totalMinutes'"
+                editableLabel="Package total minutes"
+                editableType="number"
+              >{{ packageItem.totalHours }}</span>
+              <span
+                class="package-type"
+                [appEditableContent]="'packages.plans.' + packageItem.sourceIndex + '.subscribeType'"
+                editableLabel="Package subscribe type"
+                editableType="text"
+              >{{ packageItem.displaySubscribeType }}</span>
             </div>
 
-            <h3 class="package-title">{{ packageItem.displayName }}</h3>
+            <h3
+              class="package-title"
+              [appEditableContent]="'packages.plans.' + packageItem.sourceIndex + '.name'"
+              editableLabel="Package name"
+              editableType="text"
+            >{{ packageItem.displayName }}</h3>
 
             <div class="package-price" [attr.aria-label]="section().priceAria">
               <span class="package-price__prefix">{{ packageItem.pricePrefix }}</span>
-              <strong>{{ packageItem.price }}</strong>
+              <strong
+                [appEditableContent]="'packages.plans.' + packageItem.sourceIndex + '.' + currencyField"
+                editableLabel="Package price"
+                editableType="number"
+              >{{ packageItem.price }}</strong>
               <span>{{ packageItem.priceSuffix }}</span>
             </div>
 
@@ -51,7 +91,11 @@
               target="_blank"
               rel="noopener noreferrer"
             >
-              {{ section().subscribe }}
+              <span
+                [appEditableContent]="'packages.subscribe'"
+                editableLabel="Package CTA"
+                editableType="text"
+              >{{ section().subscribe }}</span>
             </a>
           </article>
         }

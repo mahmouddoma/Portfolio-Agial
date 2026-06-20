@@ -16,12 +16,13 @@ import { CommonModule } from '@angular/common';
 import { interval, Subscription } from 'rxjs';
 import type { GsapContext } from '../../services/gsap-animation.service';
 import type { HeroMotionHandles } from '../../animations/premium-landing.animations';
-import { HERO_CONTENT } from '../../data/site-content';
+import { SiteContentFacade } from '../../core/content/site-content.facade';
+import { EditableContentDirective } from '../../core/live-edit/editable-content.directive';
 import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-about-us',
-  imports: [CommonModule, SliderComponent],
+  imports: [CommonModule, SliderComponent, EditableContentDirective],
   templateUrl: './about-us.component.html',
   styleUrl: './about-us.component.css',
 })
@@ -32,21 +33,28 @@ export class AboutUsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private readonly injector = inject(Injector);
   private readonly language = inject(LanguageService);
+  private readonly siteContent = inject(SiteContentFacade);
 
-  readonly slides = HERO_CONTENT.slides;
+  readonly hero = computed(() => this.siteContent.content().hero);
   readonly localizedSlides = computed(() =>
-    this.slides.map((slide) => ({
+    this.hero().slides.map((slide: any, index: number) => ({
       src: slide.src,
       alt: this.language.text(slide.alt),
+      path: `hero.slides.${index}.src`,
     })),
   );
-  readonly eyebrow = computed(() => this.language.text(HERO_CONTENT.eyebrow));
-  readonly sectionTitle = computed(() => this.language.text(HERO_CONTENT.title));
-  readonly description = computed(() => this.language.text(HERO_CONTENT.description));
-  readonly primaryAction = computed(() => this.language.text(HERO_CONTENT.primaryAction));
-  readonly secondaryAction = computed(() => this.language.text(HERO_CONTENT.secondaryAction));
-  readonly metricsAria = computed(() => this.language.text(HERO_CONTENT.metricsAria));
-  readonly metrics = computed(() => HERO_CONTENT.metrics.map((metric) => this.language.text(metric)));
+  readonly eyebrow = computed(() => this.language.text(this.hero().eyebrow));
+  readonly sectionTitle = computed(() => this.language.text(this.hero().title));
+  readonly description = computed(() => this.language.text(this.hero().description));
+  readonly primaryAction = computed(() => this.language.text(this.hero().primaryAction));
+  readonly secondaryAction = computed(() => this.language.text(this.hero().secondaryAction));
+  readonly metricsAria = computed(() => this.language.text(this.hero().metricsAria));
+  readonly metrics = computed(() =>
+    this.hero().metrics.map((metric: any, index: number) => ({
+      text: this.language.text(metric),
+      path: `hero.metrics.${index}`,
+    })),
+  );
   readonly direction = computed(() => this.language.direction());
 
   currentSlide = 0;

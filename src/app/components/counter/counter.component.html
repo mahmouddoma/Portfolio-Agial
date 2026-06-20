@@ -1,5 +1,11 @@
 <section class="counters-section" aria-labelledby="counters-title">
-  <h2 id="counters-title" class="visually-hidden">{{ getTitle() }}</h2>
+  <h2
+    id="counters-title"
+    class="visually-hidden"
+    [appEditableContent]="'countersTitle'"
+    editableLabel="Counters title"
+    editableType="text"
+  >{{ getTitle() }}</h2>
 
   <div class="counter-container">
     @for (counter of counters; track counter.icon; let index = $index) {
@@ -12,17 +18,33 @@
         [attr.aria-label]="getCounterLabel(counter)"
       >
         <div class="counter-icon" aria-hidden="true">
-          <i [class]="counter.icon"></i>
+          <i
+            [class]="counter.icon"
+            [appEditableContent]="'counters.' + index + '.icon'"
+            editableLabel="Counter icon"
+            editableType="text"
+          ></i>
         </div>
 
         <div class="counter-number">
-          <span class="counter-value" [attr.data-target]="counter.target">
+          <span
+            class="counter-value"
+            [attr.data-target]="counter.target"
+            [appEditableContent]="'counters.' + index + '.target'"
+            editableLabel="Counter target"
+            editableType="number"
+          >
             {{ formatNumber(counter.count) }}
           </span>
           <span class="counter-suffix" aria-hidden="true">+</span>
         </div>
 
-        <p class="counter-label">{{ getCounterLabel(counter) }}</p>
+        <p
+          class="counter-label"
+          [appEditableContent]="'counters.' + index + '.label'"
+          editableLabel="Counter label"
+          editableType="text"
+        >{{ getCounterLabel(counter) }}</p>
       </article>
     }
   </div>

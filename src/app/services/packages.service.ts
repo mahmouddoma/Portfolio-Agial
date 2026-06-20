@@ -1,7 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+
+import { SiteContentFacade } from '../core/content/site-content.facade';
+import type { EditablePackagePlan } from '../core/content/site-content.model';
+import { LanguageService } from './language.service';
 
 export type PackageCurrencyField = 'priceLE' | 'priceReyal' | 'priceDollar';
 export type PackageCurrency = 'LE' | 'SAR' | 'USD';
@@ -31,6 +35,8 @@ export interface PackagePlan {
   providedIn: 'root',
 })
 export class PackagesService {
+  private readonly contentFacade = inject(SiteContentFacade);
+  private readonly language = inject(LanguageService);
   private apiUrl = 'https://ajyalalquran.somee.com/api/Subscribe';
   private readonly mockPackages: readonly PackageApiItem[] = [
     {
@@ -83,14 +89,40 @@ export class PackagesService {
   constructor(private http: HttpClient) {}
 
   getMockPackages(currency: PackageCurrencyField = 'priceDollar'): PackagePlan[] {
+    if (this.shouldUseLocalPlans()) {
+      return this.mapEditablePackages(this.contentFacade.content().packages.plans, currency);
+    }
+
     return this.mapPackages(this.mockPackages, currency);
   }
 
   getPackages(currency: PackageCurrencyField = 'priceDollar'): Observable<PackagePlan[]> {
+    if (this.shouldUseLocalPlans()) {
+      return of(this.mapEditablePackages(this.contentFacade.content().packages.plans, currency));
+    }
+
     return this.http.get<PackageApiItem[]>(this.apiUrl).pipe(
       map((packages) => this.mapPackages(packages.length ? packages : this.mockPackages, currency)),
       catchError(() => of(this.mapPackages(this.mockPackages, currency))),
     );
+  }
+
+  private shouldUseLocalPlans(): boolean {
+    return !!this.contentFacade.content().packages.useLocalPlans;
+  }
+
+  private mapEditablePackages(
+    packages: readonly EditablePackagePlan[],
+    currency: PackageCurrencyField,
+  ): PackagePlan[] {
+    return packages.map((pkg) => ({
+      name: this.language.text(pkg.name),
+      totalMinutes: pkg.totalMinutes,
+      price: pkg[currency],
+      currency: currency === 'priceLE' ? 'LE' : currency === 'priceReyal' ? 'SAR' : 'USD',
+      subscriberCount: pkg.subscriberCount,
+      subscribeType: this.language.text(pkg.subscribeType),
+    }));
   }
 
   private mapPackages(

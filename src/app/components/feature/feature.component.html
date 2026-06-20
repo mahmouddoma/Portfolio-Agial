@@ -5,13 +5,27 @@
 >
   <div class="feature-shell">
     <header class="feature-header">
-      <span class="section-kicker feature-gsap-title">{{
-        section().kicker
-      }}</span>
-      <h2 id="feature-title" class="feature-title feature-gsap-title">
+      <span
+        class="section-kicker feature-gsap-title"
+        [appEditableContent]="'features.section.kicker'"
+        editableLabel="Features kicker"
+        editableType="text"
+      >{{ section().kicker }}</span>
+      <h2
+        id="feature-title"
+        class="feature-title feature-gsap-title"
+        [appEditableContent]="'features.section.title'"
+        editableLabel="Features title"
+        editableType="text"
+      >
         {{ section().title }}
       </h2>
-      <p class="feature-description feature-gsap-title">
+      <p
+        class="feature-description feature-gsap-title"
+        [appEditableContent]="'features.section.description'"
+        editableLabel="Features description"
+        editableType="textarea"
+      >
         {{ section().description }}
       </p>
     </header>
@@ -25,10 +39,26 @@
               class="feature-visual"
               [class.feature-visual--active]="isActive(index)"
             >
-              <img [src]="feature.image" [alt]="feature.title" loading="lazy" decoding="async" />
+              <img
+                [src]="feature.image"
+                [alt]="feature.title"
+                loading="lazy"
+                decoding="async"
+                [appEditableContent]="'features.features.' + feature.index + '.image'"
+                editableLabel="Feature image"
+                editableType="image"
+              />
               <figcaption>
-                <span>{{ feature.eyebrow }}</span>
-                <strong>{{ feature.highlight.value }}</strong>
+                <span
+                  [appEditableContent]="'features.features.' + feature.index + '.eyebrow'"
+                  editableLabel="Feature eyebrow"
+                  editableType="text"
+                >{{ feature.eyebrow }}</span>
+                <strong
+                  [appEditableContent]="'features.features.' + feature.index + '.highlight.value'"
+                  editableLabel="Feature highlight value"
+                  editableType="text"
+                >{{ feature.highlight.value }}</strong>
               </figcaption>
             </figure>
           }
@@ -44,13 +74,34 @@
             [attr.aria-label]="feature.title"
           >
             <span class="feature-panel__number">{{ feature.id }}</span>
-            <span class="feature-panel__eyebrow">{{ feature.eyebrow }}</span>
-            <h3>{{ feature.title }}</h3>
-            <p>{{ feature.description }}</p>
+            <span
+              class="feature-panel__eyebrow"
+              [appEditableContent]="'features.features.' + feature.index + '.eyebrow'"
+              editableLabel="Feature panel eyebrow"
+              editableType="text"
+            >{{ feature.eyebrow }}</span>
+            <h3
+              [appEditableContent]="'features.features.' + feature.index + '.title'"
+              editableLabel="Feature title"
+              editableType="text"
+            >{{ feature.title }}</h3>
+            <p
+              [appEditableContent]="'features.features.' + feature.index + '.description'"
+              editableLabel="Feature description"
+              editableType="textarea"
+            >{{ feature.description }}</p>
 
             <div class="feature-panel__highlight">
-              <span>{{ feature.highlight.label }}</span>
-              <strong>{{ feature.highlight.value }}</strong>
+              <span
+                [appEditableContent]="'features.features.' + feature.index + '.highlight.label'"
+                editableLabel="Feature highlight label"
+                editableType="text"
+              >{{ feature.highlight.label }}</span>
+              <strong
+                [appEditableContent]="'features.features.' + feature.index + '.highlight.value'"
+                editableLabel="Feature highlight value"
+                editableType="text"
+              >{{ feature.highlight.value }}</strong>
             </div>
           </article>
         }

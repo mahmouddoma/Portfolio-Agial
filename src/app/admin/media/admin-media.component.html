@@ -1,0 +1,24 @@
+<section aria-labelledby="admin-media-title">
+  <div class="admin-topbar">
+    <div>
+      <h2 id="admin-media-title" class="admin-title">إدارة الصور</h2>
+      <p class="admin-muted">اختر صورة من الجهاز بحجم صغير، أو ضع اسم صورة موجودة في public/assets، أو URL خارجي.</p>
+    </div>
+  </div>
+
+  @if (message) {
+    <p class="admin-success">{{ message }}</p>
+  }
+
+  <div class="admin-media-grid">
+    @for (field of imageFields(); track field.path) {
+      <article class="admin-editor-card">
+        <img class="admin-media-preview" [src]="imageValue(field)" [alt]="field.label" />
+        <strong>{{ field.label }}</strong>
+        <span class="admin-path">{{ field.path }}</span>
+        <input class="admin-input" type="text" [ngModel]="field.value" (ngModelChange)="updateImage(field, $event)" />
+        <input class="admin-input" type="file" accept="image/*" (change)="uploadImage(field, $event)" />
+      </article>
+    }
+  </div>
+</section>

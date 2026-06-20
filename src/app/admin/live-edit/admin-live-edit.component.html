@@ -1,0 +1,41 @@
+<section aria-labelledby="admin-live-edit-title">
+  <div class="admin-topbar">
+    <div>
+      <h2 id="admin-live-edit-title" class="admin-title">Live Edit</h2>
+      <p class="admin-muted">اضغط على أي عنصر محدد داخل البورتفوليو لتعديله من اللوحة الجانبية.</p>
+    </div>
+  </div>
+
+  <div class="admin-live-layout">
+    <div class="admin-preview-frame">
+      <app-landing-page></app-landing-page>
+    </div>
+
+    <aside class="admin-live-panel">
+      @if (selected(); as field) {
+        <div>
+          <h3>{{ field.label }}</h3>
+          <p class="admin-path">{{ field.path }}</p>
+        </div>
+
+        @if (field.type === 'textarea') {
+          <textarea class="admin-textarea" [ngModel]="currentValue()" (ngModelChange)="updateSelected($event)"></textarea>
+        } @else if (field.type === 'image') {
+          <img class="admin-media-preview" [src]="currentValue()" alt="" />
+          <input class="admin-input" type="text" [ngModel]="currentValue()" (ngModelChange)="updateSelected($event)" />
+          <input class="admin-input" type="file" accept="image/*" (change)="uploadSelected($event)" />
+        } @else {
+          <input
+            class="admin-input"
+            [type]="fieldInputType(field.type)"
+            [ngModel]="currentValue()"
+            (ngModelChange)="updateSelected($event)"
+          />
+        }
+      } @else {
+        <h3>اختار عنصر</h3>
+        <p class="admin-muted">العناصر القابلة للتعديل تظهر بإطار متقطع داخل المعاينة.</p>
+      }
+    </aside>
+  </div>
+</section>

@@ -8,7 +8,8 @@ import {
   inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SERVICES_CONTENT } from '../../data/site-content';
+import { SiteContentFacade } from '../../core/content/site-content.facade';
+import { EditableContentDirective } from '../../core/live-edit/editable-content.directive';
 import { LanguageService } from '../../services/language.service';
 
 type GsapApi = typeof import('gsap').gsap;
@@ -18,10 +19,13 @@ type ScrollTriggerPlugin = typeof import('gsap/ScrollTrigger').ScrollTrigger;
 interface CourseStat {
   label: string;
   value: string;
+  labelPath: string;
+  valuePath: string;
 }
 
 interface Course {
   id: number;
+  index: number;
   title: string;
   category: string;
   summary: string;
@@ -37,7 +41,7 @@ interface Course {
 @Component({
   selector: 'app-our-services',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, EditableContentDirective],
   templateUrl: './our-services.component.html',
   styleUrl: './our-services.component.css',
 })
@@ -45,22 +49,26 @@ export class OurServicesComponent implements AfterViewInit, OnDestroy {
   @ViewChild('servicesSection') private servicesSection?: ElementRef<HTMLElement>;
 
   private readonly language = inject(LanguageService);
+  private readonly siteContent = inject(SiteContentFacade);
   private gsap?: GsapApi;
   private context?: GsapContext;
   private destroyed = false;
   private reducedMotion = false;
 
+  readonly content = computed(() => this.siteContent.content().services);
+
   readonly section = computed(() => ({
-    kicker: this.language.text(SERVICES_CONTENT.section.kicker),
-    title: this.language.text(SERVICES_CONTENT.section.title),
-    description: this.language.text(SERVICES_CONTENT.section.description),
-    levelLabel: this.language.text(SERVICES_CONTENT.levelLabel),
-    sessionUnit: this.language.text(SERVICES_CONTENT.sessionUnit),
+    kicker: this.language.text(this.content().section.kicker),
+    title: this.language.text(this.content().section.title),
+    description: this.language.text(this.content().section.description),
+    levelLabel: this.language.text(this.content().levelLabel),
+    sessionUnit: this.language.text(this.content().sessionUnit),
   }));
 
   readonly courses = computed<readonly Course[]>(() =>
-    SERVICES_CONTENT.courses.map((course) => ({
+    this.content().courses.map((course: any, index: number) => ({
       id: course.id,
+      index,
       title: this.language.text(course.title),
       category: this.language.text(course.category),
       summary: this.language.text(course.summary),
@@ -68,12 +76,14 @@ export class OurServicesComponent implements AfterViewInit, OnDestroy {
       duration: this.language.text(course.duration),
       sessions: course.sessions,
       level: this.language.text(course.level),
-      instructors: course.instructors.map((instructor) => this.language.text(instructor)),
-      stats: course.stats.map((stat) => ({
+      instructors: course.instructors.map((instructor: any) => this.language.text(instructor)),
+      stats: course.stats.map((stat: any, statIndex: number) => ({
         label: this.language.text(stat.label),
         value: this.language.text(stat.value),
+        labelPath: `services.courses.${index}.stats.${statIndex}.label`,
+        valuePath: `services.courses.${index}.stats.${statIndex}.value`,
       })),
-      tags: course.tags.map((tag) => this.language.text(tag)),
+      tags: course.tags.map((tag: any) => this.language.text(tag)),
     })),
   );
 
