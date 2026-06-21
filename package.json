@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "deploy": "ng deploy --base-href=/project-landing/",
+    "deploy": "ng build --base-href=/Portfolio-Agial/ && gh-pages -d dist/project-landing/browser",
     "test": "ng test"
   },
   "homepage": "https://github.com/mahmouddoma/Portfolio-Agial.git",

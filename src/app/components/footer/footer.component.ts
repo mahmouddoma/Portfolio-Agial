@@ -21,7 +21,7 @@ export class FooterComponent {
   currentYear = new Date().getFullYear();
   readonly footerContent = computed(() => this.siteContent.content().footer);
   readonly headerContent = computed(() => this.siteContent.content().header);
-  readonly logoSrc = computed(() => this.headerContent().logoSrc || '/assets/images/Logo.jpg');
+  readonly logoSrc = computed(() => this.headerContent().logoSrc || 'assets/images/Logo.jpg');
   readonly companyName    = computed(() => this.language.text(this.footerContent().companyName));
   readonly companyLogoAlt = computed(() => this.language.text(this.footerContent().companyLogoAlt));
   readonly content = computed(() => ({

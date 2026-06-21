@@ -1,6 +1,6 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 
-import { createDefaultSiteContent } from './default-site-content';
+import { createDefaultSiteContent, normalizeSiteContentImagePaths } from './default-site-content';
 import {
   EditableCollection,
   EditableContentField,
@@ -15,8 +15,11 @@ import { SiteContentRepository } from './site-content.repository';
 export class SiteContentFacade {
   private readonly repository = inject(SiteContentRepository);
   private readonly defaults = createDefaultSiteContent();
+  private readonly storedContent = this.repository.load();
 
-  readonly content = signal<SiteContent>(this.repository.load() ?? this.clone(this.defaults));
+  readonly content = signal<SiteContent>(
+    this.storedContent ? this.prepareContent(this.storedContent) : this.clone(this.defaults),
+  );
   readonly hasStoredContent = signal(this.repository.hasStoredContent());
   readonly editableFields = computed(() => this.flattenFields(this.content()));
   readonly editableCollections = computed(() => this.getCollectionSummaries(this.content()));
@@ -34,6 +37,7 @@ export class SiteContentFacade {
         draft.packages.useLocalPlans = true;
       }
 
+      normalizeSiteContentImagePaths(draft);
       this.repository.save(draft);
       this.hasStoredContent.set(true);
       return draft;
@@ -42,6 +46,7 @@ export class SiteContentFacade {
 
   replaceContent(content: SiteContent): void {
     const draft = this.clone(content);
+    normalizeSiteContentImagePaths(draft);
     this.content.set(draft);
     this.repository.save(draft);
     this.hasStoredContent.set(true);
@@ -265,5 +270,11 @@ export class SiteContentFacade {
 
   private clone<T>(value: T): T {
     return JSON.parse(JSON.stringify(value)) as T;
+  }
+
+  private prepareContent(content: SiteContent): SiteContent {
+    const draft = this.clone(content);
+    normalizeSiteContentImagePaths(draft);
+    return draft;
   }
 }

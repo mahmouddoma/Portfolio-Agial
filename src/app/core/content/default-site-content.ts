@@ -20,18 +20,22 @@ function clone<T>(value: T): T {
 
 function normalizeImagePath(value: string): string {
   if (
-    value.startsWith('/') ||
     value.startsWith('data:') ||
+    value.startsWith('//') ||
     value.startsWith('http://') ||
     value.startsWith('https://')
   ) {
     return value;
   }
 
-  return `/${value}`;
+  return value.replace(/^\/+/, '');
 }
 
-function normalizeImagePaths(value: unknown, key = ''): void {
+export function normalizeSiteContentImagePaths(value: unknown): void {
+  normalizeImagePaths(value);
+}
+
+function normalizeImagePaths(value: unknown): void {
   if (!value || typeof value !== 'object') {
     return;
   }
@@ -46,7 +50,7 @@ function normalizeImagePaths(value: unknown, key = ''): void {
       return;
     }
 
-    normalizeImagePaths(childValue, childKey);
+    normalizeImagePaths(childValue);
   });
 }
 
@@ -55,7 +59,7 @@ export function createDefaultSiteContent(): SiteContent {
     nav: clone(NAV_ITEMS as unknown as any[]),
     header: {
       ...clone(HEADER_CONTENT),
-      logoSrc: '/assets/images/Logo.jpg',
+      logoSrc: 'assets/images/Logo.jpg',
       loginLabel: { ar: 'تسجيل دخول', en: 'Login' },
       loginAria: { ar: 'تسجيل دخول الأدمن', en: 'Admin login' },
     },
@@ -143,6 +147,6 @@ export function createDefaultSiteContent(): SiteContent {
     },
   };
 
-  normalizeImagePaths(content);
+  normalizeSiteContentImagePaths(content);
   return content;
 }
