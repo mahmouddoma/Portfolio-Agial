@@ -1,4 +1,9 @@
-<section #journeySection class="student-journey" aria-labelledby="student-journey-title">
+<section
+  #journeySection
+  class="student-journey"
+  [class.student-journey--live-edit]="isLiveEdit()"
+  aria-labelledby="student-journey-title"
+>
   <div class="journey-shell">
     <header class="journey-header">
       <span

@@ -1,29 +1,11 @@
 <section class="dash-page" aria-labelledby="admin-dashboard-title">
-
-  <!-- Hero Banner -->
-  <header class="dash-hero">
-    <div class="dash-hero-text">
-      <p class="dash-hero-eyebrow">لوحة التحكم</p>
-      <h2 id="admin-dashboard-title" class="dash-hero-title">مرحبًا بك في Admin Panel</h2>
-      <p class="dash-hero-sub">نظرة شاملة على محتوى البورتفوليو · التعديلات محفوظة محليًا في المتصفح</p>
-    </div>
-    <div class="dash-hero-actions">
-      <button type="button" class="admin-button-secondary dash-btn-icon" (click)="exportContent()" title="تصدير JSON">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Export JSON
-      </button>
-      <button type="button" class="admin-button-danger dash-btn-icon" (click)="resetContent()" title="إعادة ضبط">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.45"/></svg>
-        Reset
-      </button>
-    </div>
-  </header>
+  <h2 id="admin-dashboard-title" class="dash-visually-hidden">لوحة التحكم</h2>
 
   <!-- Stats Grid -->
   <div class="dash-stats-grid" role="list" aria-label="إحصائيات المحتوى">
     @for (stat of stats(); track stat.label) {
       <article class="dash-stat-card" role="listitem">
-        <div class="dash-stat-icon" [style.background]="stat.iconBg" aria-hidden="true">
+        <div class="dash-stat-icon" aria-hidden="true">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path [attr.d]="stat.iconPath"/>
             @if (stat.iconPath2) {
@@ -38,7 +20,6 @@
           <span class="dash-stat-label">{{ stat.label }}</span>
           <strong class="dash-stat-value">{{ stat.value }}</strong>
         </div>
-        <div class="dash-stat-bar" [style.background]="stat.barColor" aria-hidden="true"></div>
       </article>
     }
   </div>
@@ -48,11 +29,13 @@
 
     <!-- Quick Actions -->
     <section class="dash-panel dash-quick-actions" aria-labelledby="dash-qa-title">
-      <h3 id="dash-qa-title" class="dash-panel-title">وصول سريع</h3>
+      <div class="dash-panel-head">
+        <h3 id="dash-qa-title" class="dash-panel-title">وصول سريع</h3>
+      </div>
       <div class="dash-qa-grid">
         @for (action of quickActions; track action.label) {
           <a [routerLink]="action.route" class="dash-qa-card">
-            <div class="dash-qa-icon" [style.background]="action.iconBg" aria-hidden="true">
+            <div class="dash-qa-icon" aria-hidden="true">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path [attr.d]="action.iconPath"/>
                 @if (action.iconPath2) { <path [attr.d]="action.iconPath2"/> }
@@ -73,7 +56,9 @@
 
     <!-- Storage Status -->
     <section class="dash-panel dash-storage" aria-labelledby="dash-storage-title">
-      <h3 id="dash-storage-title" class="dash-panel-title">حالة التخزين</h3>
+      <div class="dash-panel-head">
+        <h3 id="dash-storage-title" class="dash-panel-title">حالة التخزين</h3>
+      </div>
 
       <div class="dash-storage-indicator" [class.dash-storage-active]="hasStoredContent()">
         <div class="dash-storage-dot" aria-hidden="true"></div>
@@ -84,13 +69,11 @@
       </div>
 
       <div class="dash-storage-actions">
-        <button type="button" class="admin-button-secondary" (click)="exportContent()">Export JSON</button>
-        <button type="button" class="admin-button-danger" (click)="resetContent()" [disabled]="!hasStoredContent()">Reset</button>
+        <button type="button" class="admin-button-danger dash-reset-button" (click)="resetContent()" [disabled]="!hasStoredContent()">Reset</button>
       </div>
 
-      <p class="dash-storage-note admin-muted">التعديلات مرتبطة بالمتصفح الحالي فقط. استخدم Export للنسخ الاحتياطي.</p>
+      <p class="dash-storage-note admin-muted">التعديلات مرتبطة بالمتصفح الحالي فقط، ويمكن الرجوع للمحتوى الافتراضي عند الحاجة.</p>
     </section>
 
   </div>
-
 </section>

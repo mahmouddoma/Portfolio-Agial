@@ -30,7 +30,7 @@ export class SiteContentFacade {
       const draft = this.clone(content);
       this.writePath(draft, path, value);
 
-      if (path.startsWith('packages.plans.')) {
+      if (path === 'packages.plans' || path.startsWith('packages.plans.')) {
         draft.packages.useLocalPlans = true;
       }
 

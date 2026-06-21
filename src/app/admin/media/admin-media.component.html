@@ -15,7 +15,6 @@
       <article class="admin-editor-card">
         <img class="admin-media-preview" [src]="imageValue(field)" [alt]="field.label" />
         <strong>{{ field.label }}</strong>
-        <span class="admin-path">{{ field.path }}</span>
         <input class="admin-input" type="text" [ngModel]="field.value" (ngModelChange)="updateImage(field, $event)" />
         <input class="admin-input" type="file" accept="image/*" (change)="uploadImage(field, $event)" />
       </article>

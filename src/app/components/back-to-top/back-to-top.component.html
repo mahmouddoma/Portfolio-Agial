@@ -1,22 +1,28 @@
-<div class="fixed-buttons">
+<div class="fixed-buttons" [class.fixed-buttons--admin]="variant() === 'admin'">
   @if (showButton()) {
     <button
       type="button"
       class="back-to-top-btn"
       [attr.aria-label]="backToTopAria()"
-      (click)="scrollToTop()"
+      (pointerdown)="scrollToTop($event)"
+      (click)="scrollToTop($event)"
     >
-      <span aria-hidden="true">↑</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 19V5" />
+        <path d="M5 12l7-7 7 7" />
+      </svg>
     </button>
   }
 
-  <a
-    href="https://wa.me/+1234567890"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="whatsapp-btn"
-    [attr.aria-label]="whatsappAria()"
-  >
-    <i class="fab fa-whatsapp"></i>
-  </a>
+  @if (showWhatsApp()) {
+    <a
+      href="https://wa.me/+1234567890"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="whatsapp-btn"
+      [attr.aria-label]="whatsappAria()"
+    >
+      <i class="fab fa-whatsapp"></i>
+    </a>
+  }
 </div>

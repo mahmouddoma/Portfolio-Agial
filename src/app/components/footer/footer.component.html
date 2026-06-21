@@ -1,9 +1,7 @@
 <footer class="footer-container">
   <div class="footer-inner">
-
     <!-- ── Row 1: Brand + Quick Links + Contact ──────────────────────────── -->
     <div class="footer-content">
-
       <!-- Brand -->
       <div class="footer-col footer-col--brand">
         <div class="brand-block">
@@ -24,7 +22,9 @@
             [appEditableContent]="'footer.companyName'"
             editableLabel="Footer company name"
             editableType="text"
-          >{{ companyName() }}</h3>
+          >
+            {{ companyName() }}
+          </h3>
         </div>
       </div>
 
@@ -35,7 +35,9 @@
           [appEditableContent]="'footer.quickLinksTitle'"
           editableLabel="Footer quick links title"
           editableType="text"
-        >{{ content().quickLinksTitle }}</h4>
+        >
+          {{ content().quickLinksTitle }}
+        </h4>
         <ul class="footer-links-list">
           @for (link of quickLinks(); track link.id) {
             <li>
@@ -44,7 +46,8 @@
                   [appEditableContent]="'nav.' + $index + '.label'"
                   editableLabel="Footer nav label"
                   editableType="text"
-                >{{ link.text }}</span>
+                  >{{ link.text }}</span
+                >
               </a>
             </li>
           }
@@ -58,7 +61,9 @@
           [appEditableContent]="'footer.contactTitle'"
           editableLabel="Footer contact title"
           editableType="text"
-        >{{ content().contactTitle }}</h4>
+        >
+          {{ content().contactTitle }}
+        </h4>
         <ul class="footer-contact-list">
           <li>
             <i class="fas fa-envelope" aria-hidden="true"></i>
@@ -67,7 +72,8 @@
               [appEditableContent]="'footer.contactInfo.email'"
               editableLabel="Footer email"
               editableType="email"
-            >{{ contactInfo().email }}</a>
+              >{{ contactInfo().email }}</a
+            >
           </li>
           <li>
             <i class="fas fa-phone" aria-hidden="true"></i>
@@ -76,7 +82,8 @@
               [appEditableContent]="'footer.contactInfo.phone'"
               editableLabel="Footer phone"
               editableType="phone"
-            >{{ contactInfo().phone }}</span>
+              >{{ contactInfo().phone }}</span
+            >
           </li>
         </ul>
       </div>
@@ -88,15 +95,23 @@
           [appEditableContent]="'footer.followTitle'"
           editableLabel="Footer social title"
           editableType="text"
-        >{{ content().followTitle }}</h4>
+        >
+          {{ content().followTitle }}
+        </h4>
         <div class="social-links">
-          @for (social of socialLinks(); track social.icon; let socialIndex = $index) {
+          @for (
+            social of socialLinks();
+            track social.icon;
+            let socialIndex = $index
+          ) {
             <a
               [href]="social.url"
               target="_blank"
               rel="noopener noreferrer"
               [attr.aria-label]="social.ariaLabel"
-              [appEditableContent]="'footer.socialLinks.' + socialIndex + '.url'"
+              [appEditableContent]="
+                'footer.socialLinks.' + socialIndex + '.url'
+              "
               editableLabel="Social link URL"
               editableType="url"
             >
@@ -105,7 +120,6 @@
           }
         </div>
       </div>
-
     </div>
 
     <!-- ── Footer Bottom ───────────────────────────────────────────────────── -->
@@ -116,12 +130,14 @@
           [appEditableContent]="'footer.companyName'"
           editableLabel="Footer company name"
           editableType="text"
-        >{{ companyName() }}</span>.
+          >{{ companyName() }}</span
+        >.
         <span
           [appEditableContent]="'footer.rights'"
           editableLabel="Footer rights"
           editableType="text"
-        >{{ content().rights }}</span>
+          >{{ content().rights }}</span
+        >
       </p>
 
       <div class="footer-powered">
@@ -135,6 +151,5 @@
         />
       </div>
     </div>
-
   </div>
 </footer>

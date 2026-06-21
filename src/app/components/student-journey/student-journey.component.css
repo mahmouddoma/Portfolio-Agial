@@ -265,6 +265,23 @@
   line-height: 1.8;
 }
 
+.student-journey--live-edit {
+  min-height: auto;
+}
+
+.student-journey--live-edit .journey-stage {
+  min-height: auto;
+}
+
+.student-journey--live-edit .journey-panel {
+  position: static;
+}
+
+.student-journey--live-edit .journey-path__track,
+.student-journey--live-edit .journey-path__progress {
+  opacity: 1;
+}
+
 @media (max-width: 900px) {
   .student-journey {
     inline-size: 100%;

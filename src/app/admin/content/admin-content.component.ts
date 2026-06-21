@@ -60,6 +60,20 @@ interface ContentFieldGroup {
   fieldCount: number;
 }
 
+interface PackageEditorMetric {
+  label: string;
+  value: string;
+}
+
+interface PackageEditorCard {
+  id: string;
+  index: number;
+  plan: PackagePlan;
+  group: ContentFieldGroup;
+  meta: PackageMeta;
+  metrics: PackageEditorMetric[];
+}
+
 interface MutableContentFieldGroup extends Omit<ContentFieldGroup, 'controls'> {
   controls: ContentFieldControl[];
   controlMap: Map<string, ContentFieldControl>;
@@ -136,18 +150,10 @@ export class AdminContentComponent {
       description: 'بيانات الفوتر وروابط السوشيال ونصوص أزرار العودة.',
       sections: ['footer'],
     },
-    {
-      id: 'tools',
-      label: 'أدوات JSON',
-      description: 'تصدير، استيراد، أو إعادة ضبط نسخة المحتوى بالكامل.',
-      sections: [],
-    },
   ];
 
   readonly searchTerm = signal('');
   readonly selectedTab = signal(this.contentTabs[0].id);
-  importText = '';
-  importMessage = '';
 
   readonly packagePlans = computed<PackagePlan[]>(() => {
     const plans = this.contentFacade.content().packages?.plans;
@@ -155,6 +161,49 @@ export class AdminContentComponent {
   });
 
   readonly isPackagesTab = computed(() => this.selectedTab() === 'packages');
+
+  readonly packagePlanGroups = computed(() =>
+    this.fieldGroups().filter(
+      (group) => this.getPackagePlanIndex(group.path) !== null,
+    ),
+  );
+
+  readonly packageSupportingGroups = computed(() =>
+    this.fieldGroups().filter(
+      (group) => this.getPackagePlanIndex(group.path) === null,
+    ),
+  );
+
+  readonly packagePlansCollection = computed(
+    () =>
+      this.collections().find(
+        (collection) => collection.path === 'packages.plans',
+      ) ?? null,
+  );
+
+  readonly packageEditorCards = computed<PackageEditorCard[]>(() => {
+    const plans = this.packagePlans();
+
+    return this.packagePlanGroups()
+      .map((group) => {
+        const index = this.getPackagePlanIndex(group.path);
+        const plan = index === null ? null : plans[index];
+
+        if (index === null || !plan) {
+          return null;
+        }
+
+        return {
+          id: group.id,
+          index,
+          plan,
+          group,
+          meta: this.getPackageMeta(plan.id),
+          metrics: this.createPackageMetrics(plan),
+        };
+      })
+      .filter((card): card is PackageEditorCard => card !== null);
+  });
 
   private readonly packageMetaMap: Record<string, PackageMeta> = {
     bronze: {
@@ -429,6 +478,13 @@ export class AdminContentComponent {
     this.searchTerm.set('');
   }
 
+  trackPackageEditorCard(
+    _index: number,
+    card: PackageEditorCard,
+  ): string {
+    return card.id;
+  }
+
   updateField(
     field: EditableContentField,
     value: string | number | boolean,
@@ -462,28 +518,38 @@ export class AdminContentComponent {
           : 'text';
   }
 
-  exportContent(): void {
-    this.importText = this.contentFacade.exportContent();
-    this.importMessage = 'تم وضع نسخة JSON في مربع الاستيراد/التصدير.';
-  }
-
-  importContent(): void {
-    this.importMessage = this.contentFacade.importContent(this.importText)
-      ? 'تم استيراد المحتوى بنجاح.'
-      : 'ملف JSON غير صالح.';
-  }
-
-  resetContent(): void {
-    this.contentFacade.reset();
-    this.importMessage = 'تم الرجوع للمحتوى الافتراضي.';
-  }
-
   private matchesTabSection(tab: ContentEditorTab, section: string): boolean {
     return tab.sections.includes(section);
   }
 
   private getTopLevelSection(path: string): string {
     return path.split('.')[0] ?? '';
+  }
+
+  private getPackagePlanIndex(groupPath: string): number | null {
+    const match = groupPath.match(/^packages\.plans\.(\d+)$/);
+    return match ? Number(match[1]) : null;
+  }
+
+  private createPackageMetrics(plan: PackagePlan): PackageEditorMetric[] {
+    return [
+      {
+        label: 'الدقائق الشهرية',
+        value: `${plan.totalMinutes} دقيقة`,
+      },
+      {
+        label: 'الأسعار',
+        value: `${plan.priceLE} ج.م / ${plan.priceReyal} ر.س / ${plan.priceDollar}$`,
+      },
+      {
+        label: 'نمط الاشتراك',
+        value: plan.subscribeType?.ar || 'غير محدد',
+      },
+      {
+        label: 'مقاعد المتابعة',
+        value: `${plan.subscriberCount ?? 0} طالب`,
+      },
+    ];
   }
 
   private groupFields(fields: EditableContentField[]): ContentFieldGroup[] {

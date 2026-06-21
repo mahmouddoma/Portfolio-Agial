@@ -13,6 +13,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { SiteContentFacade } from '../../core/content/site-content.facade';
 import { EditableContentDirective } from '../../core/live-edit/editable-content.directive';
+import { AdminLiveEditService } from '../../core/live-edit/admin-live-edit.service';
 import { LanguageService } from '../../services/language.service';
 
 type GsapApi = typeof import('gsap').gsap;
@@ -42,11 +43,13 @@ export class StudentJourneyComponent implements AfterViewInit, OnDestroy {
 
   private readonly language = inject(LanguageService);
   private readonly siteContent = inject(SiteContentFacade);
+  private readonly liveEdit = inject(AdminLiveEditService);
   private context?: GsapContext;
   private destroyed = false;
   private reducedMotion = false;
 
   readonly activeStepIndex = signal(0);
+  readonly isLiveEdit = this.liveEdit.enabled;
 
   readonly content = computed(() => this.siteContent.content().journey);
 
@@ -73,6 +76,10 @@ export class StudentJourneyComponent implements AfterViewInit, OnDestroy {
   readonly activeStep = computed(() => this.steps()[this.activeStepIndex()]);
 
   async ngAfterViewInit(): Promise<void> {
+    if (this.liveEdit.enabled()) {
+      return;
+    }
+
     const [{ gsap }, { ScrollTrigger }, { DrawSVGPlugin }] = await Promise.all([
       import('gsap'),
       import('gsap/ScrollTrigger'),

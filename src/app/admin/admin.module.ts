@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
+import { BackToTopComponent } from '../components/back-to-top/back-to-top.component';
 import { PortfolioLogoIconComponent } from '../components/portfolio-logo-icon/portfolio-logo-icon.component';
 import { LandingPageComponent } from '../features/landing/landing-page.component';
 import { AdminRoutingModule } from './admin-routing.module';
@@ -24,6 +25,7 @@ import { AdminShellComponent } from './shell/admin-shell.component';
   ],
   imports: [
     CommonModule,
+    BackToTopComponent,
     FormsModule,
     LandingPageComponent,
     PortfolioLogoIconComponent,

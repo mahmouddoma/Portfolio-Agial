@@ -21,6 +21,15 @@
 
     <button
       type="button"
+      class="mobile-language-toggle"
+      [attr.aria-label]="languageSwitchAriaLabel()"
+      (click)="toggleLanguage()"
+    >
+      {{ languageSwitchLabel() }}
+    </button>
+
+    <button
+      type="button"
       class="menu-toggle"
       aria-controls="primary-navigation"
       [attr.aria-expanded]="isMenuOpen"
