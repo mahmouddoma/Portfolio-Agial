@@ -54,6 +54,7 @@ export class SliderComponent implements AfterViewInit, OnDestroy {
   private animationContext?: GsapContext;
   private reducedMotion = false;
   private destroyed = false;
+  private readonly heavyMotionQuery = '(max-width: 768px)';
 
   readonly content = computed(() => this.siteContent.content().testimonials);
 
@@ -96,13 +97,17 @@ export class SliderComponent implements AfterViewInit, OnDestroy {
   readonly activeIndex = signal(0);
 
   async ngAfterViewInit(): Promise<void> {
+    this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (this.shouldSkipHeavyMotion()) {
+      return;
+    }
+
     const { gsap } = await import('gsap');
     if (this.destroyed) {
       return;
     }
 
     this.gsap = gsap;
-    this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.createStoryExperience();
   }
 
@@ -226,5 +231,9 @@ export class SliderComponent implements AfterViewInit, OnDestroy {
         overwrite: true,
       },
     );
+  }
+
+  private shouldSkipHeavyMotion(): boolean {
+    return this.reducedMotion || window.matchMedia(this.heavyMotionQuery).matches;
   }
 }

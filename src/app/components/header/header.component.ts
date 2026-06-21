@@ -60,6 +60,7 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
 
   isScrolled = false;
   isMenuOpen = false;
+  private readonly heavyMotionQuery = '(max-width: 768px)';
 
   @HostListener('window:scroll', [])
   onWindowScroll(): void {
@@ -132,7 +133,7 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
 
   private async createHeaderMotion(): Promise<void> {
     const navbar = this.navbarRef?.nativeElement;
-    if (!navbar) {
+    if (!navbar || this.shouldSkipHeavyMotion()) {
       return;
     }
 
@@ -155,6 +156,10 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
     }
 
     this.motionContext = context;
+  }
+
+  private shouldSkipHeavyMotion(): boolean {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.matchMedia(this.heavyMotionQuery).matches;
   }
 
   private syncActiveSection(): void {

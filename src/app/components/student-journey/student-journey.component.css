@@ -359,6 +359,13 @@
   .journey-step {
     width: min(100%, 34rem);
     margin-inline: auto;
+    opacity: 1 !important;
+  }
+
+  .journey-gsap-title,
+  .journey-stage {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 

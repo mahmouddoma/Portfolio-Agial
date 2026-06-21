@@ -54,6 +54,7 @@ export class OurServicesComponent implements AfterViewInit, OnDestroy {
   private context?: GsapContext;
   private destroyed = false;
   private reducedMotion = false;
+  private readonly heavyMotionQuery = '(max-width: 768px)';
 
   readonly content = computed(() => this.siteContent.content().services);
 
@@ -90,6 +91,11 @@ export class OurServicesComponent implements AfterViewInit, OnDestroy {
   readonly featuredCourse = computed(() => this.courses()[0]);
 
   async ngAfterViewInit(): Promise<void> {
+    this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (this.shouldSkipHeavyMotion()) {
+      return;
+    }
+
     const [{ gsap }, { ScrollTrigger }] = await Promise.all([
       import('gsap'),
       import('gsap/ScrollTrigger'),
@@ -100,7 +106,6 @@ export class OurServicesComponent implements AfterViewInit, OnDestroy {
 
     gsap.registerPlugin(ScrollTrigger);
     this.gsap = gsap;
-    this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.createEntranceAnimation(ScrollTrigger);
   }
 
@@ -159,5 +164,9 @@ export class OurServicesComponent implements AfterViewInit, OnDestroy {
 
       ScrollTrigger.refresh();
     }, section);
+  }
+
+  private shouldSkipHeavyMotion(): boolean {
+    return this.reducedMotion || window.matchMedia(this.heavyMotionQuery).matches;
   }
 }

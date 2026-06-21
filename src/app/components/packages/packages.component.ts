@@ -13,6 +13,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { timeout } from 'rxjs/operators';
 import { PackageCurrencyField, PackagePlan, PackagesService } from '../../services/packages.service';
 import { SiteContentFacade } from '../../core/content/site-content.facade';
 import { EditableContentDirective } from '../../core/live-edit/editable-content.directive';
@@ -59,6 +60,7 @@ export class PackagesComponent implements OnInit, AfterViewInit, OnDestroy {
   private animationContext?: GsapContext;
   private viewReady = false;
   private reducedMotion = false;
+  private readonly heavyMotionQuery = '(max-width: 768px)';
   packages: PackagePlan[] = [];
   packageCards: PackageCardViewModel[] = [];
   error: string | null = null;
@@ -114,7 +116,9 @@ export class PackagesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   detectUserCurrencyAndLoadPackages(): void {
-    this.http.get<{ country_name: string; country_code?: string; currency?: string }>('https://ipapi.co/json/').subscribe({
+    this.http.get<{ country_name: string; country_code?: string; currency?: string }>('https://ipapi.co/json/').pipe(
+      timeout(1200),
+    ).subscribe({
       next: (res) => {
         const detectedCurrency: PackageCurrencyField =
           res.country_name === 'Egypt' || res.country_code === 'EG' || res.currency === 'EGP'
@@ -272,7 +276,7 @@ export class PackagesComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   private async setupPackagesMotion(): Promise<void> {
-    if (!this.viewReady || this.reducedMotion || !this.packagesSection?.nativeElement) {
+    if (!this.viewReady || this.shouldSkipHeavyMotion() || !this.packagesSection?.nativeElement) {
       return;
     }
 
@@ -295,5 +299,9 @@ export class PackagesComponent implements OnInit, AfterViewInit, OnDestroy {
         ScrollTrigger,
       });
     }, this.packagesSection.nativeElement);
+  }
+
+  private shouldSkipHeavyMotion(): boolean {
+    return this.reducedMotion || window.matchMedia(this.heavyMotionQuery).matches;
   }
 }

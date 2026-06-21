@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, timeout } from 'rxjs/operators';
 
 import { SiteContentFacade } from '../core/content/site-content.facade';
 import type { EditablePackagePlan } from '../core/content/site-content.model';
@@ -102,6 +102,7 @@ export class PackagesService {
     }
 
     return this.http.get<PackageApiItem[]>(this.apiUrl).pipe(
+      timeout(2200),
       map((packages) => this.mapPackages(packages.length ? packages : this.mockPackages, currency)),
       catchError(() => of(this.mapPackages(this.mockPackages, currency))),
     );

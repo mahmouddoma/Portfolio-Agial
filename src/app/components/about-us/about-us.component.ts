@@ -63,6 +63,7 @@ export class AboutUsComponent implements OnInit, OnDestroy, AfterViewInit {
   private heroMotionHandles: HeroMotionHandles = {};
   private destroyed = false;
   private readonly SLIDE_INTERVAL = 2500;
+  private readonly heavyMotionQuery = '(max-width: 768px)';
 
   ngOnInit(): void {
     this.startSlideshow();
@@ -114,7 +115,7 @@ export class AboutUsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private async createHeroMotion(): Promise<void> {
     const section = this.heroSection?.nativeElement;
-    if (!section) {
+    if (!section || this.shouldSkipHeavyMotion()) {
       return;
     }
 
@@ -138,5 +139,9 @@ export class AboutUsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     this.motionContext = context;
+  }
+
+  private shouldSkipHeavyMotion(): boolean {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.matchMedia(this.heavyMotionQuery).matches;
   }
 }

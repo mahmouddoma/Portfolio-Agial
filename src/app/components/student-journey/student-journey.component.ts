@@ -47,6 +47,7 @@ export class StudentJourneyComponent implements AfterViewInit, OnDestroy {
   private context?: GsapContext;
   private destroyed = false;
   private reducedMotion = false;
+  private readonly heavyMotionQuery = '(max-width: 768px)';
 
   readonly activeStepIndex = signal(0);
   readonly isLiveEdit = this.liveEdit.enabled;
@@ -80,6 +81,11 @@ export class StudentJourneyComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
+    this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (this.shouldSkipHeavyMotion()) {
+      return;
+    }
+
     const [{ gsap }, { ScrollTrigger }, { DrawSVGPlugin }] = await Promise.all([
       import('gsap'),
       import('gsap/ScrollTrigger'),
@@ -89,7 +95,6 @@ export class StudentJourneyComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     await this.createJourneyMotion(gsap, ScrollTrigger, DrawSVGPlugin);
   }
 
@@ -132,5 +137,9 @@ export class StudentJourneyComponent implements AfterViewInit, OnDestroy {
         onActiveStepChange: (index) => this.activeStepIndex.set(index),
       });
     }, section);
+  }
+
+  private shouldSkipHeavyMotion(): boolean {
+    return this.reducedMotion || window.matchMedia(this.heavyMotionQuery).matches;
   }
 }
