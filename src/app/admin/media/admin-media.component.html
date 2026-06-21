@@ -13,7 +13,7 @@
   <div class="admin-media-grid">
     @for (field of imageFields(); track field.path) {
       <article class="admin-editor-card">
-        <img class="admin-media-preview" [src]="imageValue(field)" [alt]="field.label" />
+        <img class="admin-media-preview" [src]="imageValue(field)" [alt]="field.label" loading="lazy" />
         <strong>{{ field.label }}</strong>
         <input class="admin-input" type="text" [ngModel]="field.value" (ngModelChange)="updateImage(field, $event)" />
         <input class="admin-input" type="file" accept="image/*" (change)="uploadImage(field, $event)" />

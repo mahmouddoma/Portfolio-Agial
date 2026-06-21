@@ -20,7 +20,7 @@
         @if (field.type === 'textarea') {
           <textarea class="admin-textarea" [ngModel]="currentValue()" (ngModelChange)="updateSelected($event)"></textarea>
         } @else if (field.type === 'image') {
-          <img class="admin-media-preview" [src]="currentValue()" alt="" />
+          <img class="admin-media-preview" [src]="currentValue()" alt="" loading="lazy" />
           <input class="admin-input" type="text" [ngModel]="currentValue()" (ngModelChange)="updateSelected($event)" />
           <input class="admin-input" type="file" accept="image/*" (change)="uploadSelected($event)" />
         } @else {
